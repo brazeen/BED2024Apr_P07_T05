@@ -1,0 +1,89 @@
+* {
+    font-family: "Inter", sans-serif;
+}
+
+nav {
+    font-weight: bold;
+}
+
+/*-----------VolunteerHomePage*/
+#volunteerHome {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.leftSideDiv, .rightSideDiv {
+    width: 45%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h5 {
+    text-align: center;
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.leftHomeDiv, .rightHomeDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.eventItem {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.eventDate, .eventStatus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: #ffeb3b;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.rejected .eventStatus {
+    background-color: #f44336;
+    color: white;
+}
+
+.pending .eventStatus {
+    background-color: #ffeb3b;
+    color: black;
+}
+
+.eventDetails {
+    flex-grow: 1;
+}
+
+.eventTitle {
+    font-weight: bold;
+}
+
+.eventTime {
+    color: gray;
+}
+
+.removeEvent {
+    font-size: 20px;
+    color: gray;
+    cursor: pointer;
+}
+
+
