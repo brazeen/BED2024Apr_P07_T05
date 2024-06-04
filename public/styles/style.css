@@ -164,3 +164,88 @@ nav {
     background-color: #ffbb00;
 }
 
+/*-----------ngomanageopportunity.html*/
+
+
+#ngoManageOpportunityMain {
+    padding: 20px;
+}
+
+#ngoManageOpportunityMain h1 {
+    text-align: center;
+}
+
+.opportunity-details, .applications {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.opportunity-details h2, .applications h2 {
+    text-align: center;
+}
+
+.opportunity-details .details p {
+    margin: 5px 0;
+}
+
+.opportunity-details .edit-btn {
+    background-color: #FFEB3B;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.applications .applicant {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.applications .applicant img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+.applications .info {
+    flex: 1;
+}
+
+.applications .actions button {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#ngoManageOpportunityMain footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ok-btn, .delete-btn {
+    background-color: #FFEB3B;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.delete-btn {
+    background-color: #FF6347;
+    color: white;
+}
+
+
