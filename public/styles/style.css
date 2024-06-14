@@ -248,4 +248,14 @@ nav {
     color: white;
 }
 
-
+/*------------------------------STATIC PAGES*/
+/*-----------ngo/volaboutus.html*/
+.aboutUsMain {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+}
