@@ -12,6 +12,7 @@ class Volunteer {
         this.profilepicture = profilepicture;
     }
 
+    //brandon
     static async getAllVolunteers() {
         const connection = await sql.connect(dbConfig);
 
@@ -25,6 +26,22 @@ class Volunteer {
         return result.recordset.map(
             (row) => new Volunteer(row.volunteerid, row.name, row.email, row.password, row.bio, row.dateofbirth, row.profilepicture)
         ) //convert rows to volunteers
+    }
+
+    //brandon
+    static async deleteVolunteer(id) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `DELETE FROM Volunteers WHERE volunteerid = @volunteerid`
+
+        const request = connection.request()
+        request.input("volunteerid", id)
+
+        const result = await request.query(sqlQuery)
+        
+        connection.close()
+
+        return result.rowsAffected > 0; // Indicate success based on affected rows
     }
 
     /*
@@ -81,20 +98,7 @@ class Volunteer {
         return this.getBookById(id)
     }
 
-    static async deleteBook(id) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `DELETE FROM Books WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-
-        const result = await request.query(sqlQuery)
-        
-        connection.close()
-
-        return result.rowsAffected > 0; // Indicate success based on affected rows
-    }
+    
         */
 }
 

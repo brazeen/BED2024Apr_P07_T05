@@ -1,5 +1,6 @@
 const Volunteer = require("../models/volunteer")
 
+//brandon
 const getAllVolunteers = async (req, res) => {
     try {
         const volunteers = await Volunteer.getAllVolunteers()
@@ -8,6 +9,22 @@ const getAllVolunteers = async (req, res) => {
     catch(error) {
         console.error(error)
         res.status(500).send("Error retrieving volunteers")
+    }
+}
+
+//brandon
+const deleteVolunteer = async (req, res) => {
+    const volunteerId = req.params.id;
+    try {
+        const volunteer = await Volunteer.deleteVolunteer(volunteerId);
+        if (!volunteer) {
+          return res.status(404).send("Volunteer not found");
+        }
+        res.status(204).send()
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error deleting volunteer")
     }
 }
 /*
@@ -52,23 +69,11 @@ const updateBook = async (req, res) => {
     }
 }
 
-const deleteBook = async (req, res) => {
-    const bookId = req.params.id;
-    try {
-        const book = await Book.deleteBook(bookId);
-        if (!book) {
-          return res.status(404).send("Book not found");
-        }
-        res.status(204).send()
-    }
-    catch(error) {
-        console.error(error)
-        res.status(500).send("Error updating book")
-    }
-}
+
 
 */
 
 module.exports = {
-    getAllVolunteers
+    getAllVolunteers,
+    deleteVolunteer,
 }

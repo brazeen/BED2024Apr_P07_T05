@@ -30,6 +30,20 @@ class NGO {
         ) //convert rows to volunteers
     }
 
+    static async deleteNGO(id) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `DELETE FROM NGOs WHERE ngoid = @ngoid`
+
+        const request = connection.request()
+        request.input("ngoid", id)
+
+        const result = await request.query(sqlQuery)
+        
+        connection.close()
+
+        return result.rowsAffected > 0; // Indicate success based on affected rows
+    }
     /*
     static async getVolunteerById(id) {
         const connection = await sql.connect(dbConfig);
@@ -84,20 +98,7 @@ class NGO {
         return this.getBookById(id)
     }
 
-    static async deleteBook(id) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `DELETE FROM Books WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-
-        const result = await request.query(sqlQuery)
-        
-        connection.close()
-
-        return result.rowsAffected > 0; // Indicate success based on affected rows
-    }
+    
         */
 }
 

@@ -10,6 +10,21 @@ const getAllNGOs = async (req, res) => {
         res.status(500).send("Error retrieving NGOs")
     }
 }
+
+const deleteNGO = async (req, res) => {
+    const NGOId = req.params.id;
+    try {
+        const NGO = await NGO.deleteNGO(NGOId);
+        if (!NGO) {
+          return res.status(404).send("NGO not found");
+        }
+        res.status(204).send()
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error deleting NGO")
+    }
+}
 /*
 const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
@@ -52,23 +67,11 @@ const updateBook = async (req, res) => {
     }
 }
 
-const deleteBook = async (req, res) => {
-    const bookId = req.params.id;
-    try {
-        const book = await Book.deleteBook(bookId);
-        if (!book) {
-          return res.status(404).send("Book not found");
-        }
-        res.status(204).send()
-    }
-    catch(error) {
-        console.error(error)
-        res.status(500).send("Error updating book")
-    }
-}
+
 
 */
 
 module.exports = {
-    getAllNGOs
+    getAllNGOs,
+    deleteNGO,
 }
