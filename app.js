@@ -2,6 +2,8 @@ const express = require("express");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser")
+const volunteercontroller = require("./controllers/volunteercontroller")
+const ngocontroller = require("./controllers/ngocontroller")
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -11,7 +13,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 app.use(staticMiddleware)   
 
+//volunteers
+app.get("/volunteers", volunteercontroller.getAllVolunteers);
 
+//NGOs
+app.get("/ngos", ngocontroller.getAllNGOs);
 
 
 
