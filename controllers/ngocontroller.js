@@ -11,6 +11,17 @@ const getAllNGOs = async (req, res) => {
     }
 }
 
+const getNGOsByStatus = async (req, res) => {
+    const ngostatus = req.params.status;
+    try {
+      const ngos = await NGO.getNGOsByStatus(ngostatus);
+      res.json(ngos);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving NGOs");
+    }
+};
+
 const deleteNGO = async (req, res) => {
     const NGOId = req.params.id;
     try {
@@ -26,19 +37,7 @@ const deleteNGO = async (req, res) => {
     }
 }
 /*
-const getBookById = async (req, res) => {
-    const bookId = parseInt(req.params.id);
-    try {
-      const book = await Book.getBookById(bookId);
-      if (!book) {
-        return res.status(404).send("Book not found");
-      }
-      res.json(book);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error retrieving book");
-    }
-  };
+
 
 const createBook = async (req, res) => {
     const newBook = req.body;
@@ -73,5 +72,6 @@ const updateBook = async (req, res) => {
 
 module.exports = {
     getAllNGOs,
+    getNGOsByStatus,
     deleteNGO,
 }

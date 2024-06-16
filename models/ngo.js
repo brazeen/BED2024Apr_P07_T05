@@ -30,6 +30,23 @@ class NGO {
         ) //convert rows to volunteers
     }
 
+    static async getNGOsByStatus(status) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM NGOs WHERE status = @status`; //params
+
+        const request = connection.request();
+        request.input("status", status)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new NGO(row.ngoid, row.name, row.email, row.password, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
+        ) //convert rows to NGOs
+        //possible null
+    }
+
     static async deleteNGO(id) {
         const connection = await sql.connect(dbConfig)
 
@@ -45,24 +62,7 @@ class NGO {
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
     /*
-    static async getVolunteerById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Books WHERE id = @id`; //params
-
-        const request = connection.request();
-        request.input("id", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Book(result.recordset[0].id,
-                result.recordset[0].title,
-                result.recordset[0].author
-            )
-            : null; //book not found
-    }
+    
 
     static async createBook(newBookData) {
         const connection = await sql.connect(dbConfig)
