@@ -12,7 +12,13 @@ nav {
     padding: 20px;
 }
 /*-----------VolunteerHomePage*/
-
+.fullScreenDiv {
+    width: 80%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
 
 .leftSideDiv, .rightSideDiv {
     width: 45%;
@@ -280,7 +286,7 @@ nav {
     font-weight: bold;
 }
 
-.volunteer-age, .volunteer-skills, .ngo-email, .ngo-contact {
+.volunteer-age, .volunteer-skills, .ngo-email, .ngo-contact, .ngo-description {
     margin: 5px 0 0;
     font-size: 14px;
 }
@@ -323,6 +329,14 @@ nav {
     border-radius: 15px;
 }
 
+/*-----------ngo/adminapplications.html*/
+.accept-ngo {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #00d40e;
+    cursor: pointer;
+}
 /*------------------------------STATIC PAGES*/
 /*-----------ngo/volaboutus.html*/
 .aboutUsMain {

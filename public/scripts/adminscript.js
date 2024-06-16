@@ -101,6 +101,59 @@ async function fetchNGOs() {
   });
 }
 
+async function fetchNGOapplications() {
+  const response = await fetch("/ngos/status/P"); // Replace with your API endpoint
+  const data = await response.json();
+
+  const ngoDiv = document.querySelector(".fullHomeDiv");
+
+  data.forEach((ngo) => {
+    const ngoItem = document.createElement("div");
+    ngoItem.classList.add("ngo"); // Add a CSS class for styling
+
+    const ngoInfo = document.createElement("div");
+    ngoInfo.classList.add("ngo-info"); // Add a CSS class for styling
+
+    const ngoName = document.createElement("h3");
+    ngoName.textContent = ngo.name;
+    ngoName.classList.add("ngo-name")
+
+    const ngoEmail = document.createElement("p");
+    ngoEmail.textContent = ngo.email;
+    ngoEmail.classList.add("ngo-email")
+
+    const ngoContact = document.createElement("p");
+    ngoContact.textContent = ngo.contactnumber;
+    ngoContact.classList.add("ngo-contact")
+
+    const ngoDescription = document.createElement("p");
+    ngoDescription.textContent = ngo.description;
+    ngoDescription.classList.add("ngo-description")
+
+    const ngoAcceptBtn = document.createElement("button")
+    ngoAcceptBtn.textContent = "✓";
+    ngoAcceptBtn.setAttribute("id", `ngoaccept-btn${ngo.ngoid}`)
+    ngoAcceptBtn.classList.add("accept-ngo")
+    ngoAcceptBtn.addEventListener("click", deleteUser)
+
+    const ngoRejectBtn = document.createElement("button")
+    ngoRejectBtn.textContent = "✕";
+    ngoRejectBtn.setAttribute("id", `ngodeletion-btn${ngo.ngoid}`)
+    ngoRejectBtn.classList.add("remove-ngo")
+    ngoRejectBtn.addEventListener("click", deleteUser)
+
+    ngoItem.appendChild(ngoInfo);
+    ngoInfo.appendChild(ngoName);
+    ngoInfo.appendChild(ngoEmail);
+    ngoInfo.appendChild(ngoContact);
+    ngoInfo.appendChild(ngoDescription);
+    ngoItem.appendChild(ngoAcceptBtn);
+    ngoItem.appendChild(ngoRejectBtn);
+    ngoDiv.appendChild(ngoItem);
+
+  });
+}
+
 async function deleteUser(event) {
   const popup = document.querySelector(".userdeletion-popup")
   const nobutton = document.getElementById("userdeletion-no")
@@ -133,7 +186,10 @@ async function deleteUser(event) {
 }
 
 
-
-fetchVolunteers(); // Call the function to fetch and display data
+if (document.querySelector(".leftHomeDiv")) {
+  fetchVolunteers(); // Call the function to fetch and display data
 fetchNGOs();
+}
+
+fetchNGOapplications();
 
