@@ -6,12 +6,13 @@ nav {
     font-weight: bold;
 }
 
-/*-----------VolunteerHomePage*/
-#volIndexMain {
+.indexMain {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
 }
+/*-----------VolunteerHomePage*/
+
 
 .leftSideDiv, .rightSideDiv {
     width: 45%;
