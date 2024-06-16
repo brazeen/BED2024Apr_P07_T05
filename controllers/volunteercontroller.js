@@ -27,6 +27,17 @@ const deleteVolunteer = async (req, res) => {
         res.status(500).send("Error deleting volunteer")
     }
 }
+
+async function getVolunteerSkills(req, res) {
+    const volId = parseInt(req.params.id);
+    try {
+      const skills = await Volunteer.getVolunteerSkills(volId);
+      res.json(skills);
+    } catch (error) {
+      console.error(error); 
+      res.status(500).json({ message: "Error fetching volunteer's skill" });
+    }
+}
 /*
 const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
@@ -76,4 +87,5 @@ const updateBook = async (req, res) => {
 module.exports = {
     getAllVolunteers,
     deleteVolunteer,
+    getVolunteerSkills,
 }

@@ -16,6 +16,7 @@ app.use(staticMiddleware)
 //volunteers
 app.get("/volunteers", volunteercontroller.getAllVolunteers);
 app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
+app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);

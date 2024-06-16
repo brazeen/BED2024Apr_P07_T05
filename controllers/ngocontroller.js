@@ -25,8 +25,8 @@ const getNGOsByStatus = async (req, res) => {
 const deleteNGO = async (req, res) => {
     const NGOId = req.params.id;
     try {
-        const NGO = await NGO.deleteNGO(NGOId);
-        if (!NGO) {
+        const ngo = await NGO.deleteNGO(NGOId);
+        if (!ngo) {
           return res.status(404).send("NGO not found");
         }
         res.status(204).send()

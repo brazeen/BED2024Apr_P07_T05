@@ -44,6 +44,31 @@ class Volunteer {
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
 
+    //brandon
+    //this method gets all the volunteer's skills
+    static async getVolunteerSkills(id) {
+        const connection = await sql.connect(dbConfig);
+        try {
+          const query = `
+          SELECT s.skillname
+          FROM Skills s
+          INNER JOIN VolunteerSkills vs ON vs.skillid = s.skillid
+          WHERE vs.volunteerid = @volunteerid;
+          `;
+          const request = connection.request();
+          request.input("volunteerid", id)
+          const result = await request.query(query);
+    
+          return result.recordset.map(row => row.skillname)
+        } catch (error) {
+            console.log(error)
+          throw new Error("Error fetching volunteer's skill");
+          
+        } finally {
+          await connection.close();
+        }
+      }
+
     /*
     static async getVolunteerById(id) {
         const connection = await sql.connect(dbConfig);
