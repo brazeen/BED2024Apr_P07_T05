@@ -308,7 +308,7 @@ nav {
     left: 25%;
     background-color: rgb(255, 255, 255);
     border: 2px solid black;
-    border-radius: 3%;
+    border-radius: 4px;
     display: none;
     justify-content: center;
     align-items: center;
@@ -325,8 +325,13 @@ nav {
 }
 
 .userpopup-buttons button {
-    padding: 5px 20px;
-    border-radius: 15px;
+    background-color: #ffcc00;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 /*-----------ngo/adminapplications.html*/
