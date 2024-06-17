@@ -22,6 +22,53 @@ const getNGOsByStatus = async (req, res) => {
     }
 };
 
+const getNGOById = async (req, res) => {
+    const ngoid = req.params.id;
+    try {
+      const ngo = await NGO.getNGOsByStatus(ngoid);
+      if (!ngo) {
+        return res.status(404).send("NGO not found")
+      }
+      res.json(ngo);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving NGO");
+    }
+};
+
+const updateNGO = async (req, res) => {
+    const ngoId = req.params.id;
+    const newNGOData = req.body;
+    try {
+        const ngo = await NGO.updateNGO(ngoId, newNGOData);
+        if (!ngo) {
+          return res.status(404).send("NGO not found");
+        }       
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error updating NGO")
+    }
+}
+
+const updateNGOStatus = async (req, res) => {
+    const ngoId = req.params.id;
+    const status = req.params.status;
+    try {
+        const ngo = await NGO.updateNGOStatus(ngoId, status);
+        if (!ngo) {
+          return res.status(404).send("NGO not found");
+        }   
+        else {
+            return res.status(200).send("NGO status updated")
+        }    
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error updating NGO")
+    }
+}
+
 const deleteNGO = async (req, res) => {
     const NGOId = req.params.id;
     try {
@@ -33,7 +80,7 @@ const deleteNGO = async (req, res) => {
     }
     catch(error) {
         console.error(error)
-        res.status(500).send("Error deleting NGO")
+        res.status(500).send("Error deleting NGO status")
     }
 }
 /*
@@ -50,21 +97,7 @@ const createBook = async (req, res) => {
     }
 }
 
-const updateBook = async (req, res) => {
-    const bookId = req.params.id;
-    const newBookData = req.body;
-    try {
-        const book = await Book.updateBook(bookId, newBookData);
-        if (!book) {
-          return res.status(404).send("Book not found");
-        }
-        
-    }
-    catch(error) {
-        console.error(error)
-        res.status(500).send("EError updating book")
-    }
-}
+
 
 
 
@@ -73,5 +106,8 @@ const updateBook = async (req, res) => {
 module.exports = {
     getAllNGOs,
     getNGOsByStatus,
+    getNGOById,
+    updateNGO,
+    updateNGOStatus,
     deleteNGO,
 }

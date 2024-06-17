@@ -134,7 +134,7 @@ async function fetchNGOapplications() {
     ngoAcceptBtn.textContent = "✓";
     ngoAcceptBtn.setAttribute("id", `ngoaccept-btn${ngo.ngoid}`)
     ngoAcceptBtn.classList.add("accept-ngo")
-    ngoAcceptBtn.addEventListener("click", deleteUser)
+    ngoAcceptBtn.addEventListener("click", acceptNGOApplication)
 
     const ngoRejectBtn = document.createElement("button")
     ngoRejectBtn.textContent = "✕";
@@ -154,10 +154,14 @@ async function fetchNGOapplications() {
   });
 }
 
+
+
 async function deleteUser(event) {
-  const popup = document.querySelector(".userdeletion-popup")
-  const nobutton = document.getElementById("userdeletion-no")
-  const yesbutton = document.getElementById("userdeletion-yes")
+  const popup = document.querySelector(".user-popup")
+  const nobutton = document.getElementById("userpopup-no")
+  const yesbutton = document.getElementById("userpopup-yes")
+  const popuptext = document.querySelector("#userpopup-text")
+  popuptext.textContent = "Are you sure you want to delete this user?"
   popup.style.display = "flex"
   const buttonid = event.target.id;
   nobutton.onclick = function () {
@@ -185,11 +189,40 @@ async function deleteUser(event) {
   }
 }
 
-
-if (document.querySelector(".leftHomeDiv")) {
-  fetchVolunteers(); // Call the function to fetch and display data
-fetchNGOs();
+async function acceptNGOApplication(event) {
+  const popup = document.querySelector(".user-popup")
+  const nobutton = document.getElementById("userpopup-no")
+  const yesbutton = document.getElementById("userpopup-yes")
+  const popuptext = document.querySelector("#userpopup-text")
+  popuptext.textContent = "Are you sure you want to accept this NGO's application?"
+  popup.style.display = "flex"
+  const buttonid = event.target.id;
+  nobutton.onclick = function () {
+    popup.style.display = "none"
+  }
+  yesbutton.onclick = async function () {
+    let userid = buttonid.slice(13)
+    let apistring = `/ngos/${userid}/A`
+    const response = await fetch(apistring, {
+      method: "PATCH", //specify the method
+    }); // Replace with your API endpoint
+    if (response.ok) {
+      alert("NGO accepted successfully! Please reload the page.");
+      popup.style.display = "none"
+    } else {
+      alert("Error accepting NGO:", await response.text());
+      // Handle deletion errors (e.g., display an error message)
+    }
+  }
 }
 
-fetchNGOapplications();
+//check if is dashboard page or applications page
+if (document.querySelector(".leftHomeDiv")) {
+  fetchVolunteers(); // Call the function to fetch and display data
+  fetchNGOs();
+}
+else{
+  fetchNGOapplications();
+}
+
 

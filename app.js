@@ -21,6 +21,9 @@ app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);
 app.get("/ngos/status/:status", ngocontroller.getNGOsByStatus); //status must be R, A or P
+app.get("/ngos/:id", ngocontroller.getNGOById);
+app.put("/ngos/:id", ngocontroller.updateNGO)
+app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
 
 

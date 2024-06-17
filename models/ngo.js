@@ -47,6 +47,63 @@ class NGO {
         //possible null
     }
 
+    static async getNGOById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM NGOs WHERE ngoid = @ngoid`; //params
+
+        const request = connection.request();
+        request.input("ngoid", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0] ?
+            new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
+         : null //convert rows to NGOs
+        //possible null
+    }
+
+    static async updateNGO(id, newNGOData) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE NGOs SET name = @name, email = @email, password = @password, logo = @logo, description = @description, contactperson = @contactperson, contactnumber = @contactnumber, address = @address, status = @status WHERE ngoid = @ngoid`
+
+        const request = connection.request()
+        request.input("ngoid", id)
+        request.input("name", newNGOData.name || null)
+        request.input("email", newNGOData.email || null)
+        request.input("password", newNGOData.password || null)
+        request.input("logo", newNGOData.logo || null)
+        request.input("description", newNGOData.description || null)
+        request.input("contactperson", newNGOData.contactperson || null)
+        request.input("contactnumber", newNGOData.contactnumber || null)
+        request.input("address", newNGOData.address || null)
+        request.input("status", newNGOData.status || null)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getNGOById(id)
+    }
+
+    static async updateNGOStatus(id, status) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE NGOs SET status = @status WHERE ngoid = @ngoid`
+
+        const request = connection.request()
+        request.input("ngoid", id)
+        request.input("status", status || null)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getNGOById(id)
+    }
+    
     static async deleteNGO(id) {
         const connection = await sql.connect(dbConfig)
 

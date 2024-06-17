@@ -38,7 +38,7 @@ class Volunteer {
         request.input("volunteerid", id)
 
         const result = await request.query(sqlQuery)
-        
+
         connection.close()
 
         return result.rowsAffected > 0; // Indicate success based on affected rows
@@ -49,25 +49,25 @@ class Volunteer {
     static async getVolunteerSkills(id) {
         const connection = await sql.connect(dbConfig);
         try {
-          const query = `
+            const query = `
           SELECT s.skillname
           FROM Skills s
           INNER JOIN VolunteerSkills vs ON vs.skillid = s.skillid
           WHERE vs.volunteerid = @volunteerid;
           `;
-          const request = connection.request();
-          request.input("volunteerid", id)
-          const result = await request.query(query);
-    
-          return result.recordset.map(row => row.skillname)
+            const request = connection.request();
+            request.input("volunteerid", id)
+            const result = await request.query(query);
+
+            return result.recordset.map(row => row.skillname)
         } catch (error) {
             console.log(error)
-          throw new Error("Error fetching volunteer's skill");
-          
+            throw new Error("Error fetching volunteer's skill");
+
         } finally {
-          await connection.close();
+            await connection.close();
         }
-      }
+    }
 
     /*
     static async getVolunteerById(id) {
