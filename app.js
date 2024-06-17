@@ -2,6 +2,8 @@ const express = require("express");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser")
+const volunteercontroller = require("./controllers/volunteercontroller")
+const ngocontroller = require("./controllers/ngocontroller")
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -11,7 +13,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 app.use(staticMiddleware)   
 
+//volunteers
+app.get("/volunteers", volunteercontroller.getAllVolunteers);
+app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
+app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 
+//NGOs
+app.get("/ngos", ngocontroller.getAllNGOs);
+app.get("/ngos/status/:status", ngocontroller.getNGOsByStatus); //status must be R, A or P
+app.get("/ngos/:id", ngocontroller.getNGOById);
+app.put("/ngos/:id", ngocontroller.updateNGO)
+app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
+app.delete("/ngos/:id", ngocontroller.deleteNGO);
 
 
 

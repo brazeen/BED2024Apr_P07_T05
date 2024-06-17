@@ -7,6 +7,9 @@ class Admin {
         this.adminname = adminname;
         this.adminpassword = adminpassword;
     }
+
+    
+    
 /*
     static async getAllVolunteers() {
         const connection = await sql.connect(dbConfig);

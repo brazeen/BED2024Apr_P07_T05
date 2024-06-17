@@ -6,10 +6,17 @@ nav {
     font-weight: bold;
 }
 
-/*-----------VolunteerHomePage*/
-#volIndexMain {
+.indexMain {
     display: flex;
     justify-content: space-evenly;
+    padding: 20px;
+}
+/*-----------VolunteerHomePage*/
+.fullScreenDiv {
+    width: 80%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 
@@ -248,6 +255,88 @@ nav {
     color: white;
 }
 
+/*-----------admindashboard.html*/
+.volunteer, .ngo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.volunteer-photo, .ngo-photo{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.volunteer-info, .ngo-info{
+    flex-grow: 1;
+}
+
+.volunteer-name, .ngo-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.volunteer-age, .volunteer-skills, .ngo-email, .ngo-contact, .ngo-description {
+    margin: 5px 0 0;
+    font-size: 14px;
+}
+
+.remove-volunteer, .remove-ngo{
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #ff0000;
+    cursor: pointer;
+}
+
+.user-popup {
+    width: 50vw;
+    height: 50vh;
+    z-index: 1;
+    position: absolute; 
+    top: 25%;
+    left: 25%;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid black;
+    border-radius: 3%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.userpopup-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+.userpopup-text {
+    font-size: large;
+}
+
+.userpopup-buttons button {
+    padding: 5px 20px;
+    border-radius: 15px;
+}
+
+/*-----------ngo/adminapplications.html*/
+.accept-ngo {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    color: #00d40e;
+    cursor: pointer;
+}
 /*------------------------------STATIC PAGES*/
 /*-----------ngo/volaboutus.html*/
 .aboutUsMain {
