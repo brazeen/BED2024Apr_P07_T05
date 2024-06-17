@@ -255,6 +255,36 @@ nav {
     color: white;
 }
 
+/*-----------ngocreate.html*/
+
+#ngocreateMain {
+    padding: 20px;
+}
+
+#ngocreateMain h1 {
+    text-align: center;
+}
+.post-btn, .cancel-btn {
+    background-color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.post-btn {
+    border: none;
+    background-color: #FFEB3B;
+    color:#000000;
+}
+
+.cancel-btn {
+    background-color: white;
+    border-width: 0.5px;
+    color:#000000;
+}
+
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
