@@ -1,3 +1,14 @@
+-- Drop Tables if they exist
+DROP TABLE IF EXISTS Applications;
+DROP TABLE IF EXISTS OpportunitySkills;
+DROP TABLE IF EXISTS Opportunities;
+DROP TABLE IF EXISTS VolunteerSkills;
+DROP TABLE IF EXISTS Volunteers;
+DROP TABLE IF EXISTS Skills;
+DROP TABLE IF EXISTS NGOs;
+DROP TABLE IF EXISTS Admins;
+
+
 CREATE TABLE Volunteers (
     volunteerid INT PRIMARY KEY IDENTITY(1,1),
     name VARCHAR(100),
@@ -39,6 +50,8 @@ CREATE TABLE Opportunities (
     ngoid INT FOREIGN KEY REFERENCES NGOs(ngoid),
     title NVARCHAR(100),
     description NVARCHAR(255),
+    address NVARCHAR(255),
+    region NVARCHAR(10),
     datetime smalldatetime,
     maxvolunteers INT,
     currentVolunteers INT
@@ -93,8 +106,8 @@ VALUES (3, 2),  -- Volunteer 2 has skill 3
        (6, 2),  -- Volunteer 2 has skill 6
        (4, 4),  -- Volunteer 4 has skill 4
        (5, 5),  -- Volunteer 5 has skill 5
-       (3, 6);  -- Volunteer 6 has skill 3
-       (1, 1),  -- Volunteer 1 has skill 1
+       (3, 3),  -- Volunteer 3 has skill 3
+       (1, 1);  -- Volunteer 1 has skill 1
 
 -- NGO population
 INSERT INTO NGOs (name, email, password, logo, description, contactperson, contactnumber, address, status) 
@@ -110,10 +123,54 @@ VALUES ('Animal Shelter', 'animalshelter@example.com', 'sheltercare', 'https://i
        ('Soup Kitchen', 'soupkitchengoals@example.com', 'nourishinglives', 'https://static.wixstatic.com/media/950ec0_7557c389547c46bf8b123167dacf9936~mv2.webp', 'Provides hot meals to those in need.', 'David Williams', '555-345-6789', '1213 Pine St, Anytown, WA 98765', 'P'); 
 
 -- Opportunity population
---settle location thingy first
+INSERT INTO Opportunities (ngoid, title, description, address, region, datetime, maxvolunteers, currentVolunteers)
+VALUES 
+-- Animal Shelter
+(1, 'Pet Adoption Drive', 'Help organize an adoption drive for stray animals.', '80 Mandai Lake Rd, Singapore Zoo', 'North', '2025-03-15 10:00', 50, 30),
+(1, 'Shelter Maintenance', 'Assist in cleaning and maintaining the animal shelter.', '50 Sungei Tengah Rd, Animal Shelter', 'North', '2025-06-12 09:00', 30, 15),
+(1, 'Fundraising Gala', 'Support fundraising efforts for the animal shelter.', '10 Woodlands Square, Causeway Point', 'North', '2025-09-20 19:00', 100, 45),
+-- Food Bank
+(2, 'Food Distribution', 'Distribute food to families in need.', '1 Tampines Walk, Our Tampines Hub', 'East', '2025-04-05 14:00', 40, 20),
+(2, 'Warehouse Sorting', 'Sort food donations at our warehouse.', '18 Bedok North St 5, Bedok Industrial Park', 'East', '2025-07-10 11:00', 25, 18),
+(2, 'Community Kitchen', 'Prepare meals for the underprivileged.', '200 Sims Ave, Geylang', 'East', '2025-10-25 08:00', 35, 28),
+-- Literacy Program
+(3, 'Reading Session', 'Conduct reading sessions for children.', '298 Yishun St 20, Northpoint City', 'North', '2025-02-28 16:00', 20, 12),
+(3, 'Book Donation Drive', 'Organize a book donation event.', '3 Bukit Panjang Ring Rd, Hillion Mall', 'West', '2025-05-22 10:00', 60, 40),
+(3, 'Tutoring Program', 'Provide tutoring for underprivileged children.', '31 Jurong West Central 3, Jurong Point', 'West', '2025-08-15 17:00', 30, 25),
+-- Environmental Cleanup
+(4, 'Beach Cleanup', 'Join us in cleaning up East Coast Park.', 'East Coast Park, Marine Parade', 'East', '2025-03-22 07:00', 100, 60),
+(4, 'Park Maintenance', 'Help maintain the greenery at Bishan Park.', '1384 Ang Mo Kio Ave 1, Bishan Park', 'Central', '2025-06-18 09:00', 50, 30),
+(4, 'Community Garden', 'Assist in managing a community garden.', 'Bukit Batok Nature Park', 'West', '2025-09-10 08:00', 40, 25),
+-- Soup Kitchen
+(5, 'Soup Kitchen Service', 'Serve meals to the homeless.', '27 Kreta Ayer Rd, Chinatown', 'Central', '2025-01-10 11:00', 45, 30),
+(5, 'Meal Preparation', 'Prepare meals for distribution.', 'Blk 531A Upper Cross St, Hong Lim Complex', 'Central', '2025-07-05 06:00', 30, 18),
+(5, 'Volunteer Training', 'Train new volunteers at the soup kitchen.', '10 Sinaran Dr, Novena', 'Central', '2025-11-22 09:00', 25, 15);
 
 -- OpportunitySkills population
---settle opportunity table first
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (3, 1); -- Friendly for Pet Adoption Drive
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (5, 2); -- Physical for Shelter Maintenance
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (1, 3); -- Communication for Fundraising Gala
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (6, 3); -- Leadership for Fundraising Gala
+-- Food Bank
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (2, 4); -- Teamwork for Food Distribution
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (5, 5); -- Physical for Warehouse Sorting
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (7, 6); -- Time Management for Community Kitchen
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (4, 6); -- Tech for Community Kitchen
+-- Literacy Program
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (1, 7); -- Communication for Reading Session
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (3, 7); -- Friendly for Reading Session
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (6, 8); -- Leadership for Book Donation Drive
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (1, 9); -- Communication for Tutoring Program
+-- Environmental Cleanup
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (5, 10); -- Physical for Beach Cleanup
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (2, 10); -- Teamwork for Beach Cleanup
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (5, 11); -- Physical for Park Maintenance
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (7, 12); -- Time Management for Community Garden
+-- Soup Kitchen
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (3, 13); -- Friendly for Soup Kitchen Service
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (2, 13); -- Teamwork for Soup Kitchen Service
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (4, 14); -- Tech for Meal Preparation
+INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (6, 15); -- Leadership for Volunteer Training
 
 -- Admin population
 INSERT INTO Admins (adminname, adminpassword)
