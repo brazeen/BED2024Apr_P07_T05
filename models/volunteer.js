@@ -28,6 +28,22 @@ class Volunteer {
         ) //convert rows to volunteers
     }
 
+    static async getVolunteerById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Volunteers WHERE id = @id`; //params
+
+        const request = connection.request();
+        request.input("id", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Volunteer(row.volunteerid, row.name, row.email, row.password, row.bio, row.dateofbirth, row.profilepicture)
+            : null; //book not found
+    }
+
     //brandon
     static async deleteVolunteer(id) {
         const connection = await sql.connect(dbConfig)
@@ -70,24 +86,7 @@ class Volunteer {
     }
 
     /*
-    static async getVolunteerById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Books WHERE id = @id`; //params
-
-        const request = connection.request();
-        request.input("id", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Book(result.recordset[0].id,
-                result.recordset[0].title,
-                result.recordset[0].author
-            )
-            : null; //book not found
-    }
+    
 
     static async createBook(newBookData) {
         const connection = await sql.connect(dbConfig)

@@ -8,6 +8,24 @@ class Application {
         this.opportunityid = opportunityid;
         this.status = status;
     }
+
+    static async getApplicationsByOpportunityandStatus(status, id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Applications WHERE status = @status AND opportunityid = @opportunityid`; //params
+
+        const request = connection.request();
+        request.input("status", status)
+        request.input("opportunityid", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
+        ) //convert rows
+        //possible null
+    }
 /*
     static async getAllVolunteers() {
         const connection = await sql.connect(dbConfig);
@@ -25,24 +43,7 @@ class Application {
     }
 
     
-    static async getVolunteerById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Books WHERE id = @id`; //params
-
-        const request = connection.request();
-        request.input("id", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Book(result.recordset[0].id,
-                result.recordset[0].title,
-                result.recordset[0].author
-            )
-            : null; //book not found
-    }
+    
 
     static async createBook(newBookData) {
         const connection = await sql.connect(dbConfig)
