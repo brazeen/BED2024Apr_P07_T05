@@ -24,7 +24,6 @@ class Application {
         return result.recordset.map(
             (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
         ) //convert rows
-        //possible null
     }
 /*
     static async getAllVolunteers() {
