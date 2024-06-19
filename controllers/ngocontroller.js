@@ -80,7 +80,7 @@ const deleteNGO = async (req, res) => {
     }
     catch(error) {
         console.error(error)
-        res.status(500).send("Error deleting NGO status")
+        res.status(500).send("Error deleting NGO")
     }
 }
 /*
