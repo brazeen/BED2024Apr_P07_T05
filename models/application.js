@@ -9,6 +9,22 @@ class Application {
         this.status = status;
     }
 
+    static async getApplicationById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Applications WHERE applicationid = @applicationid`; //params
+
+        const request = connection.request();
+        request.input("applicationid", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0] ?
+            new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
+        : null; //convert rows
+    }
+
     static async getApplicationsByOpportunityandStatus(status, id) {
         const connection = await sql.connect(dbConfig);
 
@@ -24,6 +40,39 @@ class Application {
         return result.recordset.map(
             (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
         ) //convert rows
+    }
+
+    static async createApplication(newApplicationData) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `INSERT INTO Applications (volunteerid, opportunityid, status) VALUES (@volunteerid, @opportunityid, @status);`
+
+        const request = connection.request()
+        request.input("volunteerid", newApplicationData.volunteerid)
+        request.input("opportunityid", newApplicationData.opportunityid)
+        request.input("status", newApplicationData.status)
+
+        const result = await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getApplicationById(result.recordset[0].applicationid);
+
+    }
+
+    static async deleteApplication(id) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `DELETE FROM Applications WHERE id = @id`
+
+        const request = connection.request()
+        request.input("id", id)
+
+        const result = await request.query(sqlQuery)
+        
+        connection.close()
+
+        return result.rowsAffected > 0; // Indicate success based on affected rows
     }
 /*
     static async getAllVolunteers() {
@@ -78,20 +127,7 @@ class Application {
         return this.getBookById(id)
     }
 
-    static async deleteBook(id) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `DELETE FROM Books WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-
-        const result = await request.query(sqlQuery)
-        
-        connection.close()
-
-        return result.rowsAffected > 0; // Indicate success based on affected rows
-    }
+    
         */
 }
 

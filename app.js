@@ -4,6 +4,7 @@ const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser")
 const volunteercontroller = require("./controllers/volunteercontroller")
 const ngocontroller = require("./controllers/ngocontroller")
+const applicationcontroller = require("./controllers/applicationcontroller")
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -25,6 +26,12 @@ app.get("/ngos/:id", ngocontroller.getNGOById);
 app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
+
+//applications
+app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
+app.get("/applications/:id/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
+app.post("/applications", applicationcontroller.createApplication);
+app.delete("/applications/:id", applicationcontroller.deleteApplication);
 
 
 
