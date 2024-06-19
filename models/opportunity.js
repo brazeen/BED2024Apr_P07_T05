@@ -2,11 +2,13 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Opportunity {
-    constructor(opportunityid, ngoid, title, description, datetime, maxvolunteers, currentvolunteers) {
+    constructor(opportunityid, ngoid, title, description, address, region, datetime, maxvolunteers, currentvolunteers) {
         this.opportunityid = opportunityid;
         this.ngoid = ngoid;
         this.title = title;
         this.description = description;
+        this.address = address;
+        this.region = region;
         this.datetime = datetime;
         this.maxvolunteers = maxvolunteers;
         this.currentvolunteers = currentvolunteers;
@@ -23,7 +25,7 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.datetime, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.datetime, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
     /*
