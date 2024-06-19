@@ -25,7 +25,7 @@ const getNGOsByStatus = async (req, res) => {
 const getNGOById = async (req, res) => {
     const ngoid = req.params.id;
     try {
-      const ngo = await NGO.getNGOsByStatus(ngoid);
+      const ngo = await NGO.getNGOById(ngoid);
       if (!ngo) {
         return res.status(404).send("NGO not found")
       }
