@@ -49,8 +49,22 @@
         <h1> Create Opportunity </h1>
         <form>
             <div class="create-opp">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" value="">
+                <label for="title">Title</label><br>
+                <input type="text" id="title" name="title" value=""><br><br>
+                <label for="date">Date of Event</label><br>
+                <input type="date" id="date" name="date" value=""><br><br>
+                <label for="time">Time</label><br>
+                <input type="time" id="time1" name="time1" value="">
+                to
+                <input type="time" id="time2" name="time2" value=""><br><br> <!--time1 is time start, time2 is time end-->
+                <label for="venue">Venue</label><br>
+                <input type="text" id="venue" name="Venue" value=""><br><br>
+                <label for="age">Age Requirement</label><br>
+                <input type="number" id="age" name="age" value="" min="16" max="80"><br><br>
+                <label for="count">No. of Volunteers Needed</label><br>
+                <input type="number" id="count" name="count" value="" min="1" max="100"><br><br>
+                <label for="description">Description</label><br>
+                <textarea id="description" name="description"></textarea><br><br>
             </div>
         </form>
         <button class="post-btn">Post</button>

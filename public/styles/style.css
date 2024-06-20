@@ -261,6 +261,11 @@ nav {
     padding: 20px;
 }
 
+#ngocreateMain form {
+    margin: 0 auto;
+    width: 350px;
+}
+
 #ngocreateMain h1 {
     text-align: center;
 }
@@ -285,6 +290,22 @@ nav {
     color:#000000;
 }
 
+#title {
+    width: 350px;;
+}
+
+#venue {
+    width: 350px;
+}
+
+#age, #count {
+    width: 100px;
+}
+
+#description {
+    width: 350px;
+    height: 150px;
+}
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
