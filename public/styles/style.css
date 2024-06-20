@@ -172,14 +172,11 @@ nav {
 }
 
 /*-----------ngomanageopportunity.html*/
-
-
-#ngoManageOpportunityMain {
-    padding: 20px;
-}
-
-#ngoManageOpportunityMain h1 {
-    text-align: center;
+.manageoppMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .opportunity-details, .applications {
@@ -255,6 +252,11 @@ nav {
     color: white;
 }
 
+.manageoppwrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
