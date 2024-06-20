@@ -172,6 +172,20 @@ INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (2, 13); -- Teamwo
 INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (4, 14); -- Tech for Meal Preparation
 INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (6, 15); -- Leadership for Volunteer Training
 
+-- Applications population
+INSERT INTO Applications (volunteerid, opportunityid, status)
+VALUES
+  (1, 1, 'P'), -- Volunteer 1 applies (pending) for Pet Adoption Drive (1)
+  (2, 2, 'P'), -- Volunteer 2 applies (pending) for Food Distribution (2)
+  (3, 3, 'A'), -- Volunteer 3 is accepted for Reading Session (3)
+  (4, 4, 'P'), -- Volunteer 4 applies (pending) for Beach Cleanup (4)
+  (5, 5, 'A'), -- Volunteer 5 is accepted for Soup Kitchen Service (5)
+  (2, 6, 'P'), -- Volunteer 2 applies (pending) for Warehouse Sorting (6)
+  (1, 7, 'P'), -- Volunteer 1 applies (pending) for Fundraising Gala (7)
+  (3, 8, 'P'), -- Volunteer 3 applies (pending) for Book Donation Drive (8)
+  (4, 9, 'P'), -- Volunteer 4 applies (pending) for Park Maintenance (9)
+  (5, 10, 'A'), -- Volunteer 5 is accepted for Meal Preparation (10);
+
 -- Admin population
 INSERT INTO Admins (adminname, adminpassword)
 VALUES 
