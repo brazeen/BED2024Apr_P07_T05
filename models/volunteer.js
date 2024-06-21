@@ -1,6 +1,5 @@
 const sql = require("mssql")
 const dbConfig = require("../dbConfig");
-
 class Volunteer {
     constructor(volunteerid, name, email, password, bio, dateofbirth, profilepicture) {
         this.volunteerid = volunteerid;
@@ -69,6 +68,28 @@ class Volunteer {
         }
     }
 
+//yangyi (create new volunteer)
+    static async createVolunteer(newVolunteerData) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `INSERT INTO Volunteers (name, email, password, bio, dateofbirth, profilepicture) `
+
+        const request = connection.request()
+        request.input("name", newVolunteerData.name)
+        request.input("email", newVolunteerData.email)
+        request.input("password", newVolunteerData.password)
+        request.input("bio", newVolunteerData.bio)
+        request.input("dateofbirth", newVolunteerData.dateofbirth)
+        request.input("profilepicture", newVolunteerData.profilepicture)
+
+        const result = await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getBookById(result.recordset[0].id)
+
+    }
+    
     /*
     static async getVolunteerById(id) {
         const connection = await sql.connect(dbConfig);
@@ -87,23 +108,6 @@ class Volunteer {
                 result.recordset[0].author
             )
             : null; //book not found
-    }
-
-    static async createBook(newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`
-
-        const request = connection.request()
-        request.input("title", newBookData.title)
-        request.input("author", newBookData.author)
-
-        const result = await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(result.recordset[0].id)
-
     }
 
     static async updateBook(id, newBookData) {
