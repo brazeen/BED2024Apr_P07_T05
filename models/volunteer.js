@@ -71,7 +71,7 @@ class Volunteer {
 //yangyi (create new volunteer)
     static async createVolunteer(newVolunteerData) {
         const connection = await sql.connect(dbConfig)
-        const name = document.getElementById('name').value;
+        /*const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
@@ -83,7 +83,7 @@ class Volunteer {
         if (password !== confirmPassword) {
             alert('Passwords do not match!');
             return;
-        }
+        } */
         const sqlQuery = `INSERT INTO Volunteers (name, email, password, skills, bio, dateofbirth, profilepicture) `
 
         const request = connection.request()
@@ -98,7 +98,7 @@ class Volunteer {
 
         connection.close()
 
-        return this.getBookById(result.recordset[0].id)
+        return this.getAllVolunteers(result.recordset[0])
 
     }
     

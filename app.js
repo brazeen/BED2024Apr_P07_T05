@@ -25,7 +25,7 @@ app.get("/ngos/:id", ngocontroller.getNGOById);
 app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.createVolunteer("/volunteer", volunteercontroller.createVolunteer)
+app.post("/volunteer", volunteercontroller.createVolunteer)
 
 
 
