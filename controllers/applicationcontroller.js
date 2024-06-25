@@ -15,13 +15,11 @@ const getApplicationById = async (req, res) => {
 };
 
 const getApplicationsByOpportunityandStatus = async (req, res) => {
-    const applicationid = req.params.id;
+    const opportunityid = req.params.opportunityid;
     const status = req.params.status;
     try {
-        const application = await Application.getApplicationsByOpportunityandStatus(applicationid, status);
-        if (!application) {
-          return res.status(404).send("Application not found");
-        }       
+        const applications = await Application.getApplicationsByOpportunityandStatus(opportunityid, status);   
+        res.json(applications)
     }
     catch(error) {
         console.error(error)
@@ -40,10 +38,30 @@ const createApplication = async (req, res) => {
     }
 }
 
-const deleteApplication = async (req, res) => {
-    const applicationId = req.params.id;
+const updateApplicationStatus = async (req, res) => {
+    const volunteerid = req.params.volunteerid;
+    const opportunityid = req.params.opportunityid;
+    const status = req.params.status;
     try {
-        const application = await Application.deleteApplication(applicationId);
+        const application = await Application.updateApplicationStatus(volunteerid, opportunityid, status);
+        if (!application) {
+          return res.status(404).send("Application not found");
+        }   
+        else {
+            return res.status(200).send("Application status updated")
+        }    
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error updating application")
+    }
+}
+
+const deleteApplication = async (req, res) => {
+    const volunteerId = req.params.volunteerid;
+    const opportunityId = req.params.opportunityid;
+    try {
+        const application = await Application.deleteApplication(volunteerid, opportunityid);
         if (!application) {
           return res.status(404).send("Application not found");
         }
@@ -51,43 +69,14 @@ const deleteApplication = async (req, res) => {
     }
     catch(error) {
         console.error(error)
-        res.status(500).send("Error deleting Application")
+        res.status(500).send("Error deleting application")
     }
 }
-
-/*
-const updateNGOStatus = async (req, res) => {
-    const ngoId = req.params.id;
-    const status = req.params.status;
-    try {
-        const ngo = await NGO.updateNGOStatus(ngoId, status);
-        if (!ngo) {
-          return res.status(404).send("NGO not found");
-        }   
-        else {
-            return res.status(200).send("NGO status updated")
-        }    
-    }
-    catch(error) {
-        console.error(error)
-        res.status(500).send("Error updating NGO")
-    }
-}
-
-
-
-
-
-
-
-
-
-
-*/
 
 module.exports = {
     getApplicationById,
     getApplicationsByOpportunityandStatus,
     createApplication,
+    updateApplicationStatus,
     deleteApplication
 }

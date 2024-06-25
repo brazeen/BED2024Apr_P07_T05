@@ -29,9 +29,10 @@ app.delete("/ngos/:id", ngocontroller.deleteNGO);
 
 //applications
 app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
-app.get("/applications/:id/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
+app.get("/applications/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
 app.post("/applications", applicationcontroller.createApplication);
-app.delete("/applications/:id", applicationcontroller.deleteApplication);
+app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus)
+app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
 
 
 

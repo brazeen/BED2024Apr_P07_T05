@@ -21,18 +21,18 @@ class Application {
         connection.close();
 
         return result.recordset[0] ?
-            new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
+            new Application(result.recordset[0].applicationid, result.recordset[0].volunteerid, result.recordset[0].opportunityid, result.recordset[0].status)
         : null; //convert rows
     }
 
-    static async getApplicationsByOpportunityandStatus(status, id) {
+    static async getApplicationsByOpportunityandStatus(opportunityid, status) {
         const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `SELECT * FROM Applications WHERE status = @status AND opportunityid = @opportunityid`; //params
 
         const request = connection.request();
         request.input("status", status)
-        request.input("opportunityid", id)
+        request.input("opportunityid", opportunityid)
         const result = await request.query(sqlQuery);
 
         connection.close();
@@ -60,13 +60,31 @@ class Application {
 
     }
 
-    static async deleteApplication(id) {
+    static async updateApplicationStatus(volunteerid, opportunityid, status) {
         const connection = await sql.connect(dbConfig)
 
-        const sqlQuery = `DELETE FROM Applications WHERE id = @id`
+        const sqlQuery = `UPDATE Applications SET status = @status WHERE volunteerid = @volunteerid AND opportunityid = @opportunityid`
 
         const request = connection.request()
-        request.input("id", id)
+        request.input("volunteerid", volunteerid)
+        request.input("opportunityid", opportunityid)
+        request.input("status", status)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return result.rowsAffected > 0; // Indicate success based on affected rows
+    }
+
+    static async deleteApplication(volunteerid, opportunityid) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `DELETE FROM Applications WHERE volunteerid = @volunteerid AND opportunityid = @opportunityid`
+
+        const request = connection.request()
+        request.input("volunteerid", volunteerid)
+        request.input("opportunityid", opportunityid)
 
         const result = await request.query(sqlQuery)
         
