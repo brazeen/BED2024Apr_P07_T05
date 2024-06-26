@@ -1,6 +1,5 @@
 const sql = require("mssql")
 const dbConfig = require("../dbConfig");
-
 class Volunteer {
     constructor(volunteerid, name, email, password, bio, dateofbirth, profilepicture) {
         this.volunteerid = volunteerid;
@@ -85,17 +84,19 @@ class Volunteer {
         }
     }
 
-    /*
-    
-
-    static async createBook(newBookData) {
+//yangyi (create new volunteer)
+    static async createVolunteer(newVolunteerData) {
         const connection = await sql.connect(dbConfig)
 
-        const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`
+        const sqlQuery = `INSERT INTO Volunteers (name, email, password, bio, dateofbirth, profilepicture) `
 
         const request = connection.request()
-        request.input("title", newBookData.title)
-        request.input("author", newBookData.author)
+        request.input("name", newVolunteerData.name)
+        request.input("email", newVolunteerData.email)
+        request.input("password", newVolunteerData.password)
+        request.input("bio", newVolunteerData.bio)
+        request.input("dateofbirth", newVolunteerData.dateofbirth)
+        request.input("profilepicture", newVolunteerData.profilepicture)
 
         const result = await request.query(sqlQuery)
 
@@ -104,6 +105,9 @@ class Volunteer {
         return this.getBookById(result.recordset[0].id)
 
     }
+    
+    /*
+    
 
     static async updateBook(id, newBookData) {
         const connection = await sql.connect(dbConfig)
