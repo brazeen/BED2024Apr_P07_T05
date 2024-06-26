@@ -27,6 +27,22 @@ class Volunteer {
         ) //convert rows to volunteers
     }
 
+    static async getVolunteerById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Volunteers WHERE volunteerid = @volunteerid`; //params
+
+        const request = connection.request();
+        request.input("volunteerid", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            : null; // not found
+    }
+
     //brandon
     static async deleteVolunteer(id) {
         const connection = await sql.connect(dbConfig)
@@ -91,24 +107,7 @@ class Volunteer {
     }
     
     /*
-    static async getVolunteerById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Books WHERE id = @id`; //params
-
-        const request = connection.request();
-        request.input("id", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new Book(result.recordset[0].id,
-                result.recordset[0].title,
-                result.recordset[0].author
-            )
-            : null; //book not found
-    }
+    
 
     static async updateBook(id, newBookData) {
         const connection = await sql.connect(dbConfig)
