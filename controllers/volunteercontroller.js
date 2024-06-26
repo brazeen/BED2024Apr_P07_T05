@@ -12,6 +12,20 @@ const getAllVolunteers = async (req, res) => {
     }
 }
 
+const getVolunteerById = async (req, res) => {
+  const volunteerid = req.params.id;
+  try {
+    const volunteer = await Volunteer.getVolunteerById(volunteerid);
+    if (!volunteer) {
+      return res.status(404).send("Volunteer not found")
+    }
+    res.json(volunteer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Volunteer");
+  }
+};
+
 //brandon
 const deleteVolunteer = async (req, res) => {
     const volunteerId = req.params.id;
@@ -38,6 +52,18 @@ async function getVolunteerSkills(req, res) {
       res.status(500).json({ message: "Error fetching volunteer's skill" });
     }
 }
+
+const createVolunteer = async (req, res) => {
+  const newVolunteer = req.body;
+  try {
+      const createdVolunteer = await Volunteer.createVolunteer(newVolunteer)
+      res.status(201).json(createdVolunteer)
+  }
+  catch(error) {
+      res.status(500).send("Error creating volunteer account")
+  }
+}
+
 /*
 const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
@@ -53,16 +79,7 @@ const getBookById = async (req, res) => {
     }
   };
 
-const createBook = async (req, res) => {
-    const newBook = req.body;
-    try {
-        const createdBook = await Book.createBook(newBook)
-        res.status(201).json(createdBook)
-    }
-    catch(error) {
-        res.status(500).send("Error creating book")
-    }
-}
+
 
 const updateBook = async (req, res) => {
     const bookId = req.params.id;
@@ -86,6 +103,8 @@ const updateBook = async (req, res) => {
 
 module.exports = {
     getAllVolunteers,
+    getVolunteerById,
     deleteVolunteer,
     getVolunteerSkills,
+    createVolunteer,
 }
