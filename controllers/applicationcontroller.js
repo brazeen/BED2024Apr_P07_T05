@@ -14,6 +14,21 @@ const getApplicationById = async (req, res) => {
     }
 };
 
+const getApplicationByVolunteerAndOpportunityId = async (req, res) => {
+    const volunteerid = req.params.volunteerid;
+    const opportunityid = req.params.opportunityid;
+    try {
+      const application = await Application.getApplicationByVolunteerAndOpportunityId(volunteerid, opportunityid);
+      if (!application) {
+        return res.status(404).send("Application not found")
+      }
+      res.json(application);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving application");
+    }
+};
+
 const getApplicationsByOpportunityandStatus = async (req, res) => {
     const opportunityid = req.params.opportunityid;
     const status = req.params.status;
@@ -58,8 +73,8 @@ const updateApplicationStatus = async (req, res) => {
 }
 
 const deleteApplication = async (req, res) => {
-    const volunteerId = req.params.volunteerid;
-    const opportunityId = req.params.opportunityid;
+    const volunteerid = req.params.volunteerid;
+    const opportunityid = req.params.opportunityid;
     try {
         const application = await Application.deleteApplication(volunteerid, opportunityid);
         if (!application) {
@@ -75,6 +90,7 @@ const deleteApplication = async (req, res) => {
 
 module.exports = {
     getApplicationById,
+    getApplicationByVolunteerAndOpportunityId,
     getApplicationsByOpportunityandStatus,
     createApplication,
     updateApplicationStatus,

@@ -31,17 +31,17 @@ class Volunteer {
     static async getVolunteerById(id) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Volunteers WHERE id = @id`; //params
+        const sqlQuery = `SELECT * FROM Volunteers WHERE volunteerid = @volunteerid`; //params
 
         const request = connection.request();
-        request.input("id", id)
+        request.input("volunteerid", id)
         const result = await request.query(sqlQuery);
 
         connection.close();
 
         return result.recordset[0]
-            ? new Volunteer(row.volunteerid, row.name, row.email, row.password, row.bio, row.dateofbirth, row.profilepicture)
-            : null; //book not found
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            : null; // not found
     }
 
     //brandon

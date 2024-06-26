@@ -12,6 +12,20 @@ const getAllVolunteers = async (req, res) => {
     }
 }
 
+const getVolunteerById = async (req, res) => {
+  const volunteerid = req.params.id;
+  try {
+    const volunteer = await Volunteer.getVolunteerById(volunteerid);
+    if (!volunteer) {
+      return res.status(404).send("Volunteer not found")
+    }
+    res.json(volunteer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Volunteer");
+  }
+};
+
 //brandon
 const deleteVolunteer = async (req, res) => {
     const volunteerId = req.params.id;
@@ -86,6 +100,7 @@ const updateBook = async (req, res) => {
 
 module.exports = {
     getAllVolunteers,
+    getVolunteerById,
     deleteVolunteer,
     getVolunteerSkills,
 }

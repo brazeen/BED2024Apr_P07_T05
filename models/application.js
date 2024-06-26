@@ -25,6 +25,23 @@ class Application {
         : null; //convert rows
     }
 
+    static async getApplicationByVolunteerAndOpportunityId(volunteerid, opportunityid) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid AND opportunityid = @opportunityid`; //params
+
+        const request = connection.request();
+        request.input("volunteerid", volunteerid)
+        request.input("opportunityid", opportunityid)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0] ?
+            new Application(result.recordset[0].applicationid, result.recordset[0].volunteerid, result.recordset[0].opportunityid, result.recordset[0].status)
+        : null; //convert rows
+    }
+
     static async getApplicationsByOpportunityandStatus(opportunityid, status) {
         const connection = await sql.connect(dbConfig);
 
@@ -74,7 +91,7 @@ class Application {
 
         connection.close()
 
-        return result.rowsAffected > 0; // Indicate success based on affected rows
+        return this.getApplicationByVolunteerAndOpportunityId(volunteerid, opportunityid); 
     }
 
     static async deleteApplication(volunteerid, opportunityid) {

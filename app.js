@@ -16,6 +16,7 @@ app.use(staticMiddleware)
 
 //volunteers
 app.get("/volunteers", volunteercontroller.getAllVolunteers);
+app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 
@@ -29,7 +30,8 @@ app.delete("/ngos/:id", ngocontroller.deleteNGO);
 
 //applications
 app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
-app.get("/applications/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
+app.get("/applications/:volunteerid/:opportunityid", applicationcontroller.getApplicationByVolunteerAndOpportunityId); //by vol and opp id
+app.get("/applications/array/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
 app.post("/applications", applicationcontroller.createApplication);
 app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus)
 app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
