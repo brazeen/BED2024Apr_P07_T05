@@ -53,7 +53,7 @@ CREATE TABLE Opportunities (
     address NVARCHAR(255),
     region NVARCHAR(10),
     date date,
-    starttime, time,
+    starttime time,
     endtime time, 
     maxvolunteers INT,
     currentVolunteers INT
