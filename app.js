@@ -5,6 +5,7 @@ const bodyParser = require("body-parser")
 const volunteercontroller = require("./controllers/volunteercontroller")
 const ngocontroller = require("./controllers/ngocontroller")
 const applicationcontroller = require("./controllers/applicationcontroller")
+const opportunitycontroller = require("./controllers/opportunitycontroller")
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -37,7 +38,9 @@ app.post("/applications", applicationcontroller.createApplication);
 app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus)
 app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
 
-
+//opportunities
+app.get("/opportunities", opportunitycontroller.getAllOpportunities)
+app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
 
 app.listen(port, async() => {
     try {
