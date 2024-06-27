@@ -2,14 +2,16 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Opportunity {
-    constructor(opportunityid, ngoid, title, description, address, region, datetime, maxvolunteers, currentvolunteers) {
+    constructor(opportunityid, ngoid, title, description, address, region, date, starttime, endtime, maxvolunteers, currentvolunteers) {
         this.opportunityid = opportunityid;
         this.ngoid = ngoid;
         this.title = title;
         this.description = description;
         this.address = address;
         this.region = region;
-        this.datetime = datetime;
+        this.date = date;
+        this.starttime = starttime;
+        this.endtime = endtime;
         this.maxvolunteers = maxvolunteers;
         this.currentvolunteers = currentvolunteers;
     }
@@ -28,26 +30,37 @@ class Opportunity {
             (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.datetime, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
-    /*
-    
-    static async getVolunteerById(id) {
+
+    static async getOpportunityById(id) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Books WHERE id = @id`; //params
+        const sqlQuery = `SELECT * FROM Opportunities WHERE opportunityid = @opportunityid`; //params
 
         const request = connection.request();
-        request.input("id", id)
+        request.input("opportunityid", id)
         const result = await request.query(sqlQuery);
 
         connection.close();
 
         return result.recordset[0]
-            ? new Book(result.recordset[0].id,
+            ? new Opportunity(
+                result.recordset[0].opportunityid,
+                result.recordset[0].ngoid,
                 result.recordset[0].title,
-                result.recordset[0].author
+                result.recordset[0].description,
+                result.recordset[0].address,
+                result.recordset[0].region,
+                result.recordset[0].date,
+                result.recordset[0].starttime,
+                result.recordset[0].endtime,
+                result.recordset[0].maxvolunteers,
+                result.recordset[0].currentvolunteers,
             )
-            : null; //book not found
+            : null; //not found
     }
+    /*
+    
+    
 
     static async createBook(newBookData) {
         const connection = await sql.connect(dbConfig)
