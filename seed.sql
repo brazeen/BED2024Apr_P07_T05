@@ -187,7 +187,7 @@ VALUES
   (1, 7, 'P'), -- Volunteer 1 applies (pending) for Fundraising Gala (7)
   (3, 8, 'P'), -- Volunteer 3 applies (pending) for Book Donation Drive (8)
   (4, 9, 'P'), -- Volunteer 4 applies (pending) for Park Maintenance (9)
-  (5, 10, 'A'), -- Volunteer 5 is accepted for Meal Preparation (10);
+  (5, 10, 'A'); -- Volunteer 5 is accepted for Meal Preparation (10);
 
 -- Admin population
 INSERT INTO Admins (adminname, adminpassword)

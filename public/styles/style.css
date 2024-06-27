@@ -262,6 +262,10 @@ nav {
 
 #ngocreateMain {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 #ngocreateMain form {
@@ -309,6 +313,71 @@ nav {
     width: 350px;
     height: 150px;
 }
+
+/*--------ngodashboard.html*/
+
+#ngodashMain {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ngodashMain h1{
+    text-align: center;
+}
+
+.dashHeading {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+}
+
+.dashHeading svg {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.dashHeading svg :hover{
+    margin-left: 20px;
+    margin-top: 5px;
+    cursor: pointer;
+    fill: #ffeb3b;
+}
+
+.dashContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 45%;
+    border: 0.1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.dashContentClick {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    width: 85%;
+    border: 0.1px solid black;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 50px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.dashDate {
+    width: 20%;
+    background-color: #FFEB3B;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 20px;
+}
+
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
