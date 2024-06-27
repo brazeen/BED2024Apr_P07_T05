@@ -478,7 +478,6 @@ nav {
 }
 
 /*------------ngoprofilepage*/
-/*volunteerprofile*/
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -496,6 +495,7 @@ body {
 .logo-container {
     margin-right: 20px;
     width: 50%;
+    padding-top: 35px;
 }
 
 .ngo-logo {
@@ -505,11 +505,15 @@ body {
 
 .ngo-list {
     width: 50%;
+    height: 100%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
     margin: 40px;
+    overflow-wrap: break-word; 
+    word-wrap: break-word; 
+    word-break: break-word; 
 }
 
 .ngo-list h2 {
@@ -537,7 +541,10 @@ body {
     cursor: pointer;
     border-radius: 5px;
     margin-top: 10px;
-    margin-left: 110px;;
+    margin-left: 80%;
+    width: 100px;
+    height: 50px;
+    font-size: 80%;
 }
 
 .contact-info, .past-events, .description {
@@ -547,3 +554,28 @@ body {
 .contact-info p, .past-events p, .description p {
     margin: 5px 0;
 }
+@media (max-width: 810px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo-container {
+        width: 45%;
+        height: 45%;
+        border-radius: 100%;
+    }
+
+    .ngo-list {
+        width: 100%;
+    }
+
+    .delete-btn {
+        width: 80px;
+        height: 50px;
+        font-size: 10px;
+        margin-left: 80%;
+    }
+}
+
+
