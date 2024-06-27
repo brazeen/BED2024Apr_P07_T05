@@ -41,6 +41,7 @@ app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.de
 //opportunities
 app.get("/opportunities", opportunitycontroller.getAllOpportunities)
 app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
+app.post("/opportunities",opportunitycontroller.createOpportunity)
 
 app.listen(port, async() => {
     try {

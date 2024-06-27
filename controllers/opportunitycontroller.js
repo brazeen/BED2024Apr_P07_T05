@@ -26,6 +26,17 @@ const getOpportunityById = async (req, res) => {
   }
 };
 
+const createOpportunity = async (req, res) => {
+  const newOpp = req.body;
+  try {
+      const createdOpp = await Opportunity.createOpportunity(newOpp)
+      res.status(201).json(createdOpp)
+  }
+  catch(error) {
+      res.status(500).send("Error creating opportunity")
+  }
+}
+
 /*
 const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
@@ -65,5 +76,6 @@ const updateBook = async (req, res) => {
 
 module.exports = {
     getAllOpportunities,
-    getOpportunityById
+    getOpportunityById,
+    createOpportunity
 }
