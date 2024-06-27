@@ -172,14 +172,11 @@ nav {
 }
 
 /*-----------ngomanageopportunity.html*/
-
-
-#ngoManageOpportunityMain {
-    padding: 20px;
-}
-
-#ngoManageOpportunityMain h1 {
-    text-align: center;
+.manageoppMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .opportunity-details, .applications {
@@ -255,6 +252,132 @@ nav {
     color: white;
 }
 
+
+.manageoppwrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+}
+/*-----------ngocreate.html*/
+
+#ngocreateMain {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#ngocreateMain form {
+    margin: 0 auto;
+    width: 350px;
+}
+
+#ngocreateMain h1 {
+    text-align: center;
+}
+.post-btn, .cancel-btn {
+    background-color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.post-btn {
+    border: none;
+    background-color: #FFEB3B;
+    color:#000000;
+}
+
+.cancel-btn {
+    background-color: white;
+    border-width: 0.5px;
+    color:#000000;
+}
+
+#title {
+    width: 350px;;
+}
+
+#venue {
+    width: 350px;
+}
+
+#age, #count {
+    width: 100px;
+}
+
+#description {
+    width: 350px;
+    height: 150px;
+}
+
+/*--------ngodashboard.html*/
+
+#ngodashMain {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ngodashMain h1{
+    text-align: center;
+}
+
+.dashHeading {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+}
+
+.dashHeading svg {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.dashHeading svg :hover{
+    margin-left: 20px;
+    margin-top: 5px;
+    cursor: pointer;
+    fill: #ffeb3b;
+}
+
+.dashContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 45%;
+    border: 0.1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.dashContentClick {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    width: 85%;
+    border: 0.1px solid black;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 50px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.dashDate {
+    width: 20%;
+    background-color: #FFEB3B;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-right: 20px;
+}
+
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
@@ -308,7 +431,7 @@ nav {
     left: 25%;
     background-color: rgb(255, 255, 255);
     border: 2px solid black;
-    border-radius: 3%;
+    border-radius: 4px;
     display: none;
     justify-content: center;
     align-items: center;
@@ -325,8 +448,13 @@ nav {
 }
 
 .userpopup-buttons button {
-    padding: 5px 20px;
-    border-radius: 15px;
+    background-color: #ffcc00;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 /*-----------ngo/adminapplications.html*/

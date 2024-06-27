@@ -4,6 +4,7 @@ const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser")
 const volunteercontroller = require("./controllers/volunteercontroller")
 const ngocontroller = require("./controllers/ngocontroller")
+const applicationcontroller = require("./controllers/applicationcontroller")
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(staticMiddleware)
 
 //volunteers
 app.get("/volunteers", volunteercontroller.getAllVolunteers);
+app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 
@@ -26,6 +28,14 @@ app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
 app.post("/volunteer", volunteercontroller.createVolunteer)
+
+//applications
+app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
+app.get("/applications/:volunteerid/:opportunityid", applicationcontroller.getApplicationByVolunteerAndOpportunityId); //by vol and opp id
+app.get("/applications/array/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
+app.post("/applications", applicationcontroller.createApplication);
+app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus)
+app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
 
 
 
