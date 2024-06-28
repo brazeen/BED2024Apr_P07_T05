@@ -53,10 +53,10 @@ CREATE TABLE Opportunities (
     address NVARCHAR(255),
     region NVARCHAR(10),
     date date,
-    starttime, time,
+    starttime time,
     endtime time, 
     maxvolunteers INT,
-    currentVolunteers INT
+    currentvolunteers INT
 );
  
 CREATE TABLE OpportunitySkills (
@@ -125,7 +125,7 @@ VALUES ('Animal Shelter', 'animalshelter@example.com', 'sheltercare', 'https://i
        ('Soup Kitchen', 'soupkitchengoals@example.com', 'nourishinglives', 'https://static.wixstatic.com/media/950ec0_7557c389547c46bf8b123167dacf9936~mv2.webp', 'Provides hot meals to those in need.', 'David Williams', '555-345-6789', '1213 Pine St, Anytown, WA 98765', 'P'); 
 
 -- Opportunity population
-INSERT INTO Opportunities (ngoid, title, description, address, region, date, starttime, endtime, maxvolunteers, currentVolunteers)
+INSERT INTO Opportunities (ngoid, title, description, address, region, date, starttime, endtime, maxvolunteers, currentvolunteers)
 VALUES 
 -- Animal Shelter
 (1, 'Pet Adoption Drive', 'Help organize an adoption drive for stray animals.', '80 Mandai Lake Rd, Singapore Zoo', 'North', '2025-03-15', '10:00', '14:00', 50, 30),
