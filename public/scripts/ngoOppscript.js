@@ -19,6 +19,7 @@ function oppFormSubmission(){
   
         // Collect the data from the form
         const newOpportunity = {
+            ngoid: 1,
             title: title.value,
             description: description.value,
             date: date.value,
@@ -30,6 +31,7 @@ function oppFormSubmission(){
             maxvolunteers: maxvolunteers.value,
             currentVolunteers: 0,
         };
+        console.log(newOpportunity);
         try {
             const response = await fetch('/opportunities',{
                 method: 'POST',
@@ -44,11 +46,11 @@ function oppFormSubmission(){
                 console.log("Opportunity Created: ", createdOpp);
             }
             else {
-                console.error("Error creating opportunity:", response.statusText);
+                console.log("Error creating opportunity:", response.statusText);
             }
         }
         catch (error) {
-            console.error("Error creating opportunity:", error);
+            console.log("Error creating opportunity:", error);
         }
     });
 }
