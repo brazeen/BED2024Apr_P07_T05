@@ -75,3 +75,6 @@ async function applyForOpportunity(opportunity) {
 
 }
 displayOpportunity(6)
+
+
+
