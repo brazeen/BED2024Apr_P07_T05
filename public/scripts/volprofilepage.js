@@ -53,3 +53,23 @@ async function fetchVolunteerProfile(id) {
 
 fetchVolunteerProfile(2); // Call the function to fetch and display NGO data
 console.log("testing");
+
+document.querySelector('.delete-btn').addEventListener('click', function()
+    {
+        
+       console.log("Button was clicked");
+       deleteVolunteerProfile(1)
+    })
+async function deleteVolunteerProfile(id) {
+    const response = await fetch(`/volunteers/${id}`, {
+        method: 'DELETE'
+    })
+    if (response.ok) {
+        alert("Account successfully deleted.")
+    }
+    else {
+        alert("Unable to delete account.")
+    }
+}
+    
+
