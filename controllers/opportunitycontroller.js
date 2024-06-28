@@ -26,6 +26,16 @@ const getOpportunityById = async (req, res) => {
   }
 };
 
+async function getOpportunitySkills(req, res) {
+    const oppId = parseInt(req.params.id);
+    try {
+      const skills = await Opportunity.getOpportunitySkills(oppId)
+      res.json(skills);
+    } catch (error) {
+      console.error(error); 
+      res.status(500).json({ message: "Error fetching opportunity's skill" });
+    }
+}
 /*
 const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
@@ -65,5 +75,6 @@ const updateBook = async (req, res) => {
 
 module.exports = {
     getAllOpportunities,
-    getOpportunityById
+    getOpportunityById,
+    getOpportunitySkills
 }
