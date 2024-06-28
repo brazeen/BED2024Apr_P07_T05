@@ -161,9 +161,11 @@ async function fetchNgoProfile(id) {
         contactNumber.textContent = `Contact Number: ${NGO.contactnumber}`;
         const address = document.createElement("h2");
         address.textContent = `Address: ${NGO.address}`;
+        const description = document.createElement("p");
+        description.textContent = `Description: ${NGO.description}`;
 
         // Append all elements to the ngoItem div
-        ngoItem.append(email, username, contactPerson, contactNumber, address);
+        ngoItem.append(email, username, contactPerson, contactNumber, address, description);
 
         // Append the ngoItem div to the ngoList
         ngoList.appendChild(ngoItem);
@@ -177,12 +179,8 @@ async function fetchNgoProfile(id) {
         ngodescriptionItem.classList.add("data"); // Add a CSS class for styling
         const logo = document.createElement("img");
         logo.src = `${NGO.logo}`;
-        const description = document.createElement("p");
-        description.textContent = `Description: ${NGO.description}`;
-
         // Append the description to the ngodescriptionItem
-        ngodescriptionItem.appendChild(logo, description);
-
+        ngodescriptionItem.appendChild(logo);
         // Append the ngodescriptionItem to the ngodescription
         ngodescription.appendChild(ngodescriptionItem);
 
