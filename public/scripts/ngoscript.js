@@ -207,7 +207,7 @@ function oppFormSubmission(){
     const maxvolunteers = document.getElementById("count");
 
     //form submission btn
-    const postBtn = document.querySelector("post-btn");
+    const postBtn = document.getElementById("post-btn");
 
     postBtn.addEventListener("click", async (event) => { 
         // Prevent the default form submission behavior
@@ -225,11 +225,10 @@ function oppFormSubmission(){
             maxvolunteers: maxvolunteers.value,
         };
         try {
-            const response = await fetch("/opportunities",{
+            const response = await fetch('/opportunities',{
                 method: "POST",
                 headers: {
-                    "Content Type" :"application/json"
-
+                    "content-type" :"application/json"
                 },
                 body: JSON.stringify(newOpportunity)
             });
@@ -247,3 +246,4 @@ function oppFormSubmission(){
         }
     });
 }
+oppFormSubmission();
