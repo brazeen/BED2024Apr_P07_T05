@@ -82,6 +82,29 @@ class Opportunity {
             )
             : null; //not found
     }
+
+    static async getOpportunitySkills(id) {
+        const connection = await sql.connect(dbConfig);
+        try {
+            const query = `
+          SELECT s.skillname
+          FROM Skills s
+          INNER JOIN OpportunitySkills os ON os.skillid = s.skillid
+          WHERE os.opportunityid = @opportunityid;
+          `;
+            const request = connection.request();
+            request.input("opportunityid", id)
+            const result = await request.query(query);
+
+            return result.recordset.map(row => row.skillname)
+        } catch (error) {
+            console.log(error)
+            throw new Error("Error fetching opportunity's skill");
+
+        } finally {
+            await connection.close();
+        }
+    }
     /*
     
     

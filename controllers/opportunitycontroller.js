@@ -26,6 +26,7 @@ const getOpportunityById = async (req, res) => {
   }
 };
 
+
 const createOpportunity = async (req, res) => {
   const newOpp = req.body;
   try {
@@ -35,6 +36,18 @@ const createOpportunity = async (req, res) => {
   catch(error) {
       res.status(500).send("Error creating opportunity")
   }
+}
+
+
+async function getOpportunitySkills(req, res) {
+    const oppId = parseInt(req.params.id);
+    try {
+      const skills = await Opportunity.getOpportunitySkills(oppId)
+      res.json(skills);
+    } catch (error) {
+      console.error(error); 
+      res.status(500).json({ message: "Error fetching opportunity's skill" });
+    }
 }
 
 /*
@@ -77,5 +90,6 @@ const updateBook = async (req, res) => {
 module.exports = {
     getAllOpportunities,
     getOpportunityById,
-    createOpportunity
+    createOpportunity,
+    getOpportunitySkills
 }
