@@ -27,13 +27,13 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.datetime, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
 
     static async createOpportunity(newOpp) {
         const connection = await sql.connect(dbConfig);
-
+        //insert values
         const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@maxvolunteers,0);`;
 
         const request = connection.request();

@@ -270,7 +270,8 @@ nav {
 
 #ngocreateMain form {
     margin: 0 auto;
-    width: 350px;
+    width: 80%;
+    max-width: 350px;
 }
 
 #ngocreateMain h1 {
@@ -282,7 +283,7 @@ nav {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 10px;
+    margin: 10px auto;
 }
 
 #post-btn {
@@ -312,6 +313,27 @@ nav {
 #description {
     width: 350px;
     height: 150px;
+}
+
+@media (max-width: 1200px) {
+    #ngocreateMain {
+        width: 90%; /* Make the container take up more width on smaller screens */
+        margin: 10px auto; /* Reduce margin for more space */
+    }
+
+    #ngocreateMain form {
+        width: 100%; /* Make the form full width on smaller screens */
+    }
+
+    #title, #venue, #description {
+        width: 100%; /* Make all text inputs full width */
+        box-sizing: border-box; /* Include padding and border in element's total width */
+    }
+    
+    #age, #count {
+        width: 45%; /* Adjust width for smaller inputs */
+        box-sizing: border-box;
+    }
 }
 
 /*--------ngodashboard.html*/
@@ -354,6 +376,7 @@ nav {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    margin: 20px auto;
 }
 
 .dashContentClick {
@@ -367,6 +390,12 @@ nav {
     margin-left: 50px;
     margin-bottom: 20px;
     padding: 10px;
+    transition: all ease-in-out 0.3s;
+}
+
+.dashContentClick:hover {
+    cursor: pointer;
+    background-color: #cccccc;
 }
 
 .dashDate {
@@ -376,6 +405,21 @@ nav {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-right: 20px;
+}
+
+@media (max-width: 1200px){ /*responsiveness*/
+    .dashContent{
+        width: 95%;
+    }
+
+    .dashContentClick {
+        margin-left: 0;
+    }
+
+    .dashDate {
+        padding: 5px;
+        margin-right: 5px;
+    }
 }
 
 /*-----------admindashboard.html*/
