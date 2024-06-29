@@ -24,35 +24,36 @@ async function displayOpportunities() {
     /*let response = await fetch(`/opportunities`);
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunities = await response.json();*/
-    let opportunity = await fetchOpportunity();
-    console.log(opportunity);
+    let opportunities = await fetchOpportunity();
+    let parentContainer = document.querySelector(".dashContent")
+    opportunities.forEach(opportunity => {
+
+      const oInfo = document.createElement('section');
+      oInfo.classList.add('dashContentClick');
+
+      const oDate = document.createElement('span');
+      oDate.classList.add('dash-date');
+      oDate.textContent = opportunity.date;
+
+      const oBody = document.createElement('section');
+      oBody.classList.add('dash-body');
+
+      const oTitle = document.createElement('p');
+      oTitle.classList.add('dashTitle');
+      oTitle.textContent = opportunity.title;
+
+      const oTime = document.createElement('p');
+      oTitle.classList.add('dashTime');
+
+      oInfo.appendChild(oDate);
+      oInfo.appendChild(oBody);
+      oBody.appendChild(oTitle);
+      oBody.appendChild(oTime);
+
+      parentContainer.appendChild(oInfo);
+      
+    });
     
-    const opportunitiesContainer = document.createElement('div');
-    opportunitiesContainer.classList.add('opportunities-container');
-
-    const oInfo = document.createElement('section');
-    oInfo.classList.add('dashContentClick');
-
-    const oDate = document.createElement('span');
-    oDate.classList.add('dash-date');
-    oDate.textContent = opportunity.date;
-
-    const oBody = document.createElement('section');
-    oBody.classList.add('dash-body');
-
-    const oTitle = document.createElement('p');
-    oTitle.classList.add('dashTitle');
-    oTitle.textContent = opportunity.title;
-
-    const oTime = document.createElement('p');
-    oTitle.classList.add('dashTime');
-
-    oInfo.appendChild(oDate);
-    oInfo.appendChild(oBody);
-    oBody.appendChild(oTitle);
-    oBody.appendChild(oTime);
-
-    opportunitiesContainer.appendChild(oInfo);
     
     
 
