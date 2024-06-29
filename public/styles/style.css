@@ -276,7 +276,7 @@ nav {
 #ngocreateMain h1 {
     text-align: center;
 }
-.post-btn, .cancel-btn {
+#post-btn, .cancel-btn {
     background-color: white;
     padding: 10px 20px;
     font-size: 16px;
@@ -285,7 +285,7 @@ nav {
     margin: 0 10px;
 }
 
-.post-btn {
+#post-btn {
     border: none;
     background-color: #FFEB3B;
     color:#000000;

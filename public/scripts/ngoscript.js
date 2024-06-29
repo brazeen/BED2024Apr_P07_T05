@@ -191,4 +191,3 @@ async function fetchNgoProfile(id) {
 
 fetchNgoProfile(1); // Call the function to fetch and display NGO data
 console.log("testing");
-

@@ -31,13 +31,40 @@ class Opportunity {
         ) //convert rows to volunteers
     }
 
+    static async createOpportunity(newOpp) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@maxvolunteers,0);`;
+
+        const request = connection.request();
+        request.input("ngoid", newOpp.ngoid);
+        request.input("title", newOpp.title);
+        request.input("description", newOpp.description);
+        request.input("address", newOpp.address);
+        request.input("region", newOpp.region);
+        request.input("date", newOpp.date);
+        request.input("starttime", newOpp.starttime);
+        request.input("endtime", newOpp.endtime);
+        request.input("maxvolunteers", newOpp.maxvolunteers);
+        
+
+
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return this.getAllOpportunities();
+
+    }
+
+
     static async getOpportunityById(id) {
         const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `SELECT * FROM Opportunities WHERE opportunityid = @opportunityid`; //params
 
         const request = connection.request();
-        request.input("opportunityid", id)
+        request.input("opportunityid", id);
         const result = await request.query(sqlQuery);
 
         connection.close();
@@ -69,12 +96,12 @@ class Opportunity {
           WHERE os.opportunityid = @opportunityid;
           `;
             const request = connection.request();
-            request.input("opportunityid", id)
+            request.input("opportunityid", id);
             const result = await request.query(query);
 
             return result.recordset.map(row => row.skillname)
         } catch (error) {
-            console.log(error)
+            console.log(error);
             throw new Error("Error fetching opportunity's skill");
 
         } finally {
