@@ -1,4 +1,5 @@
 //yangyi
+let placeholderid = 7
 async function fetchVolunteerProfile(id) {
     try {
         const response = await fetch(`/volunteers/${id}`); // Replace with your API endpoint
@@ -51,14 +52,14 @@ async function fetchVolunteerProfile(id) {
     }
 }
 
-fetchVolunteerProfile(2); // Call the function to fetch and display NGO data
+fetchVolunteerProfile(placeholderid); // Call the function to fetch and display NGO data
 console.log("testing");
 
 document.querySelector('.delete-btn').addEventListener('click', function()
     {
         
        console.log("Button was clicked");
-       deleteVolunteerProfile(1)
+       deleteVolunteerProfile(placeholderid)
     })
 async function deleteVolunteerProfile(id) {
     const response = await fetch(`/volunteers/${id}`, {
