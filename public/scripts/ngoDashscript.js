@@ -14,6 +14,27 @@
     ); // Convert rows to Book objects
   }
     */
+   
+//To format time (example: 05:30 PM)
+function formatTimeRange(startTimeString, endTimeString) {
+    const startTime = new Date(startTimeString);
+    const endTime = new Date(endTimeString);
+
+    const options = { hour: '2-digit', minute: '2-digit' }; // Specify desired format
+    const formattedStartTime = startTime.toLocaleTimeString('en-SG', options); 
+    const formattedEndTime = endTime.toLocaleTimeString('en-SG', options);
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+}
+
+//To format date to numeric + month (example 12 May)
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-SG', options);
+}
+  
+
 async function fetchOpportunity() {
         let response = await fetch(`/opportunities`);
         if (!response.ok) throw new Error('Network response was not ok');
@@ -21,9 +42,7 @@ async function fetchOpportunity() {
         return opportunity;
 }
 async function displayOpportunities() {
-    /*let response = await fetch(`/opportunities`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    let opportunities = await response.json();*/
+
     let opportunities = await fetchOpportunity();
     let parentContainer = document.querySelector(".dashContent")
     opportunities.forEach(opportunity => {
@@ -32,18 +51,22 @@ async function displayOpportunities() {
       oInfo.classList.add('dashContentClick');
 
       const oDate = document.createElement('span');
-      oDate.classList.add('dash-date');
-      oDate.textContent = opportunity.date;
+      oDate.classList.add('dashDate');
+      oDate.textContent = formatDate(opportunity.date);
 
       const oBody = document.createElement('section');
-      oBody.classList.add('dash-body');
+      oBody.classList.add('dashBody');
 
       const oTitle = document.createElement('p');
       oTitle.classList.add('dashTitle');
       oTitle.textContent = opportunity.title;
-
+        
+      const starttime = opportunity.starttime;
+      const endtime = opportunity.endtime;
       const oTime = document.createElement('p');
-      oTitle.classList.add('dashTime');
+      oTime.classList.add('dashTime');
+      oTime.textContent = `${formatTimeRange(starttime, endtime)}`;
+      
 
       oInfo.appendChild(oDate);
       oInfo.appendChild(oBody);
@@ -53,36 +76,5 @@ async function displayOpportunities() {
       parentContainer.appendChild(oInfo);
       
     });
-    
-    
-    
-
-    /*
-    // Create a table element
-    const table = document.createElement('table');
-    table.classList.add('opportunities-table');
-  
-    // Create table headers
-    const headerRow = document.createElement('tr');
-    headerRow.innerHTML = `
-      <th>Date</th>
-      <th>Time</th>
-      <th>Title</th>
-    `;
-    table.appendChild(headerRow);
-  
-    // Add opportunities to the table
-    for (const opportunity in opportunities) {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${opportunity.date}</td>
-        <td>${opportunity.starttime}</td>
-        <td><a href="/opportunities/${opportunity.id}">${opportunity.title}</a></td>
-      `;
-      table.appendChild(row);
-    }
-  
-    // Add the table to the DOM
-    document.getElementById('opportunities-container').appendChild(table);*/
   }
   displayOpportunities();
