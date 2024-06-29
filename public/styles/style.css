@@ -378,6 +378,14 @@ nav {
     margin-right: 20px;
 }
 
+#opportunities-container {
+    width: 80%; /* Adjust to fit your desired width */
+    margin: 20px auto; /* Center the container horizontally */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Add rounded corners */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
+}
 /*-----------admindashboard.html*/
 .volunteer, .ngo{
     display: flex;
