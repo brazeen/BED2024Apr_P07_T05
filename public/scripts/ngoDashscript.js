@@ -1,4 +1,4 @@
-
+//donovan
 /*static async getAllBooks() {
     const connection = await sql.connect(dbConfig);
 
@@ -14,7 +14,7 @@
     ); // Convert rows to Book objects
   }
     */
-   
+
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
     const startTime = new Date(startTimeString);

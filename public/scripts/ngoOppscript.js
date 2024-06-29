@@ -16,7 +16,7 @@ function oppFormSubmission(){
     postBtn.addEventListener("click", async (event) => { 
         // Prevent the default form submission behavior
         event.preventDefault();
-  
+
         // Collect the data from the form
         const newOpportunity = {
             ngoid: 1,
@@ -44,6 +44,8 @@ function oppFormSubmission(){
             if (response.ok) {
                 const createdOpp = await response.json();
                 console.log("Opportunity Created: ", createdOpp);
+                alert("New opportunity created!");
+                window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);
