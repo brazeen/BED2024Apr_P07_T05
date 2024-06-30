@@ -62,7 +62,7 @@ class Application {
     static async createApplication(newApplicationData) {
         const connection = await sql.connect(dbConfig)
 
-        const sqlQuery = `INSERT INTO Applications (volunteerid, opportunityid, status) VALUES (@volunteerid, @opportunityid, @status);`
+        const sqlQuery = `INSERT INTO Applications (volunteerid, opportunityid, status) VALUES (@volunteerid, @opportunityid, @status); SELECT SCOPE_IDENTITY() AS applicationid;`
 
         const request = connection.request()
         request.input("volunteerid", newApplicationData.volunteerid)
@@ -73,6 +73,7 @@ class Application {
 
         connection.close()
 
+        console.log(result.recordset)       
         return this.getApplicationById(result.recordset[0].applicationid);
 
     }

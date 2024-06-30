@@ -1,3 +1,13 @@
+
+
+//hardcode
+let currentVolunteerId = 1
+let currentOpportunityId = 4
+
+const applyButton = document.querySelector(".apply-button")
+applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
+
+
 async function fetchNGOInOpportunity(opportunity) {
     let response = await fetch(`/ngos/${opportunity.ngoid}`); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
@@ -8,7 +18,7 @@ async function fetchNGOInOpportunity(opportunity) {
 async function fetchOpportunitySkills(id) {
     let response = await fetch(`/opportunities/skills/${id}`); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
-    let skills = await response.json();
+    let skills = await response.json(); 
     return skills;
 }
 
@@ -71,7 +81,30 @@ async function displayOpportunity(id) {
 }
 
 
-async function applyForOpportunity(opportunity) {
-
+async function applyForOpportunity(volid, oppid) {
+    //fake volunteer id as login is not done
+    let applicationstatus = "P"
+    let newApplication = {
+        volunteerid: volid,
+        opportunityid: oppid,
+        status: applicationstatus
+    }
+    let response = await fetch(`/applications/${volid}/${oppid}`)
+    if (response.status != 404) {
+        alert("An application for this opportunity has already been made.")
+        return;
+    }
+    response = await fetch('/applications', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(newApplication)
+      });// Replace with your API endpoint
+      
+    if (!response.ok) throw new Error('Network response was not ok');
+    else {
+        alert("Application has been made! Please refresh the page.")
+    }
 }
-displayOpportunity(6)
+displayOpportunity(currentOpportunityId)

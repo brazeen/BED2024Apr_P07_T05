@@ -458,7 +458,7 @@ nav {
 }
 
 /*-----------ngo/adminapplications.html*/
-.accept-ngo {
+.accept-volunteer, .accept-ngo {
     background-color: transparent;
     border: none;
     font-size: 18px;
