@@ -31,7 +31,20 @@ function oppFormSubmission(){
             maxvolunteers: maxvolunteers.value,
             currentVolunteers: 0,
         };
-        console.log(newOpportunity);
+
+        //Input validation
+        if (title.value.trim() === "" ||
+            description.value.trim() === "" ||
+            date.value === "" ||
+            starttime.value === "" ||
+            endtime.value === "" ||
+            address.value.trim() === "" ||
+            age.value === "" ||
+            maxvolunteers.value === ""
+        ) {
+            alert("Please fill in required fields before posting."); // Alert user
+            return; // Stop submission if any field is empty
+        }
         try {
             const response = await fetch('/opportunities',{
                 method: 'POST',
