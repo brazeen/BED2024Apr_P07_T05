@@ -74,6 +74,11 @@ async function displayOpportunities() {
       oBody.appendChild(oTime);
 
       parentContainer.appendChild(oInfo);
+
+      oInfo.addEventListener('click', () => {
+        // 1. Pass opportunity ID as a query parameter
+        window.location.href = `ngomanageopportunity.html?id=${opportunity.id}`;
+      });
       
     });
   }
