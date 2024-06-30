@@ -12,7 +12,12 @@ function oppFormSubmission(){
 
     //form submission btn
     const postBtn = document.getElementById("post-btn");
-
+    //cancel btn
+    const cancelBtn = document.querySelector('.cancel-btn');
+    cancelBtn.addEventListener('click', () => {
+        window.location.href = `ngodashboard.html`;
+    });
+    //posting opportunity
     postBtn.addEventListener("click", async (event) => { 
         // Prevent the default form submission behavior
         event.preventDefault();
