@@ -2,7 +2,7 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Opportunity {
-    constructor(opportunityid, ngoid, title, description, address, region, date, starttime, endtime, maxvolunteers, currentvolunteers) {
+    constructor(opportunityid, ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers) {
         this.opportunityid = opportunityid;
         this.ngoid = ngoid;
         this.title = title;
@@ -12,6 +12,7 @@ class Opportunity {
         this.date = date;
         this.starttime = starttime;
         this.endtime = endtime;
+        this.age = age;
         this.maxvolunteers = maxvolunteers;
         this.currentvolunteers = currentvolunteers;
     }
@@ -27,14 +28,14 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
 
     static async createOpportunity(newOpp) {
         const connection = await sql.connect(dbConfig);
         //insert values
-        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@maxvolunteers,0);`;
+        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0);`;
 
         const request = connection.request();
         request.input("ngoid", newOpp.ngoid);
@@ -45,7 +46,9 @@ class Opportunity {
         request.input("date", newOpp.date);
         request.input("starttime", newOpp.starttime);
         request.input("endtime", newOpp.endtime);
+        request.input("age", newOpp.age);
         request.input("maxvolunteers", newOpp.maxvolunteers);
+        request.input("currentVolunteers", newOpp.currentvolunteers);
         
 
 
@@ -53,7 +56,7 @@ class Opportunity {
 
         connection.close();
 
-        return this.getAllOpportunities();
+        return result.getAllOpportunities();
 
     }
 
@@ -80,6 +83,7 @@ class Opportunity {
                 result.recordset[0].date,
                 result.recordset[0].starttime,
                 result.recordset[0].endtime,
+                result.recordset[0].age,
                 result.recordset[0].maxvolunteers,
                 result.recordset[0].currentvolunteers,
             )
