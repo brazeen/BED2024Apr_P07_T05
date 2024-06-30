@@ -277,25 +277,36 @@ nav {
 #ngocreateMain h1 {
     text-align: center;
 }
+
 #post-btn, .cancel-btn {
-    background-color: white;
     padding: 10px 20px;
     font-size: 16px;
-    cursor: pointer;
     border-radius: 5px;
     margin: 10px auto;
 }
 
 #post-btn {
-    border: none;
-    background-color: #FFEB3B;
+    border-width: 0.5px;
+    background: #FFEB3B;
     color:#000000;
+    transition: all ease-in-out 0.3s;
+}
+
+#post-btn:hover {
+    background: #ffffff;
+    cursor: pointer;
 }
 
 .cancel-btn {
-    background-color: white;
+    background-color: #f44336;
     border-width: 0.5px;
     color:#000000;
+    transition: all ease-in-out 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: white;
+    cursor: pointer;
 }
 
 #title {
