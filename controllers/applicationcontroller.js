@@ -49,7 +49,7 @@ const createApplication = async (req, res) => {
         res.status(201).json(createdApplication)
     }
     catch(error) {
-        res.status(500).send("Error creating application")
+      res.status(500).send("Error creating application")
     }
 }
 

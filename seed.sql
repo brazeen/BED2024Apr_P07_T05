@@ -26,8 +26,8 @@ skillname VARCHAR(100),
  
 CREATE TABLE VolunteerSkills (
 id INT PRIMARY KEY IDENTITY(1,1),
-skillid INT FOREIGN KEY REFERENCES Skills(skillid),
-volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid),
+skillid INT FOREIGN KEY REFERENCES Skills(skillid) ON DELETE CASCADE,
+volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid) ON DELETE CASCADE,
 );
  
 -- Create NGO Table
@@ -47,7 +47,7 @@ CREATE TABLE NGOs (
 -- Create Opportunity Table
 CREATE TABLE Opportunities (
     opportunityid INT PRIMARY KEY IDENTITY(1,1),
-    ngoid INT FOREIGN KEY REFERENCES NGOs(ngoid),
+    ngoid INT FOREIGN KEY REFERENCES NGOs(ngoid) ON DELETE CASCADE,
     title NVARCHAR(100),
     description NVARCHAR(255),
     address NVARCHAR(255),
@@ -61,15 +61,15 @@ CREATE TABLE Opportunities (
  
 CREATE TABLE OpportunitySkills (
 id INT PRIMARY KEY IDENTITY(1,1),
-skillid INT FOREIGN KEY REFERENCES Skills(skillid),
-opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid),
+skillid INT FOREIGN KEY REFERENCES Skills(skillid) ON DELETE CASCADE,
+opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid) ON DELETE CASCADE,
 );
  
 -- Create Application Table
 CREATE TABLE Applications (
     applicationid INT PRIMARY KEY IDENTITY(1,1),
-    volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid),
-    opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid),
+    volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid) ON DELETE CASCADE,
+    opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid) ON DELETE CASCADE,
     status NVARCHAR(1)
 );
  

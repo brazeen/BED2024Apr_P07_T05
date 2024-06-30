@@ -27,13 +27,13 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.datetime, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
 
     static async createOpportunity(newOpp) {
         const connection = await sql.connect(dbConfig);
-
+        //insert values
         const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@maxvolunteers,0);`;
 
         const request = connection.request();
@@ -108,59 +108,7 @@ class Opportunity {
             await connection.close();
         }
     }
-    /*
     
-    
-
-    static async createBook(newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`
-
-        const request = connection.request()
-        request.input("title", newBookData.title)
-        request.input("author", newBookData.author)
-
-        const result = await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(result.recordset[0].id)
-
-    }
-
-    static async updateBook(id, newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Books SET title = @title, author = @author WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-        request.input("title", newBookData.title || null)
-        request.input("author", newBookData.author || null)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(id)
-    }
-
-    static async deleteBook(id) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `DELETE FROM Books WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-
-        const result = await request.query(sqlQuery)
-        
-        connection.close()
-
-        return result.rowsAffected > 0; // Indicate success based on affected rows
-    }
-        */
 }
 
 
