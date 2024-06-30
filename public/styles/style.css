@@ -270,22 +270,23 @@ nav {
 
 #ngocreateMain form {
     margin: 0 auto;
-    width: 350px;
+    width: 80%;
+    max-width: 350px;
 }
 
 #ngocreateMain h1 {
     text-align: center;
 }
-.post-btn, .cancel-btn {
+#post-btn, .cancel-btn {
     background-color: white;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 10px;
+    margin: 10px auto;
 }
 
-.post-btn {
+#post-btn {
     border: none;
     background-color: #FFEB3B;
     color:#000000;
@@ -312,6 +313,27 @@ nav {
 #description {
     width: 350px;
     height: 150px;
+}
+
+@media (max-width: 1200px) {
+    #ngocreateMain {
+        width: 90%; /* Make the container take up more width on smaller screens */
+        margin: 10px auto; /* Reduce margin for more space */
+    }
+
+    #ngocreateMain form {
+        width: 100%; /* Make the form full width on smaller screens */
+    }
+
+    #title, #venue, #description {
+        width: 100%; /* Make all text inputs full width */
+        box-sizing: border-box; /* Include padding and border in element's total width */
+    }
+    
+    #age, #count {
+        width: 45%; /* Adjust width for smaller inputs */
+        box-sizing: border-box;
+    }
 }
 
 /*--------ngodashboard.html*/
@@ -354,6 +376,7 @@ nav {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    margin: 20px auto;
 }
 
 .dashContentClick {
@@ -367,6 +390,12 @@ nav {
     margin-left: 50px;
     margin-bottom: 20px;
     padding: 10px;
+    transition: all ease-in-out 0.3s;
+}
+
+.dashContentClick:hover {
+    cursor: pointer;
+    background-color: #cccccc;
 }
 
 .dashDate {
@@ -376,6 +405,21 @@ nav {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin-right: 20px;
+}
+
+@media (max-width: 1200px){ /*responsiveness*/
+    .dashContent{
+        width: 95%;
+    }
+
+    .dashContentClick {
+        margin-left: 0;
+    }
+
+    .dashDate {
+        padding: 5px;
+        margin-right: 5px;
+    }
 }
 
 /*-----------admindashboard.html*/
@@ -476,3 +520,161 @@ nav {
     gap: 50px;
     align-items: center;
 }
+
+/*------------ngoprofilepage*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}  
+
+.logo-container {
+    margin-right: 20px;
+    width: 50%;
+    padding-top: 35px;
+}
+
+.ngo-logo {
+    width: 150px;
+    height: auto;
+}
+
+.ngo-list {
+    width: 50%;
+    height: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 40px;
+    overflow-wrap: break-word; 
+    word-wrap: break-word; 
+    word-break: break-word; 
+}
+
+.ngo-list h2 {
+    font-size: 15px;
+}
+
+.logo-container img {
+    height: 100%;
+    width: 100%;
+    border-radius: 10%;
+}
+
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.profile-details p {
+    margin: 5px 0;
+}
+
+.delete-btn {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 100px;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: auto;
+    display: block;
+}
+
+.contact-info, .past-events, .description {
+    margin-bottom: 20px;
+}
+
+.contact-info p, .past-events p, .description p {
+    margin: 5px 0;
+}
+
+/*-------------volunteer profile page */ 
+
+.volunteer-img-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 15%;
+    width: 50%;
+    padding-top: 35px;
+}
+
+.volunteer-logo {
+    width: 150px;
+    height: auto;
+}
+
+.volunteer-list {
+    width: 50%;
+    height: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 40px;
+    overflow-wrap: break-word; 
+    word-wrap: break-word; 
+    word-break: break-word; 
+}
+
+.volunteer-list h2 {
+    font-size: 15px;
+}
+
+.volunteer-img-container img {
+    height: 70%;
+    width: 70%;
+    border-radius: 10%;
+}
+
+.volunteer-img-container data {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+@media (max-width: 810px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo-container {
+        width: 45%;
+        height: 45%;
+        border-radius: 100%;
+    }
+
+    .ngo-list {
+        width: 100%;
+    }
+
+    .delete-btn {
+        width: 80px;
+        height: 50px;
+        font-size: 10px;
+        margin-left: 80%;
+    }
+
+    .ngo-list {
+        width: 80%;
+    }
+
+    .volunteer-list {
+        width: 80%;
+    }
+}
+
+
+

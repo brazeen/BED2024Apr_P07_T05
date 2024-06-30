@@ -27,9 +27,36 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.datetime, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.maxvolunteers, row.currentvolunteers)
         ) //convert rows to volunteers
     }
+
+    static async createOpportunity(newOpp) {
+        const connection = await sql.connect(dbConfig);
+        //insert values
+        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@maxvolunteers,0);`;
+
+        const request = connection.request();
+        request.input("ngoid", newOpp.ngoid);
+        request.input("title", newOpp.title);
+        request.input("description", newOpp.description);
+        request.input("address", newOpp.address);
+        request.input("region", newOpp.region);
+        request.input("date", newOpp.date);
+        request.input("starttime", newOpp.starttime);
+        request.input("endtime", newOpp.endtime);
+        request.input("maxvolunteers", newOpp.maxvolunteers);
+        
+
+
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return this.getAllOpportunities();
+
+    }
+
 
     static async getOpportunityById(id) {
         const connection = await sql.connect(dbConfig);
@@ -37,7 +64,7 @@ class Opportunity {
         const sqlQuery = `SELECT * FROM Opportunities WHERE opportunityid = @opportunityid`; //params
 
         const request = connection.request();
-        request.input("opportunityid", id)
+        request.input("opportunityid", id);
         const result = await request.query(sqlQuery);
 
         connection.close();
@@ -69,12 +96,12 @@ class Opportunity {
           WHERE os.opportunityid = @opportunityid;
           `;
             const request = connection.request();
-            request.input("opportunityid", id)
+            request.input("opportunityid", id);
             const result = await request.query(query);
 
             return result.recordset.map(row => row.skillname)
         } catch (error) {
-            console.log(error)
+            console.log(error);
             throw new Error("Error fetching opportunity's skill");
 
         } finally {

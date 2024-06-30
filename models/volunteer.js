@@ -43,20 +43,31 @@ class Volunteer {
             : null; // not found
     }
 
-    //brandon
     static async deleteVolunteer(id) {
-        const connection = await sql.connect(dbConfig)
+        const connection = await sql.connect(dbConfig);
+        const transaction = new sql.Transaction(connection);
 
-        const sqlQuery = `DELETE FROM Volunteers WHERE volunteerid = @volunteerid`
+        try {
+            await transaction.begin();
 
-        const request = connection.request()
-        request.input("volunteerid", id)
+            // Delete from VolunteerSkills first
+            const volSkillRequest = new sql.Request(transaction);
+            volSkillRequest.input('volunteerid', sql.Int, id);
+            await volSkillRequest.query('DELETE FROM VolunteerSkills WHERE volunteerid = @volunteerid');
 
-        const result = await request.query(sqlQuery)
+            // Delete from Volunteers next
+            const volRequest = new sql.Request(transaction);
+            volRequest.input('volunteerid', sql.Int, id);
+            const result = await volRequest.query('DELETE FROM Volunteers WHERE volunteerid = @volunteerid');
 
-        connection.close()
+            await transaction.commit();
+            console.log('Volunteer and associated skills deleted successfully.');
+            return result.rowsAffected[0] > 0; // Indicate success based on affected rows
 
-        return result.rowsAffected > 0; // Indicate success based on affected rows
+        } finally {
+            await transaction.rollback();
+            connection.close();
+        }
     }
 
     //brandon
@@ -84,39 +95,7 @@ class Volunteer {
         }
     }
 
-//yangyi (create new volunteer)
-    static async createVolunteer(newVolunteerData) {
-        const connection = await sql.connect(dbConfig)
-        /*const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const bio = document.getElementById('bio').value;
-        const skills = document.getElementById('skills').value;
-        const dateofbirth = document.getElementById('Dob').value;
-        const profilepicture = document.getElementById('profile-pic').value;
 
-        if (password !== confirmPassword) {
-            alert('Passwords do not match!');
-            return;
-        } */
-        const sqlQuery = `INSERT INTO Volunteers (name, email, password, skills, bio, dateofbirth, profilepicture) `
-
-        const request = connection.request()
-        request.input("name", newVolunteerData.name)
-        request.input("email", newVolunteerData.email)
-        request.input("password", newVolunteerData.password)
-        request.input("bio", newVolunteerData.bio)
-        request.input("dateofbirth", newVolunteerData.dateofbirth)
-        request.input("profilepicture", newVolunteerData.profilepicture)
-
-        const result = await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getAllVolunteers(result.recordset[0])
-
-    }
     
     /*
     

@@ -107,4 +107,10 @@ async function applyForOpportunity(volid, oppid) {
         alert("Application has been made! Please refresh the page.")
     }
 }
+
 displayOpportunity(currentOpportunityId)
+
+
+
+
+
