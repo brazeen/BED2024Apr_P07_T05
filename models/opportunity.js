@@ -48,7 +48,6 @@ class Opportunity {
         request.input("endtime", newOpp.endtime);
         request.input("age", newOpp.age);
         request.input("maxvolunteers", newOpp.maxvolunteers);
-        request.input("currentVolunteers", newOpp.currentvolunteers);
         
 
 
@@ -56,7 +55,7 @@ class Opportunity {
 
         connection.close();
 
-        return result.getAllOpportunities();
+        return this.getAllOpportunities();
 
     }
 

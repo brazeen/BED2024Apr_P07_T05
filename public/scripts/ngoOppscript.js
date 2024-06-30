@@ -50,11 +50,11 @@ function oppFormSubmission(){
             alert("Please fill in required fields before posting."); // Alert user
             return; // Stop submission if any field is empty
         }
-        if (parseInt(age.value) < 16 || parseInt(age.value) > 80) {
+        else if (parseInt(age.value) < 16 || parseInt(age.value) > 80) {
             alert("Age must be between 16 and 80.");
             return;
         }
-        if (parseInt(maxvolunteers.value) < 1 || parseInt(maxvolunteers.value) > 100) {
+        else if (parseInt(maxvolunteers.value) < 1 || parseInt(maxvolunteers.value) > 100) {
             alert("Maximum volunteers must be between 1 and 100.");
             return;
         }
