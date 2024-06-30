@@ -12,11 +12,16 @@ function oppFormSubmission(){
 
     //form submission btn
     const postBtn = document.getElementById("post-btn");
-
+    //cancel btn
+    const cancelBtn = document.querySelector('.cancel-btn');
+    cancelBtn.addEventListener('click', () => {
+        window.location.href = `ngodashboard.html`;
+    });
+    //posting opportunity
     postBtn.addEventListener("click", async (event) => { 
         // Prevent the default form submission behavior
         event.preventDefault();
-  
+
         // Collect the data from the form
         const newOpportunity = {
             ngoid: 1,
@@ -31,7 +36,28 @@ function oppFormSubmission(){
             maxvolunteers: maxvolunteers.value,
             currentVolunteers: 0,
         };
-        console.log(newOpportunity);
+
+        //Input validation
+        if (title.value.trim() === "" ||
+            description.value.trim() === "" ||
+            date.value === "" ||
+            starttime.value === "" ||
+            endtime.value === "" ||
+            address.value.trim() === "" ||
+            age.value === "" ||
+            maxvolunteers.value === ""
+        ) {
+            alert("Please fill in required fields before posting."); // Alert user
+            return; // Stop submission if any field is empty
+        }
+        else if (parseInt(age.value) < 16 || parseInt(age.value) > 80) {
+            alert("Age must be between 16 and 80.");
+            return;
+        }
+        else if (parseInt(maxvolunteers.value) < 1 || parseInt(maxvolunteers.value) > 100) {
+            alert("Maximum volunteers must be between 1 and 100.");
+            return;
+        }
         try {
             const response = await fetch('/opportunities',{
                 method: 'POST',
@@ -44,6 +70,8 @@ function oppFormSubmission(){
             if (response.ok) {
                 const createdOpp = await response.json();
                 console.log("Opportunity Created: ", createdOpp);
+                alert("New opportunity created!");
+                window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);
