@@ -1,5 +1,5 @@
 //yangyi
-let placeholderid = 7
+let placeholderid = 1
 async function fetchVolunteerProfile(id) {
     try {
         const response = await fetch(`/volunteers/${id}`); // Replace with your API endpoint
@@ -13,7 +13,7 @@ async function fetchVolunteerProfile(id) {
         const volunteerItem = document.createElement("div");
         volunteerItem.classList.add("data"); // Add a CSS class for styling
 
-        // Create elements for email, username, etc. and populate with NGO data
+        // Create elements for email, username, etc. and populate with vol data
         const email = document.createElement("h2");
         email.textContent = `Email: ${volunteer.email}`;
         const username = document.createElement("h2");
@@ -27,10 +27,10 @@ async function fetchVolunteerProfile(id) {
         const dateofbirth = document.createElement("h2");
         dateofbirth.textContent = `Date of birth: ${formattedDOB}`;
 
-        // Append all elements to the ngoItem div
+        // Append all elements to the volItem div
         volunteerItem.append(email, username, bio, dateofbirth);
 
-        // Append the ngoItem div to the ngoList
+        // Append the volItem div to the volList
         volunteerList.appendChild(volunteerItem);
 
         const volunteerdescription = document.getElementsByClassName("volunteer-img-container")[0];
@@ -42,9 +42,9 @@ async function fetchVolunteerProfile(id) {
         volunteerdescriptionItem.classList.add("data"); // Add a CSS class for styling
         const profilepicture = document.createElement("img");
         profilepicture.src = `${volunteer.profilepicture}`;
-        // Append the description to the ngodescriptionItem
+        // Append the description to the voldescriptionItem
         volunteerdescriptionItem.appendChild(profilepicture);
-        // Append the ngodescriptionItem to the ngodescription
+        // Append the voldescriptionItem to the voldescription
         volunteerdescription.appendChild(volunteerdescriptionItem);
 
     } catch (error) {
@@ -52,7 +52,7 @@ async function fetchVolunteerProfile(id) {
     }
 }
 
-fetchVolunteerProfile(placeholderid); // Call the function to fetch and display NGO data
+fetchVolunteerProfile(placeholderid); // Call the function to fetch and display vol data
 console.log("testing");
 
 document.querySelector('.delete-btn').addEventListener('click', function()

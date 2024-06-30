@@ -44,30 +44,14 @@ class Volunteer {
     }
 
     static async deleteVolunteer(id) {
-        const connection = await sql.connect(dbConfig);
-        const transaction = new sql.Transaction(connection);
+        const connection = await sql.connect(dbConfig)
+        const sqlQuery = `DELETE FROM Volunteers WHERE volunteerid = @volunteerid`
+        const request = connection.request()
+        request.input("volunteerid", id)
+        const result = await request.query(sqlQuery);
+        connection.close()
 
-        try {
-            await transaction.begin();
-
-            // Delete from VolunteerSkills first
-            const volSkillRequest = new sql.Request(transaction);
-            volSkillRequest.input('volunteerid', sql.Int, id);
-            await volSkillRequest.query('DELETE FROM VolunteerSkills WHERE volunteerid = @volunteerid');
-
-            // Delete from Volunteers next
-            const volRequest = new sql.Request(transaction);
-            volRequest.input('volunteerid', sql.Int, id);
-            const result = await volRequest.query('DELETE FROM Volunteers WHERE volunteerid = @volunteerid');
-
-            await transaction.commit();
-            console.log('Volunteer and associated skills deleted successfully.');
-            return result.rowsAffected[0] > 0; // Indicate success based on affected rows
-
-        } finally {
-            await transaction.rollback();
-            connection.close();
-        }
+        return result.rowsAffected > 0; // Indicate success based on affected rows
     }
 
     //brandon
