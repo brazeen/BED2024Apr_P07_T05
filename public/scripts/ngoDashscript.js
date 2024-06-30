@@ -5,7 +5,7 @@ function formatTimeRange(startTimeString, endTimeString) {
     const startTime = new Date(startTimeString);
     const endTime = new Date(endTimeString);
 
-    const options = { hour: '2-digit', minute: '2-digit' }; // Specify desired format
+    const options = { hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}; // Specify desired format, time can only be formatted based on UTC
     const formattedStartTime = startTime.toLocaleTimeString('en-SG', options); 
     const formattedEndTime = endTime.toLocaleTimeString('en-SG', options);
 
