@@ -32,6 +32,7 @@ app.post("/volunteer", volunteercontroller.createVolunteer)
 
 //applications
 app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
+app.get("/applications/volunteer/:id", applicationcontroller.getApplicationByVolunteerId); //by applicationid
 app.get("/applications/:volunteerid/:opportunityid", applicationcontroller.getApplicationByVolunteerAndOpportunityId); //by vol and opp id
 app.get("/applications/array/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
 app.post("/applications", applicationcontroller.createApplication);

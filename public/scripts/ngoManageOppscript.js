@@ -54,12 +54,12 @@ async function displayVolunteersInApplications(application, applicationDiv) {
                 const volAcceptBtn = document.createElement("button");
                 volAcceptBtn.textContent = "✓";
                 volAcceptBtn.classList.add("accept-volunteer");
-                volAcceptBtn.addEventListener("click", () => acceptVolunteerApplication(volunteer.volunteerid, application.opportunityid)); // Correct assignment
+                volAcceptBtn.addEventListener("click", () => manageVolunteerApplication(volunteer.volunteerid, application.opportunityid, "A")); // Correct assignment
 
                 const volRemoveBtn = document.createElement("button");
                 volRemoveBtn.textContent = "✕";
                 volRemoveBtn.classList.add("remove-volunteer");
-                volRemoveBtn.addEventListener("click", () => deleteApplication(volunteer.volunteerid, application.opportunityid)); // Correct assignment
+                volRemoveBtn.addEventListener("click", () => manageVolunteerApplication(volunteer.volunteerid, application.opportunityid, "R")); // Correct assignment
 
                 volItem.appendChild(volImage);
                 volItem.appendChild(volInfo);
@@ -76,12 +76,18 @@ async function displayVolunteersInApplications(application, applicationDiv) {
     }
 } // <-- Missing closing bracket added here
 
-async function acceptVolunteerApplication(volid, oppid) {
+async function manageVolunteerApplication(volid, oppid, status) {
     const popup = document.querySelector(".user-popup");
     const nobutton = document.getElementById("userpopup-no");
     const yesbutton = document.getElementById("userpopup-yes");
     const popuptext = document.querySelector("#userpopup-text");
-    popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
+    if (status == "A") {
+        popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
+    }
+    else {
+        popuptext.textContent = "Are you sure you want to reject this volunteer's application?";
+    }
+    
     popup.style.display = "flex";
     
     nobutton.onclick = function () {
@@ -90,46 +96,17 @@ async function acceptVolunteerApplication(volid, oppid) {
     
     yesbutton.onclick = async function () {
         try {
-            let apistring = `/applications/${volid}/${oppid}/A`;
+            let apistring = `/applications/${volid}/${oppid}/${status}`;
             const response = await fetch(apistring, { method: "PATCH" });
             if (response.ok) {
-                alert("Volunteer accepted successfully! Please reload the page.");
+                alert("Volunteer managed successfully! Please reload the page.");
                 popup.style.display = "none";
             } else {
-                alert("Error accepting volunteer:", await response.text());
+                alert("Error managing volunteer application:", await response.text());
             }
         } catch (error) {
-            console.error('Error accepting volunteer application:', error);
-            alert('Error accepting volunteer application');
-        }
-    };
-}
-
-async function deleteApplication(volunteerid, opportunityid) {
-    const popup = document.querySelector(".user-popup");
-    const nobutton = document.getElementById("userpopup-no");
-    const yesbutton = document.getElementById("userpopup-yes");
-    const popuptext = document.querySelector("#userpopup-text");
-    popuptext.textContent = "Are you sure you want to delete this volunteer's application?";
-    popup.style.display = "flex";
-    
-    nobutton.onclick = function () {
-        popup.style.display = "none";
-    };
-    
-    yesbutton.onclick = async function () {
-        try {
-            let apistring = `/applications/${volunteerid}/${opportunityid}`;
-            const response = await fetch(apistring, { method: "DELETE" });
-            if (response.ok) {
-                alert("Application deleted successfully! Please reload the page.");
-                popup.style.display = "none";
-            } else {
-                alert("Error deleting application:", await response.text());
-            }
-        } catch (error) {
-            console.error('Error deleting application:', error);
-            alert('Error deleting application');
+            console.error('Error managing volunteer application:', error);
+            alert('Error managing volunteer application');
         }
     };
 }
@@ -190,4 +167,3 @@ async function fetchNgoProfile(id) {
 }
 
 fetchNgoProfile(1); // Call the function to fetch and display NGO data
-console.log("testing");
