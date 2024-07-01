@@ -25,6 +25,22 @@ class Application {
         : null; //convert rows
     }
 
+    static async getApplicationByVolunteerId(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid`; //params
+
+        const request = connection.request();
+        request.input("volunteerid", id)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
+        ) //convert rows
+    }
+
     static async getApplicationByVolunteerAndOpportunityId(volunteerid, opportunityid) {
         const connection = await sql.connect(dbConfig);
 
