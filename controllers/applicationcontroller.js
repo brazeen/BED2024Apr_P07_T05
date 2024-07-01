@@ -14,6 +14,20 @@ const getApplicationById = async (req, res) => {
     }
 };
 
+const getApplicationByVolunteerId = async (req, res) => {
+  const volunteerid = req.params.id;
+  try {
+    const application = await Application.getApplicationByVolunteerId(volunteerid);
+    if (!application) {
+      return res.status(404).send("Application not found")
+    }
+    res.json(application);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving application");
+  }
+};
+
 const getApplicationByVolunteerAndOpportunityId = async (req, res) => {
     const volunteerid = req.params.volunteerid;
     const opportunityid = req.params.opportunityid;
@@ -90,6 +104,7 @@ const deleteApplication = async (req, res) => {
 
 module.exports = {
     getApplicationById,
+    getApplicationByVolunteerId,
     getApplicationByVolunteerAndOpportunityId,
     getApplicationsByOpportunityandStatus,
     createApplication,
