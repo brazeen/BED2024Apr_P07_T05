@@ -1,5 +1,6 @@
 const sql = require("mssql")
 const dbConfig = require("../dbConfig");
+const { user } = require("../../../dbConfig");
 
 class User {
     constructor(user_id, username, passwordHash, role) {
@@ -60,3 +61,5 @@ class User {
         return this.getUserById(id)
     }
 }
+
+module.exports = User;
