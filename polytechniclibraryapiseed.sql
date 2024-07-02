@@ -2,6 +2,9 @@
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Books;
 
+
+
+
 CREATE TABLE Users (
     user_id INT PRIMARY KEY,
     username VARCHAR(255) UNIQUE,

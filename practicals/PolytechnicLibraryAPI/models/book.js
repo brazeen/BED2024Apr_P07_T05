@@ -58,3 +58,5 @@ class Book {
         return this.getBookById(id)
     }
 }
+
+module.exports = Book;
