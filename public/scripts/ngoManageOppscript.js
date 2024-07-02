@@ -113,6 +113,35 @@ async function manageVolunteerApplication(volid, oppid, status) {
 
 fetchOpportunityApplications(1);
 
+//donovan
+async function fetchOpportunity() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const oppid = urlParams.get('id');
+
+    if (!oppid) {
+        // Handle case where no ID is provided
+        console.error("Opportunity ID is missing.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/opportunities/${opportunityId}`);
+        if (!response.ok) {
+        throw new Error(`Error fetching opportunity details: ${response.status}`);
+        }
+
+        const oppData = await response.json();
+
+        // Display opportunity details on the page (update elements, etc.)
+
+    }
+    catch (error) {
+        console.error("Error loading opportunity details: ", error); //error handling
+    }
+}
+//call function when page loads
+document.addEventListener('DOMContentLoaded', loadOpportunityDetails);
+
 //yangyi
 async function fetchNgoProfile(id) {
     try {
