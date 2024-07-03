@@ -35,10 +35,13 @@ class Book {
 
         connection.close();
 
-        return result.recordset[0] ?
-            new Book(result.recordset[0].book_id, result.recordset[0].title, result.recordset[0].author, result.recordset[0].availability)
-         : null //convert rows to NGOs
-        //possible null
+        return result.recordset[0]
+            ? new Book(result.recordset[0].id,
+                result.recordset[0].title,
+                result.recordset[0].author,
+                result.recordset[0].availability
+            )
+            : null; //book not found
     }
 
     static async updateBookAvailability(id, availability) {
@@ -58,3 +61,5 @@ class Book {
         return this.getBookById(id)
     }
 }
+
+module.exports = Book;
