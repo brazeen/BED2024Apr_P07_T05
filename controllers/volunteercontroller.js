@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
 const Volunteer = require("../models/volunteer")
 
 //brandon
@@ -19,12 +22,15 @@ const getVolunteerById = async (req, res) => {
     if (!volunteer) {
       return res.status(404).send("Volunteer not found")
     }
+    const volunteerName = volunteer.name; 
+
     res.json(volunteer);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving Volunteer");
   }
 };
+
 
 //brandon
 const deleteVolunteer = async (req, res) => {
@@ -56,13 +62,70 @@ async function getVolunteerSkills(req, res) {
 const createVolunteer = async (req, res) => {
   const newVolunteer = req.body;
   try {
-      const createdVolunteer = await Volunteer.createVolunteer(newVolunteer)
+      const createdVolunteer = await User.createVolunteer(newVolunteer)
       res.status(201).json(createdVolunteer)
   }
   catch(error) {
-      res.status(500).send("Error creating volunteer account")
+      res.status(500).send("Error creating volunteer")
   }
 }
+
+async function registerVolunteer(req, res) {
+  const { username, password, role } = req.body;
+  
+  try {
+    // Validate user data
+    if (password.length < 5) {
+      return res.status(400).json({ message: "Password too short" });
+    }
+    // Check for existing username
+    const existingVolunteer = await Volunteer.getVolunteerByName(username);
+    if (existingVolunteer) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const newVolunteer = {name: username, passwordHash: hashedPassword, role: role}
+    const createdVolunteer = await User.createUser(newUser);
+    return res.status(201).json({ message: "Volunteer created successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function login(req, res) {
+  const { username, password } = req.body;
+
+  try {
+    // Validate user credentials
+    const volunteer = await Volunteer.getVolunteerByName(username);
+    if (!volunteer) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Compare password with hash
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const payload = {
+      id: user.id,
+      role: user.role,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
+
+    return res.status(200).json({ token });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 
 /*
 const getBookById = async (req, res) => {
@@ -107,4 +170,5 @@ module.exports = {
     deleteVolunteer,
     getVolunteerSkills,
     createVolunteer,
+    registerVolunteer
 }
