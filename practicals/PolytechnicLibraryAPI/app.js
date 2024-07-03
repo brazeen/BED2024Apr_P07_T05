@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bcrypt = require('bcrypt');
+const booksController = require("./controllers/booksController")
+const usersController = require("./controllers/usersController")
+const verifyJWT = require("./middleware")
 require("dotenv").config()
 
 const app = express()
@@ -11,7 +14,15 @@ const staticMiddleware = express.static("public"); // Path to the public folder
 // Include body-parser middleware to handle JSON data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
-app.use(staticMiddleware)   
+app.use(staticMiddleware)  
+
+app.get("/books", verifyJWT,  booksController.getAllBooks)
+app.patch("/books/:id/:availability", verifyJWT,  booksController.updateBookAvailability)
+
+app.get("/users/:username", usersController.getUserByUsername)
+app.post("/users", usersController.registerUser)
+app.post("/users/login", usersController.login)
+
 
 app.listen(port, async() => {
     try {

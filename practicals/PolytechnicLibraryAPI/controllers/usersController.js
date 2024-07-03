@@ -3,31 +3,6 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 const User = require("../models/user")
 
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.getAllUsers()
-        res.json(users)
-    }
-    catch(error) {
-        console.error(error)
-        res.status(500).send("Error retrieving users")
-    }
-}
-
-const getUserById = async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const user = await User.getUserById(userId)
-    if (!user) {
-      return res.status(404).send("User not found")
-    }
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving user");
-  }
-};
-
 const getUserByUsername = async (req, res) => {
     const username = req.params.username;
     try {
@@ -111,8 +86,6 @@ async function login(req, res) {
 
 
 module.exports = {
-    getAllUsers,
-    getUserById,
     getUserByUsername,
     createUser,
     registerUser,
