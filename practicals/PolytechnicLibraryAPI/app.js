@@ -3,8 +3,7 @@ const bodyParser = require("body-parser");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bcrypt = require('bcrypt');
-
-
+require("dotenv").config()
 
 const app = express()
 const port = process.env.PORT || 3000;

@@ -1,5 +1,5 @@
 module.exports = {
-    user: "polytechinic_library_user", // Replace with your SQL Server login username
+    user: "polytechnic_library_user", // Replace with your SQL Server login username
     password: "ngeeannpoly", // Replace with your SQL Server login password
     server: "localhost",
     database: "Polytechnic Library",
