@@ -41,7 +41,7 @@ class User {
 
         connection.close()
 
-        return this.getUserById(result.recordset[0].id)
+        return this.getUserByUsername(result.recordset[0].username)
 
     }
 }

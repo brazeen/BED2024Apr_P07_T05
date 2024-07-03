@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
-const bcrypt = require('bcrypt');
 const booksController = require("./controllers/booksController")
 const usersController = require("./controllers/usersController")
 const verifyJWT = require("./middleware")
@@ -20,8 +19,8 @@ app.get("/books", verifyJWT,  booksController.getAllBooks)
 app.patch("/books/:id/:availability", verifyJWT,  booksController.updateBookAvailability)
 
 app.get("/users/:username", usersController.getUserByUsername)
-app.post("/users", usersController.registerUser)
-app.post("/users/login", usersController.login)
+app.post("/register", usersController.registerUser)
+app.post("/login", usersController.login)
 
 
 app.listen(port, async() => {

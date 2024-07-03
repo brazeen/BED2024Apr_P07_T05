@@ -14,7 +14,7 @@ function verifyJWT(req, res, next) {
 
         const authorizedRoles = {
             "/books": ["member", "librarian"],
-            "/books/[0-9]+/availability": ["librarian"],
+            "/books/[0-9]+/(Y|N)$": ["librarian"],
         }
 
         const requestedEndpoint = req.url;
