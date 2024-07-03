@@ -62,6 +62,7 @@ async function displayOpportunities() {
 
       oInfo.addEventListener('click', () => {
         // 1. Pass opportunity ID as a query parameter
+        console.log("Opportunity ID being passed:", opportunity.id)
         window.location.href = `ngomanageopportunity.html?id=${opportunity.id}`;
       });
       
