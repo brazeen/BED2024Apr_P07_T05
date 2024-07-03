@@ -24,23 +24,6 @@ class Book {
         ) //convert rows
     }
 
-    static async getBookById(id) {
-        const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Books WHERE book_id = @book_id`; //params
-
-        const request = connection.request();
-        request.input("book_id", id)
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0] ?
-            new Book(result.recordset[0].book_id, result.recordset[0].title, result.recordset[0].author, result.recordset[0].availability)
-         : null //convert rows to NGOs
-        //possible null
-    }
-
     static async updateBookAvailability(id, availability) {
         const connection = await sql.connect(dbConfig)
 
