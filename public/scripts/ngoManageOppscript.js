@@ -202,7 +202,7 @@ async function fetchOpportunity() {
     }
 }
 //call function when page loads
-document.addEventListener('DOMContentLoaded', fetchOpportunity());
+document.addEventListener('DOMContentLoaded', fetchOpportunity);
 
 //yangyi
 async function fetchNgoProfile(id) {
