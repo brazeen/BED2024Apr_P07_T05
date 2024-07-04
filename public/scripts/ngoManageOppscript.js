@@ -1,3 +1,24 @@
+//donovan
+//To format time (example: 05:30 PM)
+function formatTimeRange(startTimeString, endTimeString) {
+    const startTime = new Date(startTimeString);
+    const endTime = new Date(endTimeString);
+
+    const options = { hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}; // Specify desired format, time can only be formatted based on UTC
+    const formattedStartTime = startTime.toLocaleTimeString('en-SG', options); 
+    const formattedEndTime = endTime.toLocaleTimeString('en-SG', options);
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+}
+
+//To format date to numeric + month (example 12 May)
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short' };
+    return date.toLocaleDateString('en-SG', options);
+}
+
+//brandon
 async function getVolunteerSkillsArray(id) {
     const response = await fetch(`/volunteers/skills/${id}`); // Replace with your API endpoint
     const data = await response.json();
@@ -125,7 +146,7 @@ async function fetchOpportunity() {
     }
 
     try {
-        const response = await fetch(`/opportunities/${opportunityId}`);
+        const response = await fetch(`/opportunities/${oppid}`);
         if (!response.ok) {
         throw new Error(`Error fetching opportunity details: ${response.status}`);
         }
@@ -133,6 +154,47 @@ async function fetchOpportunity() {
         const oppData = await response.json();
 
         // Display opportunity details on the page (update elements, etc.)
+        console.log(oppData);
+        let leftContainer = document.querySelector('.leftSideDiv');
+        
+        const title = document.createElement('h2');
+        title.textContent = oppData.title;
+
+        const content = document.createElement('div');
+        content.classList.add('details');
+
+        const date = document.createElement('p');
+        date.innerHTML = `<strong>Date :</strong> ${formatDate(oppData.date)}`
+        
+        const time = document.createElement('p');
+        time.innerHTML = `<strong>Time :</strong> ${formatTimeRange(oppData.starttime,oppData.endtime)}`;
+
+        const address = document.createElement('p');
+        address.innerHTML = `<strong>Venue :</strong> ${oppData.address}`
+
+        const age = document.createElement('p');
+        age.innerHTML = `<strong>Age :</strong> ${oppData.age}`
+
+        const maxvol = document.createElement('p');
+        maxvol.innerHTML = `<strong>Volunteers needed :</strong> ${oppData.maxvolunteers}`
+
+        const desc = document.createElement('p');
+        desc.innerHTML = `<strong>Description :</strong> ${oppData.description}`
+        
+        const btn = document.createElement('button');
+        btn.classList.add('edit-btn');
+        btn.textContent = 'Edit'
+
+        content.appendChild(date);
+        content.appendChild(time);
+        content.appendChild(address);
+        content.appendChild(age);
+        content.appendChild(maxvol);
+        content.appendChild(desc);
+        content.appendChild(btn);
+
+        leftContainer.appendChild(title);
+        leftContainer.appendChild(content);
 
     }
     catch (error) {
@@ -140,59 +202,4 @@ async function fetchOpportunity() {
     }
 }
 //call function when page loads
-document.addEventListener('DOMContentLoaded', loadOpportunityDetails);
-
-//yangyi
-async function fetchNgoProfile(id) {
-    try {
-        const response = await fetch(`/ngos/${id}`); // Replace with your API endpoint
-        const NGO = await response.json();
-
-        const ngoList = document.getElementsByClassName("ngo-list")[0]; // Correctly select the element
-        if (!ngoList) {
-            throw new Error('Element with class "ngo-list" not found');
-        }
-
-        const ngoItem = document.createElement("div");
-        ngoItem.classList.add("data"); // Add a CSS class for styling
-
-        // Create elements for email, username, etc. and populate with NGO data
-        const email = document.createElement("h2");
-        email.textContent = `Email: ${NGO.email}`;
-        const username = document.createElement("h2");
-        username.textContent = `Username: ${NGO.name}`;
-        const contactPerson = document.createElement("h2");
-        contactPerson.textContent = `Contact Person: ${NGO.contactperson}`;
-        const contactNumber = document.createElement("h2");
-        contactNumber.textContent = `Contact Number: ${NGO.contactnumber}`;
-        const address = document.createElement("h2");
-        address.textContent = `Address: ${NGO.address}`;
-        const description = document.createElement("p");
-        description.textContent = `Description: ${NGO.description}`;
-
-        // Append all elements to the ngoItem div
-        ngoItem.append(email, username, contactPerson, contactNumber, address, description);
-
-        // Append the ngoItem div to the ngoList
-        ngoList.appendChild(ngoItem);
-
-        const ngodescription = document.getElementsByClassName("logo-container")[0];
-        if (!ngodescription) {
-            throw new Error('Element with class "logo-container" not found');
-        }
-
-        const ngodescriptionItem = document.createElement("div");
-        ngodescriptionItem.classList.add("data"); // Add a CSS class for styling
-        const logo = document.createElement("img");
-        logo.src = `${NGO.logo}`;
-        // Append the description to the ngodescriptionItem
-        ngodescriptionItem.appendChild(logo);
-        // Append the ngodescriptionItem to the ngodescription
-        ngodescription.appendChild(ngodescriptionItem);
-
-    } catch (error) {
-        console.error("Error fetching NGO profile:", error);
-    }
-}
-
-fetchNgoProfile(1); // Call the function to fetch and display NGO data
+document.addEventListener('DOMContentLoaded', fetchOpportunity);
