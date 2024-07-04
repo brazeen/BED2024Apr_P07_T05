@@ -29,6 +29,7 @@ async function fetchOpportunity() {
 async function displayOpportunities() {
 
     let opportunities = await fetchOpportunity();
+    console.log(opportunities);
     let parentContainer = document.querySelector(".dashContent")
     opportunities.forEach(opportunity => {
 
@@ -61,11 +62,11 @@ async function displayOpportunities() {
       parentContainer.appendChild(oInfo);
 
       oInfo.addEventListener('click', () => {
-        // 1. Pass opportunity ID as a query parameter
-        console.log("Opportunity ID being passed:", opportunity.id)
-        window.location.href = `ngomanageopportunity.html?id=${opportunity.id}`;
+        //Pass opportunity ID as a query parameter
+        console.log("Opportunity ID being passed:", opportunity.opportunityid)
+        window.location.href = `ngomanageopportunity.html?id=${opportunity.opportunityid}`;
       });
       
     });
-  }
+}
   displayOpportunities();
