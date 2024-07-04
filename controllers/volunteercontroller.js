@@ -170,5 +170,6 @@ module.exports = {
     deleteVolunteer,
     getVolunteerSkills,
     createVolunteer,
-    registerVolunteer
+    registerVolunteer,
+    login
 }
