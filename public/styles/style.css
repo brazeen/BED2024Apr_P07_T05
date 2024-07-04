@@ -194,7 +194,7 @@ nav {
     margin: 5px 0;
 }
 
-.opportunity-details .edit-btn {
+.opportunity-details, .edit-btn {
     background-color: #FFEB3B;
     border: none;
     padding: 10px 20px;
