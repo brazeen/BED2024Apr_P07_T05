@@ -83,6 +83,10 @@ async function manageVolunteerApplication(volid, oppid, status) {
     const popuptext = document.querySelector("#userpopup-text");
     if (status == "A") {
         popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
+        let incrementResponse = await fetch(`/opportunities/increment/${oppid}`)
+        if (!incrementResponse.ok) {
+            alert("Error updating opportunity volunteers:", await incrementResponse.text())
+        }
     }
     else {
         popuptext.textContent = "Are you sure you want to reject this volunteer's application?";

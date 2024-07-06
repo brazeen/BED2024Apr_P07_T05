@@ -44,7 +44,7 @@ app.get("/opportunities", opportunitycontroller.getAllOpportunities)
 app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
 app.post("/opportunities",opportunitycontroller.createOpportunity)
 app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
-
+app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers)
 
 app.listen(port, async() => {
     try {
