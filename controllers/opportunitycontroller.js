@@ -57,6 +57,9 @@ async function getOpportunitySkills(req, res) {
     const oppId = parseInt(req.params.id);
     try {
       const skills = await Opportunity.getOpportunitySkills(oppId)
+      if (!skills) {
+        res.status(404).send("Opportunity skills not found")
+      }
       res.json(skills);
     } catch (error) {
       console.error(error); 
@@ -64,11 +67,25 @@ async function getOpportunitySkills(req, res) {
     }
 }
 
+async function incrementOpportunityCurrentVolunteers(req, res) {
+  const oppId = parseInt(req.params.id);
+  try {
+    const opp = await Opportunity.incrementOpportunityCurrentVolunteers(oppId)
+    if (!opp) {
+      res.status(404).send("Opportunity not found")
+    }
+    res.status(200).json(opp)
+  } catch (error) {
+    console.error(error); 
+    res.status(500).json({ message: "Error updating opportunity" });
+  }
+}
 
 module.exports = {
     getAllOpportunities,
     getOpportunityById,
     createOpportunity,
     getOpportunitySkills,
+    incrementOpportunityCurrentVolunteers,
     deleteOpportunityById
 }

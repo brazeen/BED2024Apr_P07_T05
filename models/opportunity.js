@@ -124,6 +124,24 @@ class Opportunity {
             await connection.close();
         }
     }
+
+    static async incrementOpportunityCurrentVolunteers(id) {
+        const connection = await sql.connect(dbConfig);
+        try {
+            const query = `UPDATE Opportunities SET currentvolunteers = currentvolunteers + 1 WHERE opportunityid = @opportunityid;`
+            const request = connection.request();
+            request.input("opportunityid", id);
+            const result = await request.query(query);
+
+            return this.getOpportunityById(result.recordset[0].opportunityid)
+        } catch (error) {
+            console.log(error);
+            throw new Error("Error updating opportunity");
+
+        } finally {
+            await connection.close();
+        }
+    }
     
 }
 
