@@ -113,7 +113,7 @@ class Volunteer {
 
         connection.close()
 
-        return this.getVoluntererByVolunteername(result.recordset[0].name)
+        return this.getVolunteerByName(result.recordset[0].name)
 
     }
 
