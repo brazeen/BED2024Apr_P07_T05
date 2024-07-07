@@ -59,6 +59,19 @@ class Opportunity {
 
     }
 
+    static async deleteOpportunityById(id) {
+        const connection = await sql.connect(dbConfig);
+    
+        const sqlQuery = `DELETE FROM Opportunities WHERE opportunityid = @opportunityid`; // params
+    
+        const request = connection.request();
+        request.input("opportunityid", id);
+        const result = await request.query(sqlQuery);
+    
+        connection.close();
+    
+        return result.rowsAffected > 0; // Indicate success
+    }
 
     static async getOpportunityById(id) {
         const connection = await sql.connect(dbConfig);
