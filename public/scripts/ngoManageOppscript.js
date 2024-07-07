@@ -104,6 +104,10 @@ async function manageVolunteerApplication(volid, oppid, status) {
     const popuptext = document.querySelector("#userpopup-text");
     if (status == "A") {
         popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
+        let incrementResponse = await fetch(`/opportunities/increment/${oppid}`)
+        if (!incrementResponse.ok) {
+            alert("Error updating opportunity volunteers:", await incrementResponse.text())
+        }
     }
     else {
         popuptext.textContent = "Are you sure you want to reject this volunteer's application?";
@@ -203,3 +207,45 @@ async function fetchOpportunity() {
 }
 //call function when page loads
 document.addEventListener('DOMContentLoaded', fetchOpportunity);
+
+async function removeOpportunity() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const oppid = urlParams.get('id');
+    const deleteBtn = document.querySelector('.delete-btn');
+    const popup = document.querySelector('.delete-popup');
+    const popupText = document.getElementById('deletepopup-text');
+    const cancelpopBtn = document.getElementById('cancel-popBtn');
+    const deletepopBtn = document.getElementById('delete-popBtn');
+    //when deleteBtn is clicked
+    deleteBtn.addEventListener('click', async () => {
+        popupText.textContent = 'Are you sure you want to delete the opportunity?'
+        popup.style.display = 'flex'; // Show the popup
+    });
+
+    cancelpopBtn.onclick = function() {
+        popup.style.display = 'none';
+    };
+    
+    deletepopBtn.onclick = async function() {
+        try {
+            const response = await fetch(`/opportunities/${oppid}`, {
+                method: 'DELETE',
+            });
+            if (response.ok){
+                popup.style.display = 'none';
+                alert('Opportunity has been deleted!');
+                window.location.href = 'ngodashboard.html';
+            }
+            else if (!response.ok) {
+                throw new Error(`Error deleting opportunity : ${response.status}`);
+            }
+        }
+        catch (error) {
+            console.error("Error fetching opportunity :", error);
+            alert('An error has occurred.');
+        }
+    }
+
+}
+
+document.addEventListener('DOMContentLoaded',removeOpportunity);
