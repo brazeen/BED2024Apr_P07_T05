@@ -194,7 +194,7 @@ nav {
     margin: 5px 0;
 }
 
-.opportunity-details .edit-btn {
+.opportunity-details, .edit-btn {
     background-color: #FFEB3B;
     border: none;
     padding: 10px 20px;
@@ -250,6 +250,22 @@ nav {
 .delete-btn {
     background-color: #FF6347;
     color: white;
+}
+
+.delete-popup {
+    width: 50vw;
+    height: 50vh;
+    z-index: 1;
+    position: absolute; 
+    top: 25%;
+    left: 25%;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid black;
+    border-radius: 4px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 

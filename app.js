@@ -6,6 +6,8 @@ const volunteercontroller = require("./controllers/volunteercontroller")
 const ngocontroller = require("./controllers/ngocontroller")
 const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
+const verifyJWT = require("./middlewares/validatevolunteer")
+require("dotenv").config()
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -45,6 +47,9 @@ app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
 app.post("/opportunities",opportunitycontroller.createOpportunity)
 app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
 app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers)
+app.delete("/opportunities/:id",opportunitycontroller.deleteOpportunityById)
+
+
 
 app.listen(port, async() => {
     try {

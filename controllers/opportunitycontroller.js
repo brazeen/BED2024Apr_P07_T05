@@ -26,7 +26,7 @@ const getOpportunityById = async (req, res) => {
   }
 };
 
-
+//donovan
 const createOpportunity = async (req, res) => {
   const newOpp = req.body;
   try {
@@ -38,7 +38,21 @@ const createOpportunity = async (req, res) => {
   }
 }
 
-
+const deleteOpportunityById = async (req, res) => {
+  const oppid = parseInt(req.params.id);
+  
+    try {
+      const success = await Opportunity.deleteOpportunityById(oppid);
+      if (!success) {
+        return res.status(404).send("Opportunity not found");
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error deleting opportunity");
+    }
+}
+//brandon
 async function getOpportunitySkills(req, res) {
     const oppId = parseInt(req.params.id);
     try {
@@ -72,5 +86,6 @@ module.exports = {
     getOpportunityById,
     createOpportunity,
     getOpportunitySkills,
-    incrementOpportunityCurrentVolunteers
+    incrementOpportunityCurrentVolunteers,
+    deleteOpportunityById
 }
