@@ -7,81 +7,74 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet">
-    <title>Volunteezy | Admin NGO Application Review</title>
+    <title>Volunteezy | Volunteer Signup</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <style>
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+    </style>
 </head>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-    <link rel="stylesheet" 
-          href=
-"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-    <title>Bootstrap Form</title>
-</head>
-
 <body>
-    <h1 class="text-success text-center">
-        Volunteezy
-    </h1>
+    <h1 class="text-success text-center">Volunteezy</h1>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <form id="registrationForm" action="">
-                            <div class="form-group">
-                                <label for="name">
-                                    Name
-                                </label>
-                                <input type="name" 
-                                       class="form-control" 
-                                       id="name" 
-                                       
-                                    required />
+                        <form id="registrationForm">
+                            <!-- Step 1 -->
+                            <div class="step active" id="step-1">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirm-password" required />
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
                             </div>
-                            <div class="form-group">
-                                <label for="email">
-                                    Email
-                                </label>
-                                <input type="email" 
-                                       class="form-control" 
-                                       id="email" 
-                                        required />
+
+                            <!-- Step 2 -->
+                            <div class="step" id="step-2">
+                                <div class="form-group">
+                                    <label for="bio">Bio</label>
+                                    <input type="text" class="form-control" id="bio" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="skills">Skills</label>
+                                    <input type="text" class="form-control" id="skills" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dob" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-pic">Profile Picture</label>
+                                    <input type="file" class="form-control" id="profile-pic" required />
+                                </div>
+                                <button type="button" class="btn btn-secondary" onclick="prevStep()">Back</button>
+                                <button type="submit" class="btn btn-success">Create Account</button>
                             </div>
-                            <div class="form-group">
-                                <label for="password">
-                                    Password
-                                </label>
-                                <input type="password" 
-                                       class="form-control" 
-                                       id="password" 
-                                       
-                                    required />
-                            </div>
-                            <div class="form-group">
-                                <label for="password">
-                                    Confirm Password
-                                </label>
-                                <input type="password" 
-                                       class="form-control" 
-                                       id="password" 
-                                       
-                                    required />
-                            </div>
-                            <button class="btn btn-danger">
-                                <a href="volunteersignuppage2.html">Next</a>
-                            </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="scripts/volSignUpscript.js"></script>
 </body>
-<script src="volunteer.js".js"></script>
 </html>

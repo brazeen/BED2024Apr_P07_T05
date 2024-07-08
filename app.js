@@ -22,6 +22,7 @@ app.get("/volunteers", volunteercontroller.getAllVolunteers);
 app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
+app.post("/volunteers", volunteercontroller.registerVolunteer);
 
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);
@@ -30,7 +31,6 @@ app.get("/ngos/:id", ngocontroller.getNGOById);
 app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.post("/volunteer", volunteercontroller.createVolunteer)
 
 //applications
 app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
@@ -46,8 +46,10 @@ app.get("/opportunities", opportunitycontroller.getAllOpportunities)
 app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
 app.post("/opportunities",opportunitycontroller.createOpportunity)
 app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
+app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers)
 app.delete("/opportunities/:id",opportunitycontroller.deleteOpportunityById)
 app.put("/opportunities/:id", opportunitycontroller.updateOpportunity)
+
 
 
 app.listen(port, async() => {

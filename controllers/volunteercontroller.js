@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const Volunteer = require("../models/volunteer")
+const Volunteer = require("../models/volunteer");
+const path = require('path');
+
 
 //brandon
 const getAllVolunteers = async (req, res) => {
@@ -62,7 +64,7 @@ async function getVolunteerSkills(req, res) {
 const createVolunteer = async (req, res) => {
   const newVolunteer = req.body;
   try {
-      const createdVolunteer = await User.createVolunteer(newVolunteer)
+      const createdVolunteer = await Volunteer.createVolunteer(newVolunteer)
       res.status(201).json(createdVolunteer)
   }
   catch(error) {
@@ -71,24 +73,25 @@ const createVolunteer = async (req, res) => {
 }
 
 async function registerVolunteer(req, res) {
-  const { username, password, role } = req.body;
-  
+  const { name, email, password, bio, skills, dateofbirth, profilepicture } = req.body;
+  const relativePath = path.join('uploads', `${name}_profile.jpg`);
   try {
     // Validate user data
-    if (password.length < 5) {
+    if (String(password).length < 5) {
       return res.status(400).json({ message: "Password too short" });
     }
     // Check for existing username
-    const existingVolunteer = await Volunteer.getVolunteerByName(username);
+    const existingVolunteer = await Volunteer.getVolunteerByName(name);
     if (existingVolunteer) {
       return res.status(400).json({ message: "Username already exists" });
     }
-
+    console.log(req.body)
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const newVolunteer = {name: username, passwordHash: hashedPassword, role: role}
-    const createdVolunteer = await User.createUser(newUser);
+    console.log(hashedPassword);
+    const newVolunteer = {name: name, email: email, password: hashedPassword, bio: bio, skills: skills, dateofbirth: dateofbirth, profilepicture: relativePath }
+    const createdVolunteer = await Volunteer.createVolunteer(newVolunteer);
     return res.status(201).json({ message: "Volunteer created successfully" });
   } catch (err) {
     console.error(err);
@@ -170,5 +173,6 @@ module.exports = {
     deleteVolunteer,
     getVolunteerSkills,
     createVolunteer,
-    registerVolunteer
+    registerVolunteer,
+    login
 }
