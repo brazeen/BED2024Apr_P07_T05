@@ -47,6 +47,7 @@ app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
 app.post("/opportunities",opportunitycontroller.createOpportunity)
 app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
 app.delete("/opportunities/:id",opportunitycontroller.deleteOpportunityById)
+app.put("/opportunities/:id", opportunitycontroller.updateOpportunity)
 
 
 app.listen(port, async() => {
