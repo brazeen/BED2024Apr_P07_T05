@@ -73,6 +73,30 @@ class Opportunity {
         return result.rowsAffected > 0; // Indicate success
     }
 
+    static async updateOpportunity(id, newOppData) {
+        const connection = await sql.connect(dbConfig);
+    
+        const sqlQuery = `UPDATE Opportunities SET ngoid = 1, title = @title, description = @description, address = @address, region = @region, date = @date, starttime = @starttime, endtime = @endtime, age = @age, maxvolunteers = @maxvolunteers, currentVolunteers = 0 WHERE opportunityid = @opportunityid`; // Parameterized query
+    
+        const request = connection.request();
+        request.input("opportunityid", id);
+        request.input("title", newOppData.title || null); // Handle optional fields
+        request.input("description", newOppData.description || null);
+        request.input("address", newOppData.address || null);
+        request.input("region", newOppData.region || null);
+        request.input("date", newOppData.date || null);
+        request.input("starttime", newOppData.starttime || null);
+        request.input("endtime", newOppData.endtime || null);
+        request.input("age", newOppData.age || null);
+        request.input("maxvolunteers", newOppData.maxvolunteers || null);
+    
+        await request.query(sqlQuery);
+    
+        connection.close();
+    
+        return this.getOpportunityById(id); // return the updated opportunity data
+    }
+
     static async getOpportunityById(id) {
         const connection = await sql.connect(dbConfig);
 

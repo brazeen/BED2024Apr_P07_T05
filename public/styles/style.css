@@ -194,7 +194,7 @@ nav {
     margin: 5px 0;
 }
 
-.opportunity-details, .edit-btn {
+.opportunity-details {
     background-color: #FFEB3B;
     border: none;
     padding: 10px 20px;
@@ -237,7 +237,7 @@ nav {
     padding: 20px;
 }
 
-.ok-btn, .delete-btn {
+.edit-btn, .delete-btn {
     background-color: #FFEB3B;
     border: none;
     padding: 10px 20px;
@@ -273,6 +273,7 @@ nav {
     display: flex;
     justify-content: space-around;
     align-items: stretch;
+    padding-bottom: 10px;
 }
 /*-----------ngocreate.html*/
 
