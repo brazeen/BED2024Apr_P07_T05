@@ -180,10 +180,6 @@ async function fetchOpportunity() {
 
         const desc = document.createElement('p');
         desc.innerHTML = `<strong>Description :</strong> ${oppData.description}`
-        
-        const btn = document.createElement('button');
-        btn.classList.add('edit-btn');
-        btn.textContent = 'Edit'
 
         content.appendChild(date);
         content.appendChild(time);
@@ -191,7 +187,6 @@ async function fetchOpportunity() {
         content.appendChild(age);
         content.appendChild(maxvol);
         content.appendChild(desc);
-        content.appendChild(btn);
 
         leftContainer.appendChild(title);
         leftContainer.appendChild(content);
@@ -245,3 +240,17 @@ async function removeOpportunity() {
 }
 
 document.addEventListener('DOMContentLoaded',removeOpportunity);
+
+async function editOpportunity() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const oppid = urlParams.get('id');
+    const editBtn = document.querySelector('.edit-btn');
+
+    editBtn.addEventListener('click', () => {
+        //Pass opportunity ID as a query parameter
+        console.log("Opportunity ID being passed:", oppid)
+        window.location.href = `ngoupdate.html?id=${oppid}`;
+      });
+}
+
+editOpportunity();
