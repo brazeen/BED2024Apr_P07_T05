@@ -52,6 +52,23 @@ const deleteOpportunityById = async (req, res) => {
       res.status(500).send("Error deleting opportunity");
     }
 }
+
+const updateOpportunity = async (req, res) => {
+  const oppId = parseInt(req.params.id);
+  const newOppData = req.body;
+
+  try {
+    const updatedOpp = await Opportunity.updateOpportunity(oppId, newOppData);
+    if (!updatedOpp) {
+      return res.status(404).send("Opportunity not found");
+    }
+    res.json(updatedOpp);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating opportunity");
+  }
+};
+
 //brandon
 async function getOpportunitySkills(req, res) {
     const oppId = parseInt(req.params.id);
@@ -86,6 +103,8 @@ module.exports = {
     getOpportunityById,
     createOpportunity,
     getOpportunitySkills,
+    deleteOpportunityById,
+    updateOpportunity,
     incrementOpportunityCurrentVolunteers,
     deleteOpportunityById
 }
