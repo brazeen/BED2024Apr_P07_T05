@@ -23,6 +23,7 @@ app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 app.post("/volunteers", volunteercontroller.registerVolunteer);
+app.post("/volunteers/login",volunteercontroller.loginVolunteer)
 
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);
