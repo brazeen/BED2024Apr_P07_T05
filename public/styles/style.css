@@ -704,5 +704,24 @@ body {
     }
 }
 
+/*----------------Volunteersignuppage----------*/
+.login-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 35px;
+}
+
+/*----------------Volunteerloginpage------------*/
+.btn-orange {
+    background-color: orange;
+    border-color: orange;
+    color: white;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
 
 
