@@ -99,30 +99,30 @@ async function registerVolunteer(req, res) {
   }
 }
 
-async function login(req, res) {
-  const { username, password } = req.body;
+async function loginVolunteer(req, res) {
+  const { email, password } = req.body;
 
   try {
     // Validate user credentials
-    const volunteer = await Volunteer.getVolunteerByName(username);
+    const volunteer = await Volunteer.getVolunteerByEmail(email);
     if (!volunteer) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
     // Compare password with hash
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch = await bcrypt.compare(password, volunteer.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     // Generate JWT token
     const payload = {
-      id: user.id,
-      role: user.role,
+      id: volunteer.id,
+      role: volunteer.role,
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
+    console.log(process.env.ACCESS_SECRET_KEY);
+    const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ message: "Login successful", token, volunteer: {id: volunteer.id }});
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
@@ -174,5 +174,5 @@ module.exports = {
     getVolunteerSkills,
     createVolunteer,
     registerVolunteer,
-    login
+    loginVolunteer
 }
