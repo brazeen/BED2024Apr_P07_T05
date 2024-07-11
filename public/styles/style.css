@@ -709,6 +709,7 @@ body {
     }
 }
 
+
 /* Modal container */
 .modal {
     display: none;
@@ -722,6 +723,26 @@ body {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
     padding-top: 60px;
+
+/*----------------Volunteersignuppage----------*/
+.login-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 35px;
+}
+
+/*----------------Volunteerloginpage------------*/
+.btn-orange {
+    background-color: orange;
+    border-color: orange;
+    color: white;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+
 }
 
 /* Modal content box */

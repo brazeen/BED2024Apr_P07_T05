@@ -59,6 +59,22 @@ class Volunteer {
             : null; // not found
     }
 
+    static async getVolunteerByEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Volunteers WHERE email = @email`; //params
+
+        const request = connection.request();
+        request.input("email", email)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            : null; // not found
+    }
+
     static async deleteVolunteer(id) {
         const connection = await sql.connect(dbConfig)
         const sqlQuery = `DELETE FROM Volunteers WHERE volunteerid = @volunteerid`
