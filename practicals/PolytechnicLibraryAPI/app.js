@@ -5,11 +5,15 @@ const dbConfig = require("./dbConfig");
 const booksController = require("./controllers/booksController")
 const usersController = require("./controllers/usersController")
 const verifyJWT = require("./middleware")
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 require("dotenv").config()
 
 const app = express()
 const port = process.env.PORT || 3000;
 const staticMiddleware = express.static("public"); // Path to the public folder
+// Serve the Swagger UI at a specific route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Include body-parser middleware to handle JSON data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
