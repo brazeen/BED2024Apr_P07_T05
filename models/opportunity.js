@@ -152,7 +152,7 @@ class Opportunity {
     static async incrementOpportunityCurrentVolunteers(id) {
         const connection = await sql.connect(dbConfig);
         try {
-            const query = `UPDATE Opportunities SET currentvolunteers = currentvolunteers + 1 WHERE opportunityid = @opportunityid;`
+            const query = `UPDATE Opportunities SET currentvolunteers = currentvolunteers + 1 WHERE opportunityid = @opportunityid; SELECT SCOPE_IDENTITY() AS opportunityid;`
             const request = connection.request();
             request.input("opportunityid", id);
             const result = await request.query(query);

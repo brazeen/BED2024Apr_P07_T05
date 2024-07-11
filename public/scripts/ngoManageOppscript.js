@@ -98,42 +98,48 @@ async function displayVolunteersInApplications(application, applicationDiv) {
 } // <-- Missing closing bracket added here
 
 async function manageVolunteerApplication(volid, oppid, status) {
-    const popup = document.querySelector(".user-popup");
-    const nobutton = document.getElementById("userpopup-no");
-    const yesbutton = document.getElementById("userpopup-yes");
-    const popuptext = document.querySelector("#userpopup-text");
-    if (status == "A") {
-        popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
-        let incrementResponse = await fetch(`/opportunities/increment/${oppid}`)
-        if (!incrementResponse.ok) {
-            alert("Error updating opportunity volunteers:", await incrementResponse.text())
-        }
-    }
-    else {
-        popuptext.textContent = "Are you sure you want to reject this volunteer's application?";
-    }
-    
-    popup.style.display = "flex";
-    
-    nobutton.onclick = function () {
-        popup.style.display = "none";
-    };
-    
-    yesbutton.onclick = async function () {
-        try {
-            let apistring = `/applications/${volid}/${oppid}/${status}`;
-            const response = await fetch(apistring, { method: "PATCH" });
-            if (response.ok) {
-                alert("Volunteer managed successfully! Please reload the page.");
-                popup.style.display = "none";
-            } else {
-                alert("Error managing volunteer application:", await response.text());
+    try {
+        const popup = document.querySelector(".user-popup");
+        const nobutton = document.getElementById("userpopup-no");
+        const yesbutton = document.getElementById("userpopup-yes");
+        const popuptext = document.querySelector("#userpopup-text");
+        if (status == "A") {
+            popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
+            let incrementResponse = await fetch(`/opportunities/increment/${oppid}`)
+            if (!incrementResponse.ok) {
+                alert("Error updating opportunity volunteers:", await incrementResponse.text())
             }
-        } catch (error) {
-            console.error('Error managing volunteer application:', error);
-            alert('Error managing volunteer application');
         }
-    };
+        else {
+            popuptext.textContent = "Are you sure you want to reject this volunteer's application?";
+        }
+        
+        popup.style.display = "flex";
+        
+        nobutton.onclick = function () {
+            popup.style.display = "none";
+        };
+        
+        yesbutton.onclick = async function () {
+            try {
+                let apistring = `/applications/${volid}/${oppid}/${status}`;
+                const response = await fetch(apistring, { method: "PATCH" });
+                if (response.ok) {
+                    alert("Volunteer managed successfully! Please reload the page.");
+                    popup.style.display = "none";
+                } else {
+                    alert("Error managing volunteer application:", await response.text());
+                }
+            } catch (error) {
+                console.error('Error managing volunteer application:', error);
+                alert('Error managing volunteer application');
+            }
+        };
+    }
+    catch (error) {
+        console.error(error)
+    }
+    
 }
 
 fetchOpportunityApplications(1);
