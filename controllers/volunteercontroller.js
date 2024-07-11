@@ -72,6 +72,24 @@ const createVolunteer = async (req, res) => {
   }
 }
 
+
+const updateVolunteer = async (req, res) => {
+  const volId = req.params.id;
+  const newVolunteerData = req.body;
+  try {
+      const volunteer = await Volunteer.updateVolunteer(volId, newVolunteerData);
+      if (!volunteer) {
+        return res.status(404).send("Volunteer not found");
+      }
+      
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating volunteer")
+  }
+}
+
+
 async function registerVolunteer(req, res) {
   const { name, email, password, bio, skills, dateofbirth, profilepicture } = req.body;
   const relativePath = path.join('uploads', `${name}_profile.jpg`);
@@ -174,5 +192,6 @@ module.exports = {
     getVolunteerSkills,
     createVolunteer,
     registerVolunteer,
+    updateVolunteer,
     loginVolunteer
 }

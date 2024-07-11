@@ -13,7 +13,7 @@ CREATE TABLE Volunteers (
     volunteerid INT PRIMARY KEY IDENTITY(1,1),
     name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
-    password VARCHAR(100),
+    passwordHash VARCHAR(100),
     bio VARCHAR(255),
     dateofbirth DATE,
     profilepicture NVARCHAR(MAX),
@@ -35,13 +35,13 @@ CREATE TABLE NGOs (
     ngoid INT PRIMARY KEY IDENTITY(1,1),
     name NVARCHAR(100),
     email NVARCHAR(100) UNIQUE,
-    password NVARCHAR(100),
+    passwordHash NVARCHAR(100),
     logo NVARCHAR(MAX),
     description NVARCHAR(255),
     contactperson NVARCHAR(100),
     contactnumber NVARCHAR(20),
     address NVARCHAR(MAX),
-    status VARCHAR(1)
+    status VARCHAR(1) CHECK (status IN ('P', 'A', 'R'))
 );
  
 -- Create Opportunity Table
@@ -71,14 +71,14 @@ CREATE TABLE Applications (
     applicationid INT PRIMARY KEY IDENTITY(1,1),
     volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid) ON DELETE CASCADE,
     opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid) ON DELETE CASCADE,
-    status NVARCHAR(1)
+    status NVARCHAR(1) CHECK (status IN ('R', 'P', 'A'))
 );
  
 -- Create Admin Table 
 CREATE TABLE Admins (
     adminid INT PRIMARY KEY IDENTITY(1,1),
     adminname NVARCHAR(100),
-    adminpassword NVARCHAR(100),
+    adminpasswordHash NVARCHAR(100),
 );
 
 -- Volunteer population
