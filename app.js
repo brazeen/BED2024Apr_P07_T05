@@ -26,7 +26,6 @@ app.post("/volunteers", volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", volunteercontroller.updateVolunteer)
 app.post("/volunteers/login",volunteercontroller.loginVolunteer)
 
-
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);
 app.get("/ngos/status/:status", ngocontroller.getNGOsByStatus); //status must be R, A or P
