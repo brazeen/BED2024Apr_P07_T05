@@ -113,11 +113,30 @@ class Volunteer {
 
         connection.close()
 
-        return this.getVolunteerByName(result.recordset[0].name)
+        return this.getVolunteerById(result.recordset[0].volunteerid)
 
     }
 
+    static async updateVolunteer(id, newVolunteerData) {
+        const connection = await sql.connect(dbConfig)
 
+        const sqlQuery = `UPDATE Volunteers SET name = @name, email = @email, passwordHash = @passwordHash, bio = @bio, dateofbirth = @dateofbirth, profilepicture = @profilepicture WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
+
+        const request = connection.request()
+        request.input("volunteerid", id)
+        request.input("name", newVolunteerData.name)
+        request.input("email", newVolunteerData.email)
+        request.input("passwordHash", newVolunteerData.passwordHash)
+        request.input("bio", newVolunteerData.bio)
+        request.input("dateofbirth", newVolunteerData.dateofbirth)
+        request.input("profilepicture", newVolunteerData.profilepicture)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getVolunteerById(result.recordset[0].volunteerid)
+    }
     
     /*
     
