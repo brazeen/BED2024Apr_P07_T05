@@ -151,7 +151,7 @@ class Volunteer {
 
         connection.close()
 
-        return this.getVolunteerById(result.recordset[0].volunteerid)
+        return this.getVolunteerById(id)
     }
     
     static async updateVolunteerProfilePicture(id, imagepath) {
