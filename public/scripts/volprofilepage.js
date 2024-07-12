@@ -69,29 +69,102 @@ async function deleteVolunteerProfile(id) {
     }
 }
 
-// Pass a reference to the function, not call it
+//when update button is pressed, the updateProfile method gets called
 document.querySelector('.update-btn').addEventListener('click', updateProfile);
 
 async function updateProfile() {
     let modal = document.querySelector('.modal');
-    var nameField = document.getElementById("username");
+    var nameField = document.getElementById("name");
     var emailField = document.getElementById("email");
     var bioField = document.getElementById("bio");
-    var dobField = document.getElementById("age");
+    var dobField = document.getElementById("dateOfBirth");
+    var picField = document.getElementById("profilePicture");
+    var volunteerdob = new Date(volunteer.dateofbirth);
 
-    // Display popup
+    //display popup
     modal.style.display = 'block';
 
-    // Close popup
+    //close popup
     document.querySelector('.close').addEventListener('click', function() {
         modal.style.display = 'none';
     });
 
+    //set form fields with current volunteer data
     nameField.value = volunteer.name;
     emailField.value = volunteer.email;
     bioField.value = volunteer.bio;
-    dobField.value = volunteer.dateofbirth;
+    dobField.value = `${volunteerdob.getFullYear()}-${String(volunteerdob.getMonth() + 1).padStart(2, '0')}-${volunteerdob.getDate().toString().padStart(2, '0')}`;
+
+    //when submit
+    document.querySelector('.submit-btn').addEventListener('click', async function(event) {
+        try{
+            let pic = volunteer.profilepicture;
+
+            //if a file is uploaded
+            if (picField.files.length > 0) {
+                const formData = new FormData();
+                formData.append('profilepicture', picField.files[0]);
+                Object.entries(volunteer).forEach(([key, value]) => {
+                    if (key != "volunteerid") {
+                        formData.append(key, value);
+                    }
+                    
+                });
+
+                const picResponse = await fetch(`/volunteers/profilepicture/${volunteer.volunteerid}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (picResponse.ok) {
+                    const picData = await picResponse.json();
+                    console.log(picData)
+                    pic = picData.profilepicture; //update pic with the new profile picture path
+                } else {
+                    alert("Failed to upload new profile picture.");
+                    return;
+                }
+            }
+
+            
+            let newVolunteerData = {
+                name: nameField.value,
+                email: emailField.value,
+                passwordHash: volunteer.passwordHash,
+                bio: bioField.value,
+                dateofbirth: dobField.value,
+                profilepicture: pic
+            };
+
+            
+            const response = await fetch(`/volunteers/${volunteer.volunteerid}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newVolunteerData)
+            });
+    
+            if (response.ok) {
+                alert("Profile successfully updated.");
+                modal.style.display = 'none';
+                // Optionally, update the displayed volunteer information on the page
+                volunteer = await response.json();
+                // Update displayed data with new information
+                // ...
+            } else {
+                alert("Failed to update profile.");
+            }
+        }
+        catch(error){
+            console.error(error)
+            throw new Error("Failed to update volunteer")
+        }
+        
+            
+    });
 }
+
 
 
     

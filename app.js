@@ -7,6 +7,7 @@ const ngocontroller = require("./controllers/ngocontroller")
 const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const verifyJWT = require("./middlewares/validatevolunteer")
+const upload = require('./middlewares/upload');
 require("dotenv").config()
 
 const app = express()
@@ -25,7 +26,7 @@ app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 app.post("/volunteers", volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", volunteercontroller.updateVolunteer)
 app.post("/volunteers/login",volunteercontroller.loginVolunteer)
-
+app.post('/volunteers/profilepicture/:id', upload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
 
 //NGOs
 app.get("/ngos", ngocontroller.getAllNGOs);

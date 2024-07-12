@@ -237,7 +237,7 @@ nav {
     padding: 20px;
 }
 
-.edit-btn, .delete-btn, .update-btn {
+.edit-btn, .delete-btn, .update-btn, .submit-btn {
     background-color: #FFEB3B;
     border: none;
     padding: 10px 20px;
@@ -789,15 +789,6 @@ body {
     border-radius: 5px;
 }
 
-#profileForm button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 #profileForm button:hover {
-    background-color: #45a049;
+    background-color: #f6ff00;
 }
