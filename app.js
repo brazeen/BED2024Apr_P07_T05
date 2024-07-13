@@ -8,6 +8,7 @@ const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const verifyJWT = require("./middlewares/validatevolunteer")
 require("dotenv").config()
+const verifyJWT = require("./middlewares/validatevolunteer")
 
 const app = express()
 const port = process.env.PORT || 3000;
