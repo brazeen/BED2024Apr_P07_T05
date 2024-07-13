@@ -1,3 +1,22 @@
+
+//To format time (example: 05:30 PM)
+function formatTimeRange(startTimeString, endTimeString) {
+    const startTime = new Date(startTimeString);
+    const endTime = new Date(endTimeString);
+
+    const options = { hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}; // Specify desired format, time can only be formatted based on UTC
+    const formattedStartTime = startTime.toLocaleTimeString('en-SG', options); 
+    const formattedEndTime = endTime.toLocaleTimeString('en-SG', options);
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+}
+
+//To format date to numeric + month (example 12 May)
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year:"numeric", day: 'numeric', month: 'long' };
+    return date.toLocaleDateString('en-SG', options);
+}
 //test variable
 let testvolid = 1
 
@@ -44,12 +63,12 @@ async function displayApplication(application) {
 
     let eventTime = document.createElement("div")
     eventTime.classList.add("eventTime")
-    eventTime.textContent = `${new Date(opportunity.starttime).toLocaleTimeString('en-US', { timeZone: 'UTC'})} to ${new Date(opportunity.endtime).toLocaleTimeString('en-US', { timeZone: 'UTC'})}`;
+    eventTime.textContent = `${formatTimeRange(opportunity.starttime, opportunity.endtime)}`;
     if (application.status == 'A') {
         applicationDiv = document.querySelector(".leftHomeDiv");
         
         eventBoxDetails.classList.add("eventDate")
-        eventBoxDetails.textContent = new Date(opportunity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        eventBoxDetails.textContent = formatDate(opportunity.date) //new Date(opportunity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     }
     else{
         //define remove button and classes
@@ -68,7 +87,7 @@ async function displayApplication(application) {
             eventDiv.classList.add("rejected")
             eventBoxDetails.textContent = "Rejected"
         }
-        eventTime.textContent += ` on ${new Date(opportunity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`
+        eventTime.textContent += ` on ${formatDate(opportunity.date)}`
     }
         eventDetailsDiv.appendChild(eventTitle)
         eventDetailsDiv.appendChild(eventTime)
@@ -108,4 +127,4 @@ async function deleteApplication(volunteerid, opportunityid) {
         }
     };
 }
-fetchAllApplications(testvolid)
+fetchAllApplications(testvolid);
