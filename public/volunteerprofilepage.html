@@ -89,6 +89,27 @@
         </div>
     </div>
 
+    
+
+    <div id="passwordpopup" class="passwordpopup">
+        <div class="passwordpopup-content">
+            <span class="passwordpopup-close">&times;</span>
+            <h2>Change Password</h2>
+            <form id="password-form">
+                <label for="current-password">Current Password:</label>
+                <input type="password" id="current-password" name="current-password" required>
+
+                <label for="new-password">New Password:</label>
+                <input type="password" id="new-password" name="new-password" required>
+
+                <label for="confirm-password">Confirm New Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+
+                <button type="submit" class="passwordpopup-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
     <div class="profile-container">
         <div class="volunteer-img-container">
         </div>
@@ -96,6 +117,7 @@
             <div class="profile-details">
                 <button class="delete-btn">Delete profile</button>
                 <button class="update-btn">Update profile</button>
+                <button id="change-password-btn">Change Password</button>
             </div>
 
         </div>

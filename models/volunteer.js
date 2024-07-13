@@ -169,6 +169,22 @@ class Volunteer {
 
         return this.getVolunteerById(id)
     }
+
+    static async updateVolunteerPassword(id, hash) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE Volunteers SET passwordHash = @passwordHash WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
+
+        const request = connection.request()
+        request.input("volunteerid", id)
+        request.input("passwordHash", hash)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getVolunteerById(id)
+    }
     /*
     
 
