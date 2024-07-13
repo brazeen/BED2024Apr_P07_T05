@@ -793,6 +793,7 @@ body {
     background-color: #f6ff00;
 }
 
+
 #change-password-btn {
     margin: 20px;
     padding: 10px 20px;
@@ -863,4 +864,69 @@ body {
 
 .passwordpopup-submit:hover {
     background-color: #f6ff00;
+}
+/*---------------volsearch.html---------------*/
+
+.searchMain {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.search-bar {
+    width: 600px;
+    background: #ded6d6;
+    margin: 200px auto 0;
+    border-radius: 10px;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.search-row input {
+    flex: 1;
+    height: 50px;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    font-size: 18px;
+    color: black
+}
+
+.search-row button {
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.search-row button:hover {
+    color: white;
+}
+
+.result-box {
+    overflow-y: auto; /* Allow vertical scrolling if results overflow */
+}
+
+.result-box ul{
+    border-top: 1px solid #999;
+    padding: 15px 10px;
+}
+
+.result-box .active {
+    display: none;
+}
+
+.result-box li{
+    list-style: none;
+    border-radius: 3px;
+    padding: 15px 10px;
+    cursor: pointer;
+}
+
+.result-box ul li:hover {
+    background: #ddd;
+    transition: all ease-in-out 0.3s;
 }
