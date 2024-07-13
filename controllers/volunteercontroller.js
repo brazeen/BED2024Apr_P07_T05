@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const fs = require("fs");
 require("dotenv").config();
 const Volunteer = require("../models/volunteer");
 const path = require('path');
-
+const upload = require("../middlewares/upload");
 
 //brandon
 const getAllVolunteers = async (req, res) => {
@@ -72,9 +73,47 @@ const createVolunteer = async (req, res) => {
   }
 }
 
+
+const updateVolunteer = async (req, res) => {
+  const volId = req.params.id;
+  const newVolunteerData = req.body;
+  try {
+      const volunteer = await Volunteer.updateVolunteer(volId, newVolunteerData);
+      
+      if (!volunteer) {
+        return res.status(404).send("Volunteer not found");
+      }
+      res.status(200) //send a OK status code so that the website knows that the thing was ok
+      
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating volunteer")
+  }
+}
+
+const updateVolunteerProfilePicture = async (req, res) => {
+  const volId = req.params.id;
+  const newPhoto = req.file;
+  const imagepath = newPhoto.path.slice(6);
+  try {
+      const volunteer = await Volunteer.updateVolunteerProfilePicture(volId, imagepath);
+      
+      if (!volunteer) {
+        return res.status(404).send("Volunteer not found");
+      }
+      res.status(201) //send a OK status code
+      
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating volunteer profile picture")
+  }
+}
+
 async function registerVolunteer(req, res) {
   const { name, email, password, bio, skills, dateofbirth, profilepicture } = req.body;
-  const relativePath = path.join('uploads', `${name}_profile.jpg`);
+  const relativePath = path.join('./public/images', `${name}_profile.jpg`);
   try {
     // Validate user data
     if (String(password).length < 5) {
@@ -174,5 +213,7 @@ module.exports = {
     getVolunteerSkills,
     createVolunteer,
     registerVolunteer,
-    loginVolunteer
+    updateVolunteer,
+    loginVolunteer,
+    updateVolunteerProfilePicture
 }

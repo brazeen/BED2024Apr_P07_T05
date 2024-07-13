@@ -13,7 +13,7 @@ CREATE TABLE Volunteers (
     volunteerid INT PRIMARY KEY IDENTITY(1,1),
     name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
-    password VARCHAR(100),
+    passwordHash VARCHAR(100),
     bio VARCHAR(255),
     dateofbirth DATE,
     profilepicture NVARCHAR(MAX),
@@ -35,13 +35,13 @@ CREATE TABLE NGOs (
     ngoid INT PRIMARY KEY IDENTITY(1,1),
     name NVARCHAR(100),
     email NVARCHAR(100) UNIQUE,
-    password NVARCHAR(100),
+    passwordHash NVARCHAR(100),
     logo NVARCHAR(MAX),
     description NVARCHAR(255),
     contactperson NVARCHAR(100),
     contactnumber NVARCHAR(20),
     address NVARCHAR(MAX),
-    status VARCHAR(1)
+    status VARCHAR(1) CHECK (status IN ('P', 'A', 'R'))
 );
  
 -- Create Opportunity Table
@@ -71,18 +71,18 @@ CREATE TABLE Applications (
     applicationid INT PRIMARY KEY IDENTITY(1,1),
     volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid) ON DELETE CASCADE,
     opportunityid INT FOREIGN KEY REFERENCES Opportunities(opportunityid) ON DELETE CASCADE,
-    status NVARCHAR(1)
+    status NVARCHAR(1) CHECK (status IN ('R', 'P', 'A'))
 );
  
 -- Create Admin Table 
 CREATE TABLE Admins (
     adminid INT PRIMARY KEY IDENTITY(1,1),
     adminname NVARCHAR(100),
-    adminpassword NVARCHAR(100),
+    adminpasswordHash NVARCHAR(100),
 );
 
 -- Volunteer population
-INSERT INTO Volunteers (name, email, password, bio, dateofbirth, profilepicture) 
+INSERT INTO Volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) 
 
 VALUES ('John Doe', 'johndoe@example.com', 'password123', 'Friendly and passionate volunteer with experience in animal care.', '1990-01-01', 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/John_Doe%2C_born_John_Nommensen_Duchac.jpg/1200px-John_Doe%2C_born_John_Nommensen_Duchac.jpg'), 
 
@@ -113,7 +113,7 @@ VALUES (3, 2),  -- Volunteer 2 has skill 3
        (1, 1);  -- Volunteer 1 has skill 1
 
 -- NGO population
-INSERT INTO NGOs (name, email, password, logo, description, contactperson, contactnumber, address, status) 
+INSERT INTO NGOs (name, email, passwordHash, logo, description, contactperson, contactnumber, address, status) 
 
 VALUES ('Animal Shelter', 'animalshelter@example.com', 'sheltercare', 'https://images.wsj.net/im-831237?width=1280&size=1.33333333', 'Provides care and adoption services for homeless pets.', 'John Johnson', '555-123-4567', '123 Main St, Anytown, CA 12345', 'A'), 
 
@@ -191,7 +191,7 @@ VALUES
   (5, 10, 'A'); -- Volunteer 5 is accepted for Meal Preparation (10);
 
 -- Admin population
-INSERT INTO Admins (adminname, adminpassword)
+INSERT INTO Admins (adminname, adminpasswordHash)
 VALUES 
 ('Jessica Liu', 'password123!'),
 ('Michael Tan', 'securePass45#'),

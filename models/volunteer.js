@@ -1,11 +1,11 @@
 const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 class Volunteer {
-    constructor(volunteerid, name, email, password, bio, dateofbirth, profilepicture) {
+    constructor(volunteerid, name, email, passwordHash, bio, dateofbirth, profilepicture) {
         this.volunteerid = volunteerid;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.passwordHash = passwordHash;
         this.bio = bio;
         this.dateofbirth = dateofbirth;
         this.profilepicture = profilepicture;
@@ -23,7 +23,7 @@ class Volunteer {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Volunteer(row.volunteerid, row.name, row.email, row.password, row.bio, row.dateofbirth, row.profilepicture)
+            (row) => new Volunteer(row.volunteerid, row.name, row.email, row.passwordHash, row.bio, row.dateofbirth, row.profilepicture)
         ) //convert rows to volunteers
     }
 
@@ -39,7 +39,7 @@ class Volunteer {
         connection.close();
 
         return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
             : null; // not found
     }
 
@@ -55,7 +55,7 @@ class Volunteer {
         connection.close();
 
         return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
             : null; // not found
     }
 
@@ -71,7 +71,7 @@ class Volunteer {
         connection.close();
 
         return result.recordset[0]
-            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
+            ? new Volunteer(result.recordset[0].volunteerid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].bio, result.recordset[0].dateofbirth, result.recordset[0].profilepicture)
             : null; // not found
     }
 
@@ -114,12 +114,12 @@ class Volunteer {
     static async createVolunteer(newVolunteerData) {
         const connection = await sql.connect(dbConfig)
 
-        const sqlQuery = `INSERT INTO volunteers (name, email, password, bio, dateofbirth, profilepicture) VALUES (@name, @email, @passwordHash, @bio, @dateofbirth, @profilepicture); SELECT SCOPE_IDENTITY() AS volunteerid;`
+        const sqlQuery = `INSERT INTO volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) VALUES (@name, @email, @passwordHash, @bio, @dateofbirth, @profilepicture); SELECT SCOPE_IDENTITY() AS volunteerid;`
 
         const request = connection.request()
         request.input("name", newVolunteerData.name)
         request.input("email", newVolunteerData.email)
-        request.input("passwordHash", newVolunteerData.password)
+        request.input("passwordHash", newVolunteerData.passwordHash)
         request.input("bio", newVolunteerData.bio)
         request.input("dateofbirth", newVolunteerData.dateofbirth)
         request.input("profilepicture", newVolunteerData.profilepicture)
@@ -129,12 +129,46 @@ class Volunteer {
 
         connection.close()
 
-        return this.getVolunteerByName(result.recordset[0].name)
+        return this.getVolunteerById(result.recordset[0].volunteerid)
 
     }
 
+    static async updateVolunteer(id, newVolunteerData) {
+        const connection = await sql.connect(dbConfig)
 
+        const sqlQuery = `UPDATE Volunteers SET name = @name, email = @email, passwordHash = @passwordHash, bio = @bio, dateofbirth = @dateofbirth, profilepicture = @profilepicture WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
+
+        const request = connection.request()
+        request.input("volunteerid", id)
+        request.input("name", newVolunteerData.name)
+        request.input("email", newVolunteerData.email)
+        request.input("passwordHash", newVolunteerData.passwordHash)
+        request.input("bio", newVolunteerData.bio)
+        request.input("dateofbirth", newVolunteerData.dateofbirth)
+        request.input("profilepicture", newVolunteerData.profilepicture)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getVolunteerById(id)
+    }
     
+    static async updateVolunteerProfilePicture(id, imagepath) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE Volunteers SET profilepicture = @profilepicture WHERE volunteerid = @volunteerid; SELECT SCOPE_IDENTITY() AS volunteerid;`
+
+        const request = connection.request()
+        request.input("volunteerid", id)
+        request.input("profilepicture", imagepath)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getVolunteerById(id)
+    }
     /*
     
 
