@@ -119,7 +119,6 @@ async function loginVolunteer(req, res) {
       id: volunteer.id,
       role: volunteer.role,
     };
-    console.log(process.env.ACCESS_SECRET_KEY);
     const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
 
     return res.status(200).json({ message: "Login successful", token, volunteer: {id: volunteer.id }});
