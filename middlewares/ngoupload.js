@@ -6,9 +6,9 @@ const storage = multer.diskStorage({
         cb(null, '/public/images'); //do nothing when error, second parameter is path
     },
     filename: function (req, file, cb) {
-        const volunteerId = req.params.id;
+        const ngoId = req.params.id;
         const ext = path.extname(file.originalname);
-        cb(null, `volid${volunteerId}${ext}`); //do nothing when error, second parameter is path
+        cb(null, `ngoid${ngoId}${ext}`); //do nothing when error, second parameter is path
     }
 });
 

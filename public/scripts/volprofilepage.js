@@ -96,7 +96,7 @@ async function updateProfile() {
     dobField.value = `${volunteerdob.getFullYear()}-${String(volunteerdob.getMonth() + 1).padStart(2, '0')}-${volunteerdob.getDate().toString().padStart(2, '0')}`;
 
     //when submit
-    document.querySelector('.submit-btn').addEventListener('click', async function(event) {
+    document.querySelector('.submit-btn').addEventListener('click', async function() {
         try{
             let pic = volunteer.profilepicture;
 
@@ -163,6 +163,64 @@ async function updateProfile() {
         
             
     });
+}
+
+document.querySelector('#change-password-btn').addEventListener('click', changePassword);
+
+async function changePassword() {
+    const popup = document.getElementById("passwordpopup");
+    const currentpwField = document.getElementById("current-password");
+    const newpwField = document.getElementById("new-password");
+    const confirmpwField = document.getElementById("confirm-password");
+
+    popup.style.display = 'block';
+
+    document.querySelector('.passwordpopup-close').addEventListener('click', function() {
+        popup.style.display = 'none';
+    });
+
+    document.querySelector('.passwordpopup-submit').addEventListener('click', async function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        let currentpw = currentpwField.value;
+        let newpw = newpwField.value;
+        let confirmpw = confirmpwField.value;
+
+        try {
+            //check if the current password is correct
+            let response = await fetch(`/volunteers/${volunteer.volunteerid}/${currentpw}`, {
+                method: "POST"
+            });
+            if (!response.ok) {
+                alert("Invalid current password");
+                return;
+            }
+            //check if the new passwords match
+            if (newpw !== confirmpw) {
+                alert("New and Confirm password fields do not match");
+                return;
+            }
+            //continue if no errors
+            response = await fetch(`/volunteers/changepw/${volunteer.volunteerid}/${newpw}`, {
+                method: "PATCH"
+            });
+            if (response.ok) {
+                alert("Password successfully changed");
+                popup.style.display = 'none';
+            } else {
+                alert("There was an error changing your password");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("There was an error processing your request");
+        }
+        finally {
+            //empty the fields
+            currentpwField.value = ''
+            newpwField.value = ''
+            confirmpwField.value = ''
+        }
+    })
 }
 
 

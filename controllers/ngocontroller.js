@@ -69,6 +69,25 @@ const updateNGOStatus = async (req, res) => {
     }
 }
 
+const updateNGOLogo = async (req, res) => {
+    const ngoId = req.params.id;
+    const newPhoto = req.file;
+    const imagepath = newPhoto.path.slice(6);
+    try {
+        const ngo = await NGO.updateNGOProfilePicture(ngoId, imagepath)
+        
+        if (!ngo) {
+          return res.status(404).send("NGO not found");
+        }
+        res.status(201) //send a OK status code
+        
+    }
+    catch(error) {
+        console.error(error)
+        res.status(500).send("Error updating NGO logo")
+    }
+  }
+
 const deleteNGO = async (req, res) => {
     const NGOId = req.params.id;
     try {
@@ -109,5 +128,6 @@ module.exports = {
     getNGOById,
     updateNGO,
     updateNGOStatus,
+    updateNGOLogo,
     deleteNGO,
 }

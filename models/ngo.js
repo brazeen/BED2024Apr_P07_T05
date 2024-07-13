@@ -104,6 +104,22 @@ class NGO {
         return this.getNGOById(id)
     }
     
+    static async updateNGOLogo(id, imagepath) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE NGOs SET logo = @logo WHERE ngoid = @ngoid;`
+
+        const request = connection.request()
+        request.input("ngoid", id)
+        request.input("logo", imagepath)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getNGOById(id)
+    }
+
     static async deleteNGO(id) {
         const connection = await sql.connect(dbConfig)
 

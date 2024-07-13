@@ -1,10 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const fs = require("fs");
 require("dotenv").config();
 const Volunteer = require("../models/volunteer");
 const path = require('path');
-const upload = require("../middlewares/upload");
 
 //brandon
 const getAllVolunteers = async (req, res) => {
@@ -24,8 +22,7 @@ const getVolunteerById = async (req, res) => {
     const volunteer = await Volunteer.getVolunteerById(volunteerid);
     if (!volunteer) {
       return res.status(404).send("Volunteer not found")
-    }
-    const volunteerName = volunteer.name; 
+    } 
 
     res.json(volunteer);
   } catch (error) {
@@ -111,6 +108,24 @@ const updateVolunteerProfilePicture = async (req, res) => {
   }
 }
 
+const updateVolunteerPassword = async (req, res) => {
+  const volId = req.params.id;
+  const hash = req.params.hash;
+  try {
+      const volunteer = await Volunteer.updateVolunteerProfilePicture(volId, hash);
+      
+      if (!volunteer) {
+        return res.status(404).send("Volunteer not found");
+      }
+      res.status(200).json(volunteer) //send a OK status code
+      
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating volunteer password")
+  }
+}
+
 async function registerVolunteer(req, res) {
   const { name, email, password, bio, skills, dateofbirth, profilepicture } = req.body;
   const relativePath = path.join('./public/images', `${name}_profile.jpg`);
@@ -168,6 +183,46 @@ async function loginVolunteer(req, res) {
   }
 }
 
+async function comparePassword(req, res) {
+  const password = req.params.pw;
+  const volId = req.params.id;
+
+  try{
+    const volunteer = await Volunteer.getVolunteerById(volId)
+    if (!volunteer) {
+      return res.status(401).json({ message: "Invalid email" });
+    }
+    // Compare password with hash
+    const isMatch = await bcrypt.compare(password, volunteer.passwordHash);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+    res.status(200).json({ message: "Password matches" })
+  }
+  catch (err) {
+  console.error(err);
+  return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function changePassword(req, res) {
+  const password = req.params.pw;
+  const volId = req.params.id;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const updatedVolunteer = await Volunteer.updateVolunteerPassword(volId, hashedPassword)
+    if (!updatedVolunteer) {
+      return res.status(404).json({ message: "Volunteer not found" })
+    }
+    res.status(200).json({ message: "Volunteer updated successfully" })
+
+  }
+  catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+    }
+}
 
 /*
 const getBookById = async (req, res) => {
@@ -215,5 +270,8 @@ module.exports = {
     registerVolunteer,
     updateVolunteer,
     loginVolunteer,
-    updateVolunteerProfilePicture
+    updateVolunteerProfilePicture,
+    comparePassword,
+    updateVolunteerPassword,
+    changePassword
 }
