@@ -10,6 +10,7 @@ const verifyJWT = require("./middlewares/validatevolunteer")
 const bcrypt = require("bcrypt")
 const upload = require('./middlewares/volupload');
 require("dotenv").config()
+const verifyJWT = require("./middlewares/validatevolunteer")
 
 const app = express()
 const port = process.env.PORT || 3000;
