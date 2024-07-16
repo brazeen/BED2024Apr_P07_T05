@@ -175,12 +175,18 @@ async function loginVolunteer(req, res) {
 
     // Generate JWT token
     const payload = {
-      id: Volunteer.id,
-      role: Volunteer.role,
-    };
+      id: volunteer.volunteerid,
+      role: "volunteer",
+    };  
     const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
-
-    return res.status(200).json({ message: "Login successful", token, volunteer: {id: volunteer.id }});
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      volunteer: {
+        id: volunteer.id,
+        role: "volunteer"
+      }
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
