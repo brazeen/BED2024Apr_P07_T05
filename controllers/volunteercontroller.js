@@ -139,12 +139,17 @@ async function registerVolunteer(req, res) {
     if (existingVolunteer) {
       return res.status(400).json({ message: "Username already exists" });
     }
+    //check for existing email
+    const existingVolunteerByEmail = await Volunteer.getVolunteerByEmail(email);
+    if (existingVolunteerByEmail) {
+        return res.status(400).json({ message: "Email already exists" });
+    }
     console.log(req.body)
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log(hashedPassword);
-    const newVolunteer = {name: name, email: email, password: hashedPassword, bio: bio, skills: skills, dateofbirth: dateofbirth, profilepicture: relativePath }
+    const newVolunteer = {name: name, email: email, passwordHash: hashedPassword, bio: bio, skills: skills, dateofbirth: dateofbirth, profilepicture: relativePath }
     const createdVolunteer = await Volunteer.createVolunteer(newVolunteer);
     return res.status(201).json({ message: "Volunteer created successfully" });
   } catch (err) {
@@ -163,25 +168,31 @@ async function loginVolunteer(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     // Compare password with hash
-    const isMatch = await bcrypt.compare(password, volunteer.password);
+    const isMatch = await bcrypt.compare(password, volunteer.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     // Generate JWT token
     const payload = {
-      id: volunteer.id,
-      role: volunteer.role,
-    };
-    console.log(process.env.ACCESS_SECRET_KEY);
+      id: volunteer.volunteerid,
+      role: "volunteer",
+    };  
     const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
-
-    return res.status(200).json({ message: "Login successful", token, volunteer: {id: volunteer.id }});
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      volunteer: {
+        id: volunteer.id,
+        role: "volunteer"
+      }
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 }
+
 
 async function comparePassword(req, res) {
   const password = req.params.pw;
@@ -273,5 +284,5 @@ module.exports = {
     updateVolunteerProfilePicture,
     comparePassword,
     updateVolunteerPassword,
-    changePassword
+    changePassword,
 }

@@ -4,17 +4,13 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const data = {
-        email,
-        password
-    };
+    const data = { email, password };
 
     try {
-        // Send JSON data to the server
         const response = await fetch('/volunteers/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data)
         });
@@ -23,6 +19,9 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
 
         if (response.ok) {
             alert('Volunteer logged in successfully!');
+            console.log("token:",result.token);
+            localStorage.setItem('token', result.token); // Store JWT token
+            window.location.href = '/volindex.html'; // Redirect to the desired page
             document.getElementById('registrationForm').reset();
         } else {
             showAlert('Error logging in volunteer: ' + result.message);
@@ -32,6 +31,6 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     }
 });
 
-function showAlert(message) {  
+function showAlert(message) {
     alert(message);
 }

@@ -8,17 +8,19 @@ const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const verifyJWT = require("./middlewares/validatevolunteer")
 const bcrypt = require("bcrypt")
-const volupload = require('./middlewares/volupload');
-const ngoupload = require('./middlewares/ngoupload');
+const upload = require('./middlewares/volupload');
 require("dotenv").config()
 
-const app = express()
+const app = express();
 const port = process.env.PORT || 3000;
-const staticMiddleware = express.static("public"); // Path to the public folder
-// Include body-parser middleware to handle JSON data
+const staticMiddleware = express.static("public");
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
-app.use(staticMiddleware)   
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(staticMiddleware);
+
+//verifyJWT middleware to routes that need authentication
+
 
 //volunteers
 app.get("/volunteers", volunteercontroller.getAllVolunteers);
@@ -28,7 +30,8 @@ app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 app.post("/volunteers", volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", volunteercontroller.updateVolunteer)
 app.post("/volunteers/login",volunteercontroller.loginVolunteer)
-app.post('/volunteers/profilepicture/:id', volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
+app.post('/volunteers/profilepicture/:id', upload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
+app.patch('/volunteers/:id/:hash', volunteercontroller.updateVolunteerPassword)
 app.patch('/volunteers/changepw/:id/:pw', volunteercontroller.changePassword)
 app.post("/volunteers/:id/:pw", volunteercontroller.comparePassword)
 
@@ -39,48 +42,41 @@ app.get("/ngos/:id", ngocontroller.getNGOById);
 app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.post('/ngos/logo/:id', ngoupload.single('logo'), ngocontroller.updateNGOLogo);
-app.patch('/ngos/changepw/:id/:pw', ngocontroller.changePassword)
-app.post("/ngos/:id/:pw", ngocontroller.comparePassword)
+app.post('/ngos/logo/:id', upload.single('logo'), );
 
-//applications
-app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid
-app.get("/applications/volunteer/:id", applicationcontroller.getApplicationByVolunteerId); //by applicationid
-app.get("/applications/:volunteerid/:opportunityid", applicationcontroller.getApplicationByVolunteerAndOpportunityId); //by vol and opp id
-app.get("/applications/array/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); //by opportunityid and status
-app.post("/applications", applicationcontroller.createApplication);
-app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus)
-app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
+// Application routes
+app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
+app.get("/applications/volunteer/:id", verifyJWT,applicationcontroller.getApplicationByVolunteerId); // by applicationid
+app.get("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.getApplicationByVolunteerAndOpportunityId); // by vol and opp id
+app.get("/applications/array/:opportunityid/:status", verifyJWT,applicationcontroller.getApplicationsByOpportunityandStatus); // by opportunityid and status
+app.post("/applications", verifyJWT,applicationcontroller.createApplication);
+app.patch("/applications/:volunteerid/:opportunityid/:status", verifyJWT,applicationcontroller.updateApplicationStatus);
+app.delete("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.deleteApplication);
 
-//opportunities
-app.get("/opportunities", opportunitycontroller.getAllOpportunities)
-app.get("/opportunities/:id", opportunitycontroller.getOpportunityById)
-app.post("/opportunities",opportunitycontroller.createOpportunity)
-app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
-app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers)
-app.delete("/opportunities/:id",opportunitycontroller.deleteOpportunityById)
-app.put("/opportunities/:id", opportunitycontroller.updateOpportunity)
+// Opportunity routes
+app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
+app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
+app.post("/opportunities", verifyJWT,opportunitycontroller.createOpportunity);
+app.get("/opportunities/skills/:id", verifyJWT,opportunitycontroller.getOpportunitySkills);
+app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.incrementOpportunityCurrentVolunteers);
+app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
+app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 
-app.listen(port, async() => {
+app.listen(port, async () => {
     try {
         await sql.connect(dbConfig);
-        console.log("Database connection success")
-    }
-    catch (err) {
-        console.error("Database connection error", err)
-        //terminate process
+        console.log("Database connection success");
+    } catch (err) {
+        console.error("Database connection error", err);
         process.exit(1);
     }
 
-    console.log(`Server listening on port ${port}`)
-})
+    console.log(`Server listening on port ${port}`);
+});
 
-process.on("SIGINT", async() => {
-    console.log("Server shutting down gracefully")
-    //clean up tasks
-    await sql.close()
-    console.log("Database connection closed")
-    process.exit(0) //code 0 is successful shutdown
-})
-
-
+process.on("SIGINT", async () => {
+    console.log("Server shutting down gracefully");
+    await sql.close();
+    console.log("Database connection closed");
+    process.exit(0);
+});
