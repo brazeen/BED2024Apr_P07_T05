@@ -151,14 +151,19 @@ async function updateProfile() {
                 // Optionally, update the displayed volunteer information on the page
                 volunteer = await response.json();
                 // Update displayed data with new information
-                // ...
+                
             } else {
                 alert("Failed to update profile.");
+                
             }
         }
         catch(error){
             console.error(error)
             throw new Error("Failed to update volunteer")
+            
+        }
+        finally {
+            return;
         }
         
             

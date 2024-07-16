@@ -8,7 +8,8 @@ const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const verifyJWT = require("./middlewares/validatevolunteer")
 const bcrypt = require("bcrypt")
-const upload = require('./middlewares/volupload');
+const volupload = require('./middlewares/volupload');
+const ngoupload = require('./middlewares/ngoupload');
 require("dotenv").config()
 
 const app = express()
@@ -27,8 +28,7 @@ app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
 app.post("/volunteers", volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", volunteercontroller.updateVolunteer)
 app.post("/volunteers/login",volunteercontroller.loginVolunteer)
-app.post('/volunteers/profilepicture/:id', upload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
-app.patch('/volunteers/:id/:hash', volunteercontroller.updateVolunteerPassword)
+app.post('/volunteers/profilepicture/:id', volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
 app.patch('/volunteers/changepw/:id/:pw', volunteercontroller.changePassword)
 app.post("/volunteers/:id/:pw", volunteercontroller.comparePassword)
 
@@ -39,7 +39,9 @@ app.get("/ngos/:id", ngocontroller.getNGOById);
 app.put("/ngos/:id", ngocontroller.updateNGO)
 app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
 app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.post('/ngos/logo/:id', upload.single('logo'), );
+app.post('/ngos/logo/:id', ngoupload.single('logo'), ngocontroller.updateNGOLogo);
+app.patch('/ngos/changepw/:id/:pw', ngocontroller.changePassword)
+app.post("/ngos/:id/:pw", ngocontroller.comparePassword)
 
 //applications
 app.get("/applications/:id", applicationcontroller.getApplicationById); //by applicationid

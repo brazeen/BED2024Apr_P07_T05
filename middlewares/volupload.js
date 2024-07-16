@@ -12,6 +12,6 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage, limits: { fieldSize: 2 * 1024 * 1024 } }); //use the storage object we just defined
+const volupload = multer({ storage: storage, limits: { fieldSize: 2 * 1024 * 1024 } }); //use the storage object we just defined
 
-module.exports = upload;
+module.exports = volupload;

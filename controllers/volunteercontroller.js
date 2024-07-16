@@ -112,7 +112,7 @@ const updateVolunteerPassword = async (req, res) => {
   const volId = req.params.id;
   const hash = req.params.hash;
   try {
-      const volunteer = await Volunteer.updateVolunteerProfilePicture(volId, hash);
+      const volunteer = await Volunteer.updateVolunteerPassword(volId, hash);
       
       if (!volunteer) {
         return res.status(404).send("Volunteer not found");
@@ -190,7 +190,7 @@ async function comparePassword(req, res) {
   try{
     const volunteer = await Volunteer.getVolunteerById(volId)
     if (!volunteer) {
-      return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "Invalid volunteer" });
     }
     // Compare password with hash
     const isMatch = await bcrypt.compare(password, volunteer.passwordHash);
