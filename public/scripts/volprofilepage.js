@@ -1,15 +1,17 @@
 let volunteer;
-let placeholderid = 1;
-
+let placeholderid = localStorage.getItem('volunteerid');
+console.log("placeholder id:", placeholderid);
+const token = localStorage.getItem('token');    
+console.log("token:", token);
 async function fetchVolunteerProfile(id) {
     try {
-        const response = await fetch(`/volunteers/${id}`); // Replace with your API endpoint
+        const response = await fetch(`/volunteers/${id}`);
         volunteer = await response.json();
         const volunteerList = document.getElementsByClassName("volunteer-list")[0]; // Correctly select the element
         if (!volunteerList) {
             throw new Error('Element with class "volunteer-list" not found');
         }
-
+        
         const volunteerItem = document.createElement("div");
         volunteerItem.classList.add("data"); // Add a CSS class for styling
 
