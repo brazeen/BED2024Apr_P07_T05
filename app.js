@@ -8,7 +8,8 @@ const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const verifyJWT = require("./middlewares/validatevolunteer")
 const bcrypt = require("bcrypt")
-const upload = require('./middlewares/volupload');
+const volupload = require('./middlewares/volupload');
+const ngoupload = require('./middlewares/ngoupload');
 require("dotenv").config()
 
 const app = express();
@@ -22,27 +23,32 @@ app.use(staticMiddleware);
 //verifyJWT middleware to routes that need authentication
 
 
-//volunteers
-app.get("/volunteers", volunteercontroller.getAllVolunteers);
-app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
-app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
-app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
-app.post("/volunteers", volunteercontroller.registerVolunteer);
-app.put("/volunteers/:id", volunteercontroller.updateVolunteer)
-app.post("/volunteers/login",volunteercontroller.loginVolunteer)
-app.post('/volunteers/profilepicture/:id', upload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
-app.patch('/volunteers/:id/:hash', volunteercontroller.updateVolunteerPassword)
-app.patch('/volunteers/changepw/:id/:pw', volunteercontroller.changePassword)
-app.post("/volunteers/:id/:pw", volunteercontroller.comparePassword)
+// Volunteer routes
+app.get('/volunteers', verifyJWT, (req, res) => {
+    res.json(req.user); // Return the entire user object
+});
+app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
+app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
+app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
+app.post("/volunteers", verifyJWT,volunteercontroller.registerVolunteer);
+app.put("/volunteers/:id", verifyJWT,volunteercontroller.updateVolunteer);
+app.post("/volunteers/login", volunteercontroller.loginVolunteer);
+app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
+app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteerPassword);
+app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
+app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 
-//NGOs
-app.get("/ngos", ngocontroller.getAllNGOs);
-app.get("/ngos/status/:status", ngocontroller.getNGOsByStatus); //status must be R, A or P
-app.get("/ngos/:id", ngocontroller.getNGOById);
-app.put("/ngos/:id", ngocontroller.updateNGO)
-app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus)
-app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.post('/ngos/logo/:id', upload.single('logo'), );
+// NGO routes
+app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
+app.get("/ngos/status/:status", verifyJWT,ngocontroller.getNGOsByStatus); // status must be R, A or P
+app.get("/ngos/:id", verifyJWT,ngocontroller.getNGOById);
+app.put("/ngos/:id", verifyJWT,ngocontroller.updateNGO);
+app.patch("/ngos/:id/:status", verifyJWT,ngocontroller.updateNGOStatus);
+app.delete("/ngos/:id", verifyJWT,ngocontroller.deleteNGO);
+app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.updateNGOLogo);
+app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
+app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
+
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
