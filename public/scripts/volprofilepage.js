@@ -5,7 +5,12 @@ const token = localStorage.getItem('token');
 console.log("token:", token);
 async function fetchVolunteerProfile(id) {
     try {
-        const response = await fetch(`/volunteers/${id}`);
+        const response = await fetch(`/volunteers/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }});
         volunteer = await response.json();
         const volunteerList = document.getElementsByClassName("volunteer-list")[0]; // Correctly select the element
         if (!volunteerList) {
