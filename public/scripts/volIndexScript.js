@@ -64,7 +64,12 @@ function formatDate(dateString) {
 }
 //test variable
 async function getOpportunityInApplication(oppid) {
-    let response = await fetch(`/opportunities/${oppid}`); // Replace with your API endpoint
+    let response = await fetch(`/opportunities/${oppid}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }}); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunity = await response.json();
     return opportunity;
