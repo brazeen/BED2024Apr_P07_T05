@@ -6,8 +6,8 @@ const volunteercontroller = require("./controllers/volunteercontroller")
 const ngocontroller = require("./controllers/ngocontroller")
 const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
-const verifyJWT = require("./middlewares/validatevolunteer")
-const bcrypt = require("bcrypt")
+const admincontroller = require("./controllers/admincontroller")
+const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
 require("dotenv").config()
@@ -24,9 +24,10 @@ app.use(staticMiddleware);
 
 
 // Volunteer routes
-app.get('/volunteers', verifyJWT, (req, res) => {
+app.get('/volunteers/validate', verifyJWT, (req, res) => {
     res.json(req.user); // Return the entire user object
 });
+app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
@@ -68,6 +69,26 @@ app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.increm
 app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 
+//admin routes
+app.get('/admins/validate', verifyJWT, (req, res) => {
+    res.json(req.user); // Return the entire user object
+});
+app.get("/admins/:name", admincontroller.getAdminByUsername)
+app.post("/admins/login", admincontroller.loginAdmin)
+
+//html routes
+app.get('/', (req, res) => {
+    res.sendFile("index.html", {root: "public"});
+});
+app.get('/login/admin', (req, res) => {
+    res.sendFile("adminloginpage.html", {root: "public"});
+});
+app.get('/admin/dashboard', verifyJWT, (req, res) => {
+    res.redirect('/admindashboard.html');
+});
+app.get('/admin/applications', verifyJWT, (req, res) => {
+    res.sendFile("adminapplications.html", {root: "public"});
+});
 app.listen(port, async () => {
     try {
         await sql.connect(dbConfig);

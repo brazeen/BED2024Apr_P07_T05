@@ -1,11 +1,64 @@
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
+}
+
+
+
+async function initialiseAdmin() {
+  try {
+    let response = await fetch('/admins/validate', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    });
+  
+    // Check if the response is OK (status code 200-299)
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    else {
+      if (document.querySelector(".leftHomeDiv")) {
+        fetchVolunteers(); // Call the function to fetch and display data
+        fetchNGOs();
+      }
+      else{
+        fetchNGOapplications();
+      }
+    }
+  
+    let data = await response.json();
+  
+    // Assuming the response contains an object with the ID
+    localStorage.setItem('role', data.role);
+  } catch (error) {
+    console.error('Error fetching admin:', error);
+  }
+}
+
+
 async function getVolunteerSkillsArray(id) {
-  const response = await fetch(`/volunteers/skills/${id}`); // Replace with your API endpoint
+  const response = await fetch(`/volunteers/skills/${id}`, {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
   return "Skills: " + data.join(", ");
 }
 
 async function fetchVolunteers() {
-  const response = await fetch("/volunteers"); // Replace with your API endpoint
+  const response = await fetch("/volunteers", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
   const volDiv = document.querySelector(".leftHomeDiv");
@@ -56,7 +109,13 @@ async function fetchVolunteers() {
 }
 
 async function fetchNGOs() {
-  const response = await fetch("/ngos/status/A"); // Replace with your API endpoint
+  const response = await fetch("/ngos/status/A", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
   const ngoDiv = document.querySelector(".rightHomeDiv");
@@ -102,7 +161,13 @@ async function fetchNGOs() {
 }
 
 async function fetchNGOapplications() {
-  const response = await fetch("/ngos/status/P"); // Replace with your API endpoint
+  const response = await fetch("/ngos/status/P", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
   const ngoDiv = document.querySelector(".fullHomeDiv");
@@ -155,7 +220,6 @@ async function fetchNGOapplications() {
 }
 
 
-
 async function deleteUser(event) {
   const popup = document.querySelector(".user-popup")
   const nobutton = document.getElementById("userpopup-no")
@@ -178,6 +242,10 @@ async function deleteUser(event) {
     }
     const response = await fetch(apistring, {
       method: "DELETE", //specify the DELETE method
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
     }); // Replace with your API endpoint
     if (response.ok) {
       alert("User deleted successfully! Please reload the page.");
@@ -205,6 +273,10 @@ async function acceptNGOApplication(event) {
     let apistring = `/ngos/${userid}/A`
     const response = await fetch(apistring, {
       method: "PATCH", //specify the method
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
     }); // Replace with your API endpoint
     if (response.ok) {
       alert("NGO accepted successfully! Please reload the page.");
@@ -216,13 +288,5 @@ async function acceptNGOApplication(event) {
   }
 }
 
-//check if is dashboard page or applications page
-if (document.querySelector(".leftHomeDiv")) {
-  fetchVolunteers(); // Call the function to fetch and display data
-  fetchNGOs();
-}
-else{
-  fetchNGOapplications();
-}
-
+initialiseAdmin()
 

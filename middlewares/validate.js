@@ -58,7 +58,6 @@ function verifyJWT(req, res, next) {
         );
 
         if (!authorizedRole) {
-            alert("You are not authorized.")
             return res.status(403).json({ message: "Forbidden" });
         }
 
