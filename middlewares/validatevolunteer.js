@@ -18,34 +18,33 @@ function verifyJWT(req, res, next) {
             return res.status(403).json({ message: "Forbidden" });
         }
         const authorizedRoles = {
-            "/volunteers": ["Admin", "volunteer"],
-            "/volunteers/:id": ["Admin", "volunteer"],
-            "/volunteers/skills/:id": ["Admin", "volunteer"],
-            "/volunteers/profilepicture/:id": ["Admin", "volunteer"],
-            "/volunteers/:id/:hash": ["Admin", "volunteer"],
-            "/volunteers/changepw/:id/:pw": ["Admin", "volunteer"],
-            "/volunteers/:id/:pw": ["Admin", "volunteer"],
-            "/volunteers/login": ["Admin", "volunteer"],
+            "/volunteers": ["admin", "volunteer"],
+            "/volunteers/:id": ["admin", "volunteer"],
+            "/volunteers/skills/:id": ["admin", "volunteer"],
+            "/volunteers/profilepicture/:id": ["admin", "volunteer"],
+            "/volunteers/:id/:hash": ["admin", "volunteer"],
+            "/volunteers/changepw/:id/:pw": ["admin", "volunteer"],
+            "/volunteers/:id/:pw": ["admin", "volunteer"],
+            "/volunteers/login": ["admin", "volunteer"],
             
-            "/ngos": ["Admin", "NGO"],
-            "/ngos/status/:status": ["Admin", "NGO"],
-            "/ngos/:id": ["Admin", "NGO"],
-            "/ngos/:id/:status": ["Admin", "NGO"],
-            "/ngos/logo/:id": ["Admin", "NGO"],
-            "/ngos/changepw/:id/:pw": ["Admin", "NGO"],
-            "/ngos/:id/:pw": ["Admin", "NGO"],
-
-            "/applications/:id": ["Admin", "NGO", "volunteer"],
-            "/applications/volunteer/:id": ["Admin", "NGO", "volunteer"],
-            "/applications/:volunteerid/:opportunityid": ["Admin", "NGO", "volunteer"],
-            "/applications/array/:opportunityid/:status": ["Admin", "NGO", "volunteer"],
-            "/applications": ["Admin", "NGO"],
-            "/applications/:volunteerid/:opportunityid/:status": ["Admin", "NGO", "volunteer"],
-            "/applications/:volunteerid/:opportunityid": ["Admin", "NGO", "volunteer"],
+            "/ngos": ["admin", "ngo"],
+            "/ngos/status/:status": ["admin", "ngo"],
+            "/ngos/:id": ["admin", "ngo"],
+            "/ngos/:id/:status": ["admin", "ngo"],
+            "/ngos/logo/:id": ["admin", "ngo"],
+            "/ngos/changepw/:id/:pw": ["admin", "ngo"],
+            "/ngos/:id/:pw": ["admin", "ngo"],
+        
+            "/applications/:id": ["admin", "ngo", "volunteer"],
+            "/applications/volunteer/:id": ["admin", "ngo", "volunteer"],
+            "/applications/:volunteerid/:opportunityid": ["admin", "ngo", "volunteer"],
+            "/applications/array/:opportunityid/:status": ["admin", "ngo", "volunteer"],
+            "/applications": ["admin", "ngo"],
+            "/applications/:volunteerid/:opportunityid/:status": ["admin", "ngo", "volunteer"],
             
-            "/opportunities": ["Admin", "NGO", "volunteer"],
-            "/opportunities/:id": ["Admin", "NGO", "volunteer"]
-        };
+            "/opportunities": ["admin", "ngo", "volunteer"],
+            "/opportunities/:id": ["admin", "ngo", "volunteer"]
+        };        
 
         const requestedEndpoint = req.url;
         const volunteerRole = decoded.role;
