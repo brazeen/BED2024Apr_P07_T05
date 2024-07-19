@@ -15,6 +15,8 @@ function verifyJWT(req, res, next) {
             return res.status(403).json({ message: "Forbidden" });
         }
         const authorizedRoles = {
+            "/users/validate": ["admin", "volunteer", "ngo"],
+
             "/volunteers": ["admin", "volunteer"],
             "/volunteers/:id": ["admin", "volunteer"],
             "/volunteers/skills/:id": ["admin", "volunteer"],

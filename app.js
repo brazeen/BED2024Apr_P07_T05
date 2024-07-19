@@ -24,7 +24,7 @@ app.use(staticMiddleware);
 
 
 // Volunteer routes
-app.get('/volunteers/validate', verifyJWT, (req, res) => {
+app.get('/users/validate', verifyJWT, (req, res) => {
     res.json(req.user); // Return the entire user object
 });
 app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
@@ -70,9 +70,6 @@ app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportuni
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 
 //admin routes
-app.get('/admins/validate', verifyJWT, (req, res) => {
-    res.json(req.user); // Return the entire user object
-});
 app.get("/admins/:name", admincontroller.getAdminByUsername)
 app.post("/admins/login", admincontroller.loginAdmin)
 

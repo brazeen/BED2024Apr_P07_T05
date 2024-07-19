@@ -7,7 +7,7 @@ if (!token) {
 
 async function initialiseAdmin() {
   try {
-    let response = await fetch('/admins/validate', {
+    let response = await fetch('/users/validate', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
