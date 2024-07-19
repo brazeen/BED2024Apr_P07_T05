@@ -4,9 +4,6 @@ function verifyJWT(req, res, next) {
 
 
     const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).json({ message: "Unauthorized - Missing Authorization header" });
-    } 
 
     const token = authHeader.split(" ")[1];
     if (!token) {
@@ -43,26 +40,30 @@ function verifyJWT(req, res, next) {
             "/applications/:volunteerid/:opportunityid/:status": ["admin", "ngo", "volunteer"],
             
             "/opportunities": ["admin", "ngo", "volunteer"],
-            "/opportunities/:id": ["admin", "ngo", "volunteer"]
+            "/opportunities/:id": ["admin", "ngo", "volunteer"],
+
+            "/admin/dashboard": ["admin"],
+            "/admin/applications": ["admin"]
         };        
 
         const requestedEndpoint = req.url;
-        const volunteerRole = decoded.role;
-        const volunteerid = decoded.id;
+        const role = decoded.role;
+        const id = decoded.id;
 
         const authorizedRole = Object.entries(authorizedRoles).find(
             ([endpoint, roles]) => {
                 const regex = new RegExp(`^${endpoint.replace(/:[^\s/]+/g, '[^/]+')}$`);
-                return regex.test(requestedEndpoint) && roles.includes(volunteerRole);
+                return regex.test(requestedEndpoint) && roles.includes(role);
             }
         );
 
         if (!authorizedRole) {
+            alert("You are not authorized.")
             return res.status(403).json({ message: "Forbidden" });
         }
 
         // Attach user details to the request object for further use in the route handlers
-        req.user = { volunteerid: volunteerid, volunteerRole: volunteerRole};
+        req.user = { id: id, role: role};
         next();
     }); 
 }
