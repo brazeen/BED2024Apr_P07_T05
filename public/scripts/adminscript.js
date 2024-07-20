@@ -288,5 +288,34 @@ async function acceptNGOApplication(event) {
   }
 }
 
+async function redirect(url) {
+  let redirectresponse = await fetch(url, {
+    method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+  }})
+  if (redirectresponse.redirected) {
+    
+      window.location.href = redirectresponse.url;
+  } else {
+      return redirectresponse.text().then(text => {
+          alert('Redirection failed: ' + text);
+      });
+  }
+}
+
 initialiseAdmin()
 
+//redirect logic
+const dashbtn = document.getElementById("admindashboard")
+const applicationsbtn = document.getElementById("adminapplications")
+dashbtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  redirect('/admin/dashboard');
+});
+
+applicationsbtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  redirect('/admin/applications');
+});

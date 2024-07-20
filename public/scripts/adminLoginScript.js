@@ -23,9 +23,20 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             localStorage.setItem('token', result.token); // Store JWT token
             document.getElementById('registrationForm').reset();
             
-            window.location.href = '../admindashboard.html'
-            
-            
+            let redirectresponse = await fetch('/admin/dashboard', {
+                method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${result.token}` // Include the token in the Authorization header
+            }})
+            if (redirectresponse.redirected) {
+                window.location.href = redirectresponse.url;
+            } else {
+                return redirectresponse.text().then(text => {
+                    alert('Redirection failed: ' + text);
+                });
+            }
+              
         } else {
             showAlert('Error logging in admin: ' + result.message);
         }

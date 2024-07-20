@@ -4,7 +4,9 @@ function verifyJWT(req, res, next) {
 
 
     const authHeader = req.headers.authorization;
-
+    if (!authHeader) {
+        return res.status(401).json({ message: "Unauthorized = Missing authentication header"})
+    }
     const token = authHeader.split(" ")[1];
     if (!token) {
         return res.status(401).json({ message: "Unauthorized - Missing token" });

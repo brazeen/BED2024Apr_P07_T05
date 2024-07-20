@@ -75,16 +75,16 @@ app.post("/admins/login", admincontroller.loginAdmin)
 
 //html routes
 app.get('/', (req, res) => {
-    res.sendFile("index.html", {root: "public"});
+    res.redirect('/index.html')
 });
 app.get('/login/admin', (req, res) => {
-    res.sendFile("adminloginpage.html", {root: "public"});
+    res.redirect('/adminloginpage.html')
 });
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
     res.redirect('/admindashboard.html');
 });
 app.get('/admin/applications', verifyJWT, (req, res) => {
-    res.sendFile("adminapplications.html", {root: "public"});
+    res.redirect('/adminapplications.html');
 });
 app.listen(port, async () => {
     try {
