@@ -19,7 +19,7 @@ function verifyJWT(req, res, next) {
         const authorizedRoles = {
             "/users/validate": ["admin", "volunteer", "ngo"],
 
-            "/volunteers": ["admin", "volunteer"],
+            "/volunteers": ["admin"],
             "/volunteers/:id": ["admin", "volunteer"],
             "/volunteers/skills/:id": ["admin", "volunteer"],
             "/volunteers/profilepicture/:id": ["admin", "volunteer"],
@@ -28,7 +28,7 @@ function verifyJWT(req, res, next) {
             "/volunteers/:id/:pw": ["admin", "volunteer"],
             "/volunteers/login": ["admin", "volunteer"],
             
-            "/ngos": ["admin", "ngo"],
+            "/ngos": ["admin"],
             "/ngos/status/:status": ["admin", "ngo"],
             "/ngos/:id": ["admin", "ngo"],
             "/ngos/:id/:status": ["admin", "ngo"],
