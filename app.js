@@ -74,12 +74,23 @@ app.get("/admins/:name", admincontroller.getAdminByUsername)
 app.post("/admins/login", admincontroller.loginAdmin)
 
 //html routes
+//login routes
 app.get('/', (req, res) => {
     res.redirect('/index.html')
 });
 app.get('/login/admin', (req, res) => {
     res.redirect('/adminloginpage.html')
 });
+
+//volunteer routes
+app.get('/volunteer/index', verifyJWT, (req, res) => {
+    res.redirect('/volindex.html');
+});
+app.get('/volunteer/profile', verifyJWT, (req, res) => {
+    res.redirect('/volunteerprofilepage.html');
+});
+
+//admin routes
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
     res.redirect('/admindashboard.html');
 });

@@ -67,7 +67,11 @@ document.querySelector('.delete-btn').addEventListener('click', function() {
 
 async function deleteVolunteerProfile(id) {
     const response = await fetch(`/volunteers/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
     });
     if (response.ok) {
         alert("Account successfully deleted.");
@@ -120,7 +124,11 @@ async function updateProfile() {
 
                 const picResponse = await fetch(`/volunteers/profilepicture/${volunteer.volunteerid}`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
                 });
 
                 if (picResponse.ok) {
@@ -147,7 +155,8 @@ async function updateProfile() {
             const response = await fetch(`/volunteers/${volunteer.volunteerid}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 },
                 body: JSON.stringify(newVolunteerData)
             });
@@ -201,7 +210,11 @@ async function changePassword() {
         try {
             //check if the current password is correct
             let response = await fetch(`/volunteers/${volunteer.volunteerid}/${currentpw}`, {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
             });
             if (!response.ok) {
                 alert("Invalid current password");
@@ -214,7 +227,11 @@ async function changePassword() {
             }
             //continue if no errors
             response = await fetch(`/volunteers/changepw/${volunteer.volunteerid}/${newpw}`, {
-                method: "PATCH"
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
             });
             if (response.ok) {
                 alert("Password successfully changed");

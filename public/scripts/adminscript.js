@@ -1,6 +1,6 @@
 const token = localStorage.getItem('token');
 if (!token) {
-    window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
+    window.location.href = '/'; //replace with the main login page BUT IT HASNT BEEN MADE 
 }
 
 
