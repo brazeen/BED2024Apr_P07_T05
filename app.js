@@ -64,6 +64,7 @@ app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
 app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers);
 app.delete("/opportunities/:id", opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", opportunitycontroller.updateOpportunity);
+app.get("/opportunities/search", opportunitycontroller.searchOpportunity);
 
 app.listen(port, async () => {
     try {

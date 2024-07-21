@@ -167,6 +167,28 @@ class Opportunity {
         }
     }
     
+    static async searchOpportunity(searchTerm) {
+        const connection = await sql.connect(dbConfig);
+    
+        try {
+          const query = `
+            SELECT o.opportunityid, o.ngoid, o.title, o.description, o.address, o.region, o.date, o.starttime, o.endtime, o.age, o.maxvolunteers, o.currentvolunteers, s.skillname FROM Opportunities o
+            INNER JOIN OpportunitySkills os ON os.opportunityid = o.opportunityid
+            INNER JOIN Skills s ON s.skillid = os.skillid
+            WHERE region LIKE '%${searchTerm}%'
+            OR date LIKE '%${searchTerm}%'
+            OR skillid LIKE '%${searchTerm}%'
+          `;
+    
+          const result = await connection.request().input('searchTerm', sql.NVarChar, '%' + searchTerm + '%').query(query);
+          return result.recordset;
+        } catch (error) {
+          throw new Error("Error searching Opportunities");
+        } finally {
+          await connection.close(); // Close connection even on errors
+        }
+      }
+
 }
 
 
