@@ -27,6 +27,13 @@ async function fetchOpportunities() {
     return opportunity;
 }
 
+async function fetchOpportunitySkills(id) {
+    let response = await fetch(`/opportunities/skills/${id}`); // Replace with your API endpoint
+    if (!response.ok) throw new Error('Network response was not ok');
+    let skills = await response.json(); 
+    return skills;
+}
+
 async function addKeywords() {    
     let keywords = await fetchOpportunities();
     searchPrompt = keywords;
@@ -98,6 +105,9 @@ async function displaySuggestedOpp() {
         buttons.classList.add('sbutton');
         const viewBtn = document.createElement('button');
         viewBtn.textContent = `View`;
+        viewBtn.addEventListener('click', () => {
+            window.location.href = `volopportunity.html?oppid=${opp.opportunityid}`
+        })
 
         imgDiv.appendChild(putImage);
         buttons.appendChild(viewBtn);
@@ -106,6 +116,28 @@ async function displaySuggestedOpp() {
         imgDiv.appendChild(infoDiv);
         oppDiv.appendChild(imgDiv);
     })
+    filterOpp();
+}
+
+async function filterOpp() {
+    const opportunities = await fetchOpportunities();
+    const regionSelect = document.querySelector('.searchFilter .form-select[aria-label="Region"]');
+    const skillSelect = document.querySelector('.searchFilter .form-select[aria-label="Skills"]');
+    const dateSelect = document.querySelector('.searchFilter .form-select[aria-label="Date"]');
+
+    const selectedRegion = regionSelect.value;
+    const selectedSkill = skillSelect.value;
+    const selectedDate = dateSelect.value;
+
+    filteredOpportunities = opportunities.filter(opp => {
+        
+    })
+    // Sort opportunities based on date
+    if (selectedDate === 'newest') {
+        Opportunities.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (selectedDate === 'oldest') {
+        Opportunities.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
 }
 
 displaySuggestedOpp();

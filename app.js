@@ -68,6 +68,14 @@ app.patch("/applications/:volunteerid/:opportunityid/:status", verifyJWT,applica
 app.delete("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.deleteApplication);
 
 // Opportunity routes
+app.get("/opportunities", opportunitycontroller.getAllOpportunities);
+app.get("/opportunities/:id", opportunitycontroller.getOpportunityById);
+app.post("/opportunities", opportunitycontroller.createOpportunity);
+app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills);
+app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers);
+app.delete("/opportunities/:id", opportunitycontroller.deleteOpportunityById);
+app.put("/opportunities/:id", opportunitycontroller.updateOpportunity);
+app.get("/opportunities/search", opportunitycontroller.searchOpportunity);
 app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
 app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
 app.post("/opportunities", verifyJWT,opportunitycontroller.createOpportunity);
