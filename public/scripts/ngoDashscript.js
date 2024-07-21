@@ -1,4 +1,4 @@
-//donovan
+const token = localStorage.getItem("token")
 
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
@@ -21,7 +21,13 @@ function formatDate(dateString) {
   
 
 async function fetchOpportunity() {
-        let response = await fetch(`/opportunities`);
+        let response = await fetch(`/opportunities`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+        });
         if (!response.ok) throw new Error('Network response was not ok');
         let opportunity = await response.json();
         return opportunity;

@@ -10,12 +10,19 @@ const admincontroller = require("./controllers/admincontroller")
 const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
+
+
+
 require("dotenv").config()
 
 const app = express();
 const port = process.env.PORT || 3000;
 const staticMiddleware = express.static("public");
 
+// Serve the Swagger UI at a specific route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);

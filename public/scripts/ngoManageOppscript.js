@@ -1,3 +1,5 @@
+const token = localStorage.getItem("token")
+
 //donovan
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
@@ -20,14 +22,26 @@ function formatDate(dateString) {
 
 //brandon
 async function getVolunteerSkillsArray(id) {
-    const response = await fetch(`/volunteers/skills/${id}`); // Replace with your API endpoint
+    const response = await fetch(`/volunteers/skills/${id}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    }); // Replace with your API endpoint
     const data = await response.json();
     return "Skills: " + data.join(", ");
   }
 
 async function fetchOpportunityApplications(oppid) {
     try {
-        let response = await fetch(`/applications/array/${oppid}/P`); // Replace with your API endpoint
+        let response = await fetch(`/applications/array/${oppid}/P`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        }); // Replace with your API endpoint
         if (!response.ok) throw new Error('Network response was not ok');
         let data = await response.json();
         const applicationDiv = document.querySelector(".rightSideDiv");
@@ -42,7 +56,13 @@ async function fetchOpportunityApplications(oppid) {
 
 async function displayVolunteersInApplications(application, applicationDiv) {
     try {
-        let response = await fetch(`/volunteers/${application.volunteerid}`); // Replace with your API endpoint
+        let response = await fetch(`/volunteers/${application.volunteerid}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        }); // Replace with your API endpoint
         if (!response.ok) throw new Error('Network response was not ok');
         let volunteer = await response.json();
         getVolunteerSkillsArray(volunteer.volunteerid)
@@ -95,7 +115,7 @@ async function displayVolunteersInApplications(application, applicationDiv) {
         console.error('Error displaying volunteer applications:', error);
         alert('Error displaying volunteer applications');
     }
-} // <-- Missing closing bracket added here
+} 
 
 async function manageVolunteerApplication(volid, oppid, status) {
     try {
@@ -105,10 +125,6 @@ async function manageVolunteerApplication(volid, oppid, status) {
         const popuptext = document.querySelector("#userpopup-text");
         if (status == "A") {
             popuptext.textContent = "Are you sure you want to accept this volunteer's application?";
-            let incrementResponse = await fetch(`/opportunities/increment/${oppid}`)
-            if (!incrementResponse.ok) {
-                alert("Error updating opportunity volunteers:", await incrementResponse.text())
-            }
         }
         else {
             popuptext.textContent = "Are you sure you want to reject this volunteer's application?";
@@ -123,10 +139,26 @@ async function manageVolunteerApplication(volid, oppid, status) {
         yesbutton.onclick = async function () {
             try {
                 let apistring = `/applications/${volid}/${oppid}/${status}`;
-                const response = await fetch(apistring, { method: "PATCH" });
+                const response = await fetch(apistring, { method: "PATCH" , headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }});
                 if (response.ok) {
-                    alert("Volunteer managed successfully! Please reload the page.");
-                    popup.style.display = "none";
+                    let incrementResponse = await fetch(`/opportunities/increment/${oppid}`, {
+                        method: "PATCH",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                        }
+                    })
+                    if (!incrementResponse.ok) {
+                        alert("Error updating opportunity volunteers:", await incrementResponse.text())
+                    }
+                    else {
+                        alert("Volunteer managed successfully! Please reload the page.");
+                        popup.style.display = "none";
+                    }
+                    
                 } else {
                     alert("Error managing volunteer application:", await response.text());
                 }
@@ -156,7 +188,13 @@ async function fetchOpportunity() {
     }
 
     try {
-        const response = await fetch(`/opportunities/${oppid}`);
+        const response = await fetch(`/opportunities/${oppid}` , {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });
         if (!response.ok) {
         throw new Error(`Error fetching opportunity details: ${response.status}`);
         }
@@ -231,6 +269,10 @@ async function removeOpportunity() {
         try {
             const response = await fetch(`/opportunities/${oppid}`, {
                 method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
             });
             if (response.ok){
                 popup.style.display = 'none';
