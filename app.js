@@ -1,60 +1,71 @@
 const express = require("express");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
-const bodyParser = require("body-parser");
-const volunteercontroller = require("./controllers/volunteercontroller");
-const ngocontroller = require("./controllers/ngocontroller");
-const applicationcontroller = require("./controllers/applicationcontroller");
-const opportunitycontroller = require("./controllers/opportunitycontroller");
-const verifyJWT = require("./middlewares/validatevolunteer");
-const bcrypt = require("bcrypt");
-const upload = require('./middlewares/volupload');
-require("dotenv").config();
+const bodyParser = require("body-parser")
+const volunteercontroller = require("./controllers/volunteercontroller")
+const ngocontroller = require("./controllers/ngocontroller")
+const applicationcontroller = require("./controllers/applicationcontroller")
+const opportunitycontroller = require("./controllers/opportunitycontroller")
+const admincontroller = require("./controllers/admincontroller")
+const verifyJWT = require("./middlewares/validate")
+const volupload = require('./middlewares/volupload');
+const ngoupload = require('./middlewares/ngoupload');
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
+
+
+
+require("dotenv").config()
 
 const app = express();
 const port = process.env.PORT || 3000;
 const staticMiddleware = express.static("public");
 
+// Serve the Swagger UI at a specific route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);
 
-/*verifyJWT middleware to routes that need authentication
-app.use("/volunteers", verifyJWT);
-app.use("/ngos", verifyJWT);
-app.use("/applications", verifyJWT);
-app.use("/opportunities", verifyJWT);*/
+//verifyJWT middleware to routes that need authentication
+
 
 // Volunteer routes
-app.get("/volunteers", volunteercontroller.getAllVolunteers);
-app.get("/volunteers/:id", volunteercontroller.getVolunteerById);
-app.delete("/volunteers/:id", volunteercontroller.deleteVolunteer);
-app.get("/volunteers/skills/:id", volunteercontroller.getVolunteerSkills);
-app.post("/volunteers", volunteercontroller.registerVolunteer);
-app.put("/volunteers/:id", volunteercontroller.updateVolunteer);
+app.get('/users/validate', verifyJWT, (req, res) => {
+    res.json(req.user); // Return the entire user object
+});
+app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
+app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
+app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
+app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
+app.post("/volunteers", verifyJWT,volunteercontroller.registerVolunteer);
+app.put("/volunteers/:id", verifyJWT,volunteercontroller.updateVolunteer);
 app.post("/volunteers/login", volunteercontroller.loginVolunteer);
-app.post('/volunteers/profilepicture/:id', upload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
-app.patch('/volunteers/:id/:hash', volunteercontroller.updateVolunteerPassword);
-app.patch('/volunteers/changepw/:id/:pw', volunteercontroller.changePassword);
-app.post("/volunteers/:id/:pw", volunteercontroller.comparePassword);
+app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
+app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteerPassword);
+app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
+app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 
 // NGO routes
-app.get("/ngos", ngocontroller.getAllNGOs);
-app.get("/ngos/status/:status", ngocontroller.getNGOsByStatus); // status must be R, A or P
-app.get("/ngos/:id", ngocontroller.getNGOById);
-app.put("/ngos/:id", ngocontroller.updateNGO);
-app.patch("/ngos/:id/:status", ngocontroller.updateNGOStatus);
-app.delete("/ngos/:id", ngocontroller.deleteNGO);
-app.post('/ngos/logo/:id', upload.single('logo'), ngocontroller.updateNGOLogo);
+app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
+app.get("/ngos/status/:status", verifyJWT,ngocontroller.getNGOsByStatus); // status must be R, A or P
+app.get("/ngos/:id", verifyJWT,ngocontroller.getNGOById);
+app.put("/ngos/:id", verifyJWT,ngocontroller.updateNGO);
+app.patch("/ngos/:id/:status", verifyJWT,ngocontroller.updateNGOStatus);
+app.delete("/ngos/:id", verifyJWT,ngocontroller.deleteNGO);
+app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.updateNGOLogo);
+app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
+app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
+
 
 // Application routes
-app.get("/applications/:id", applicationcontroller.getApplicationById); // by applicationid
-app.get("/applications/volunteer/:id", applicationcontroller.getApplicationByVolunteerId); // by applicationid
-app.get("/applications/:volunteerid/:opportunityid", applicationcontroller.getApplicationByVolunteerAndOpportunityId); // by vol and opp id
-app.get("/applications/array/:opportunityid/:status", applicationcontroller.getApplicationsByOpportunityandStatus); // by opportunityid and status
-app.post("/applications", applicationcontroller.createApplication);
-app.patch("/applications/:volunteerid/:opportunityid/:status", applicationcontroller.updateApplicationStatus);
-app.delete("/applications/:volunteerid/:opportunityid", applicationcontroller.deleteApplication);
+app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
+app.get("/applications/volunteer/:id", verifyJWT,applicationcontroller.getApplicationByVolunteerId); // by applicationid
+app.get("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.getApplicationByVolunteerAndOpportunityId); // by vol and opp id
+app.get("/applications/array/:opportunityid/:status", verifyJWT,applicationcontroller.getApplicationsByOpportunityandStatus); // by opportunityid and status
+app.post("/applications", verifyJWT,applicationcontroller.createApplication);
+app.patch("/applications/:volunteerid/:opportunityid/:status", verifyJWT,applicationcontroller.updateApplicationStatus);
+app.delete("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.deleteApplication);
 
 // Opportunity routes
 app.get("/opportunities", opportunitycontroller.getAllOpportunities);
@@ -65,7 +76,42 @@ app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportu
 app.delete("/opportunities/:id", opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", opportunitycontroller.updateOpportunity);
 app.get("/opportunities/search", opportunitycontroller.searchOpportunity);
+app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
+app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
+app.post("/opportunities", verifyJWT,opportunitycontroller.createOpportunity);
+app.get("/opportunities/skills/:id", verifyJWT,opportunitycontroller.getOpportunitySkills);
+app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.incrementOpportunityCurrentVolunteers);
+app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
+app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 
+//admin routes
+app.get("/admins/:name", admincontroller.getAdminByUsername)
+app.post("/admins/login", admincontroller.loginAdmin)
+
+//html routes
+//login routes
+app.get('/', (req, res) => {
+    res.redirect('/index.html')
+});
+app.get('/login/admin', (req, res) => {
+    res.redirect('/adminloginpage.html')
+});
+
+//volunteer routes
+app.get('/volunteer/index', verifyJWT, (req, res) => {
+    res.redirect('/volindex.html');
+});
+app.get('/volunteer/profile', verifyJWT, (req, res) => {
+    res.redirect('/volunteerprofilepage.html');
+});
+
+//admin routes
+app.get('/admin/dashboard', verifyJWT, (req, res) => {
+    res.redirect('/admindashboard.html');
+});
+app.get('/admin/applications', verifyJWT, (req, res) => {
+    res.redirect('/adminapplications.html');
+});
 app.listen(port, async () => {
     try {
         await sql.connect(dbConfig);

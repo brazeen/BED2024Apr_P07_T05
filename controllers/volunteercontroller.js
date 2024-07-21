@@ -112,7 +112,7 @@ const updateVolunteerPassword = async (req, res) => {
   const volId = req.params.id;
   const hash = req.params.hash;
   try {
-      const volunteer = await Volunteer.updateVolunteerProfilePicture(volId, hash);
+      const volunteer = await Volunteer.updateVolunteerPassword(volId, hash);
       
       if (!volunteer) {
         return res.status(404).send("Volunteer not found");
@@ -175,12 +175,18 @@ async function loginVolunteer(req, res) {
 
     // Generate JWT token
     const payload = {
-      id: Volunteer.id,
-      role: Volunteer.role,
-    };
+      id: volunteer.volunteerid,
+      role: "volunteer",
+    };  
     const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
-
-    return res.status(200).json({ message: "Login successful", token, volunteer: {id: volunteer.id }});
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      volunteer: {
+        id: volunteer.id,
+        role: "volunteer"
+      }
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
@@ -195,7 +201,7 @@ async function comparePassword(req, res) {
   try{
     const volunteer = await Volunteer.getVolunteerById(volId)
     if (!volunteer) {
-      return res.status(401).json({ message: "Invalid email" });
+      return res.status(401).json({ message: "Invalid volunteer" });
     }
     // Compare password with hash
     const isMatch = await bcrypt.compare(password, volunteer.passwordHash);

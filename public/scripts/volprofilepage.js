@@ -1,15 +1,22 @@
 let volunteer;
-let placeholderid = 1;
-
+let placeholderid = localStorage.getItem('volunteerid');
+console.log("placeholder id:", placeholderid);
+const token = localStorage.getItem('token');    
+console.log("token:", token);
 async function fetchVolunteerProfile(id) {
     try {
-        const response = await fetch(`/volunteers/${id}`); // Replace with your API endpoint
+        const response = await fetch(`/volunteers/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }});
         volunteer = await response.json();
         const volunteerList = document.getElementsByClassName("volunteer-list")[0]; // Correctly select the element
         if (!volunteerList) {
             throw new Error('Element with class "volunteer-list" not found');
         }
-
+        
         const volunteerItem = document.createElement("div");
         volunteerItem.classList.add("data"); // Add a CSS class for styling
 
@@ -60,7 +67,11 @@ document.querySelector('.delete-btn').addEventListener('click', function() {
 
 async function deleteVolunteerProfile(id) {
     const response = await fetch(`/volunteers/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
     });
     if (response.ok) {
         alert("Account successfully deleted.");
@@ -113,7 +124,11 @@ async function updateProfile() {
 
                 const picResponse = await fetch(`/volunteers/profilepicture/${volunteer.volunteerid}`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
                 });
 
                 if (picResponse.ok) {
@@ -140,7 +155,8 @@ async function updateProfile() {
             const response = await fetch(`/volunteers/${volunteer.volunteerid}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 },
                 body: JSON.stringify(newVolunteerData)
             });
@@ -151,14 +167,19 @@ async function updateProfile() {
                 // Optionally, update the displayed volunteer information on the page
                 volunteer = await response.json();
                 // Update displayed data with new information
-                // ...
+                
             } else {
                 alert("Failed to update profile.");
+                
             }
         }
         catch(error){
             console.error(error)
             throw new Error("Failed to update volunteer")
+            
+        }
+        finally {
+            return;
         }
         
             
@@ -189,7 +210,11 @@ async function changePassword() {
         try {
             //check if the current password is correct
             let response = await fetch(`/volunteers/${volunteer.volunteerid}/${currentpw}`, {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
             });
             if (!response.ok) {
                 alert("Invalid current password");
@@ -202,7 +227,11 @@ async function changePassword() {
             }
             //continue if no errors
             response = await fetch(`/volunteers/changepw/${volunteer.volunteerid}/${newpw}`, {
-                method: "PATCH"
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                }
             });
             if (response.ok) {
                 alert("Password successfully changed");

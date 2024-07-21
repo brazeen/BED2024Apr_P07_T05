@@ -1,3 +1,49 @@
+// Retrieve token from localStorage
+const token = localStorage.getItem('token');
+console.log("local storage token:", token);
+let testvolid;
+// Function to retrieve volunteer ID
+async function getVolunteerId() {
+    try {
+        let response = await fetch('/volunteers/validate', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });
+
+        // Check if the response is OK (status code 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        let data = await response.json();
+
+        // Assuming the response contains an object with the ID
+        console.log("id:", data.id);
+        testvolid = data.id;
+        console.log("role:", data.role);
+        localStorage.setItem('role', data.role)
+        localStorage.setItem('id', data.id);
+        return data.volunteerid;
+    } catch (error) {
+        console.error('Error fetching volunteer ID:', error);
+    }
+}
+
+async function initializeApp() {
+    // Ensure the global volunteer ID is set
+    await getVolunteerId();
+
+    // Now you can call other methods that depend on the global volunteer ID
+    console.log("Global volunteer ID is set to:", testvolid);
+
+    // Example: Call other methods here
+    fetchAllApplications(testvolid);
+}
+
+initializeApp();
 
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
@@ -18,10 +64,13 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-SG', options);
 }
 //test variable
-let testvolid = 1
-
 async function getOpportunityInApplication(oppid) {
-    let response = await fetch(`/opportunities/${oppid}`); // Replace with your API endpoint
+    let response = await fetch(`/opportunities/${oppid}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }}); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunity = await response.json();
     return opportunity;
@@ -29,7 +78,12 @@ async function getOpportunityInApplication(oppid) {
 
 async function fetchAllApplications(volid) {
     try {
-        let response = await fetch(`/applications/volunteer/${volid}`); // Replace with your API endpoint
+        let response = await fetch(`/applications/volunteer/${volid}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }}); 
         if (!response.ok) throw new Error('Network response was not ok');
         let data = await response.json();
         
@@ -127,4 +181,3 @@ async function deleteApplication(volunteerid, opportunityid) {
         }
     };
 }
-fetchAllApplications(testvolid);
