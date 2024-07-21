@@ -148,6 +148,17 @@ async function comparePassword(req, res) {
       }
   }
   
+  async function searchAcceptedNGOs(req, res) {
+    const searchTerm = req.query.searchTerm; // Extract search term from query params
+    
+    try {    
+      const ngos = await NGO.searchAcceptedNGOs(searchTerm);
+      res.json(ngos);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error searching NGOs" });
+    }
+  }
 /*
 
 
@@ -177,5 +188,6 @@ module.exports = {
     updateNGOLogo,
     deleteNGO,
     changePassword,
-    comparePassword
+    comparePassword,
+    searchAcceptedNGOs
 }

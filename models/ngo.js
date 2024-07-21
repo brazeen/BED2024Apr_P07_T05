@@ -150,6 +150,22 @@ class NGO {
 
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
+
+    static async searchAcceptedNGOs(searchTerm) {
+        const connection = await sql.connect(dbConfig)
+        
+        const sqlQuery = `SELECT * FROM NGOs WHERE name LIKE '%${searchTerm}%' AND status = 'A'`
+    
+        const request = connection.request()
+        
+        const result = await request.query(sqlQuery);
+    
+        connection.close()
+    
+        return result.recordset.map(
+            (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
+        ) //convert rows to NGOs
+    }
     /*
     
 
