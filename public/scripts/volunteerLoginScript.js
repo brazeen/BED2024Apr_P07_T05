@@ -5,7 +5,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const password = document.getElementById('password').value;
 
     const data = { email, password };
-
+    console.log("email:", email);
+    console.log("password:", password);
     try {
         const response = await fetch('/volunteers/login', {
             method: 'POST',
