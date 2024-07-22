@@ -45,6 +45,7 @@ app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepi
 app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteerPassword);
 app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
 app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
+app.get("/volunteers/search/user", verifyJWT, volunteercontroller.searchVolunteers)
 
 // NGO routes
 app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
@@ -56,7 +57,7 @@ app.delete("/ngos/:id", verifyJWT,ngocontroller.deleteNGO);
 app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.updateNGOLogo);
 app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
-
+app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
@@ -88,6 +89,7 @@ app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity)
 app.get("/admins/:name", admincontroller.getAdminByUsername)
 app.post("/admins/login", admincontroller.loginAdmin)
 
+
 //html routes
 //login routes
 app.get('/', (req, res) => {
@@ -104,6 +106,7 @@ app.get('/volunteer/index', verifyJWT, (req, res) => {
 app.get('/volunteer/profile', verifyJWT, (req, res) => {
     res.redirect('/volunteerprofilepage.html');
 });
+
 
 //admin routes
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
