@@ -18,7 +18,7 @@ class NGO {
     static async getAllNGOs() {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM NGOs`; //code to get all volunteers
+        const sqlQuery = `SELECT * FROM NGOs`; //code to get all NGOs
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -27,7 +27,7 @@ class NGO {
 
         return result.recordset.map(
             (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
-        ) //convert rows to volunteers
+        ) //convert rows to NGOs
     }
 
     static async getNGOsByStatus(status) {
@@ -166,6 +166,23 @@ class NGO {
             (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
         ) //convert rows to NGOs
     }
+    
+    static async getNGOByEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM NGOs WHERE email = @email`; //params
+
+        const request = connection.request();
+        request.input("email", email)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
+            : null; // not found
+    }
+
     /*
     
 

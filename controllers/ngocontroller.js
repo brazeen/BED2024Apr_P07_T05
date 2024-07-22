@@ -147,6 +147,65 @@ async function comparePassword(req, res) {
       return res.status(500).json({ message: "Internal server error" });
       }
   }
+
+  async function loginNGO(req, res) {
+    const { email, password } = req.body;
+  
+    try {
+      // Validate user credentials
+      const ngo = await NGO.getNGOByEmail(email);
+      if (!ngo) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      // Compare password with hash
+      const isMatch = await bcrypt.compare(password, ngo.passwordHash);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+  
+      // Generate JWT token
+      const payload = {
+        id: ngo.ngoid,
+        role: "ngo",
+      };  
+      const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
+      return res.status(200).json({
+        message: "Login successful",
+        token,
+        ngo: {
+          id: ngo.id,
+          role: "ngo"
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+  
+  
+  async function comparePassword(req, res) {
+    const password = req.params.pw;
+    const volId = req.params.id;
+  
+    try{
+      const ngo = await Volunteer.getNGOById(ngoId)
+      if (!ngo) {
+        return res.status(401).json({ message: "Invalid NGO" });
+      }
+      // Compare password with hash
+      const isMatch = await bcrypt.compare(password, volunteer.passwordHash);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+      res.status(200).json({ message: "Password matches" })
+    }
+    catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+  
   
   async function searchAcceptedNGOs(req, res) {
     const searchTerm = req.query.searchTerm; // Extract search term from query params
@@ -189,5 +248,6 @@ module.exports = {
     deleteNGO,
     changePassword,
     comparePassword,
-    searchAcceptedNGOs
+    searchAcceptedNGOs,
+    loginNGO
 }

@@ -76,7 +76,7 @@ app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills)
 app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers);
 app.delete("/opportunities/:id", opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", opportunitycontroller.updateOpportunity);
-app.get("/opportunities/search", opportunitycontroller.searchOpportunity);
+app.get("/opportunities/search/listing", opportunitycontroller.searchOpportunity);
 app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
 app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
 app.post("/opportunities", verifyJWT,opportunitycontroller.createOpportunity);
@@ -107,6 +107,17 @@ app.get('/volunteer/profile', verifyJWT, (req, res) => {
     res.redirect('/volunteerprofilepage.html');
 });
 
+//ngo routes
+app.get('/ngo/dashboard', verifyJWT, (req,res) => {
+    res.redirect('/ngodashboard.html');
+})
+app.get('/ngo/profile', verifyJWT, (req, res) => {
+    res.redirect('/ngoprofilepage.html');
+})
+app.get('/login/ngo', (req, res) => {
+    res.redirect('/ngologinpage.html');
+})
+app.post('/ngo/login', ngocontroller.loginNGO);
 
 //admin routes
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
