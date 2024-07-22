@@ -42,7 +42,9 @@ function verifyJWT(req, res, next) {
             "/applications/:volunteerid/:opportunityid": ["admin", "ngo", "volunteer"],
             
             "/opportunities": ["admin", "ngo", "volunteer"],
-            "/opportunities/:id": ["admin", "ngo", "volunteer"]
+            "/opportunities/:id": ["admin", "ngo", "volunteer"],
+
+            '/users/validate' : ["admin", "ngo", "volunteer"]
         };        
 
         const requestedEndpoint = req.url;
