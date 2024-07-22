@@ -1,8 +1,10 @@
-
-
-//hardcode
-let currentVolunteerId = 1
-let currentOpportunityId = 4
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
+}
+let currentVolunteerId = localStorage.getItem("id");
+let currentOpportunityId = 4 //still hardcoded for now
+const id = localStorage.getItem('id')
 
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 

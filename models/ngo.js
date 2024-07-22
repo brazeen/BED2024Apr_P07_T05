@@ -2,11 +2,11 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class NGO {
-    constructor(ngoid, name, email, password, logo, description, contactperson, contactnumber, address, status) {
+    constructor(ngoid, name, email, passwordHash, logo, description, contactperson, contactnumber, address, status) {
         this.ngoid = ngoid;
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.passwordHash = passwordHash;
         this.logo = logo;
         this.description = description;
         this.contactperson = contactperson;
@@ -26,7 +26,7 @@ class NGO {
         connection.close();
 
         return result.recordset.map(
-            (row) => new NGO(row.ngoid, row.name, row.email, row.password, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
+            (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
         ) //convert rows to volunteers
     }
 
@@ -42,7 +42,7 @@ class NGO {
         connection.close();
 
         return result.recordset.map(
-            (row) => new NGO(row.ngoid, row.name, row.email, row.password, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
+            (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
         ) //convert rows to NGOs
         //possible null
     }
@@ -59,7 +59,7 @@ class NGO {
         connection.close();
 
         return result.recordset[0] ?
-            new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].password, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
+            new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
          : null //convert rows to NGOs
         //possible null
     }
@@ -67,13 +67,13 @@ class NGO {
     static async updateNGO(id, newNGOData) {
         const connection = await sql.connect(dbConfig)
 
-        const sqlQuery = `UPDATE NGOs SET name = @name, email = @email, password = @password, logo = @logo, description = @description, contactperson = @contactperson, contactnumber = @contactnumber, address = @address, status = @status WHERE ngoid = @ngoid`
+        const sqlQuery = `UPDATE NGOs SET name = @name, email = @email, passwordHash = @passwordHash, logo = @logo, description = @description, contactperson = @contactperson, contactnumber = @contactnumber, address = @address, status = @status WHERE ngoid = @ngoid`
 
         const request = connection.request()
         request.input("ngoid", id)
         request.input("name", newNGOData.name || null)
         request.input("email", newNGOData.email || null)
-        request.input("password", newNGOData.password || null)
+        request.input("passwordHash", newNGOData.passwordHash || null)
         request.input("logo", newNGOData.logo || null)
         request.input("description", newNGOData.description || null)
         request.input("contactperson", newNGOData.contactperson || null)
@@ -112,6 +112,22 @@ class NGO {
         const request = connection.request()
         request.input("ngoid", id)
         request.input("logo", imagepath)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getNGOById(id)
+    }
+
+    static async updateNGOPassword(id, hash) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE NGOs SET passwordHash = @passwordHash WHERE ngoid = @ngoid;`
+
+        const request = connection.request()
+        request.input("ngoid", id)
+        request.input("passwordHash", hash)
 
         await request.query(sqlQuery)
 

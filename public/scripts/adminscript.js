@@ -1,64 +1,132 @@
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = '/'; //replace with the main login page BUT IT HASNT BEEN MADE 
+}
+
+
+
+async function initialiseAdmin() {
+  try {
+    let response = await fetch('/users/validate', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    });
+  
+    // Check if the response is OK (status code 200-299)
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    else {
+      if (document.querySelector(".leftHomeDiv")) {
+        fetchVolunteers(); // Call the function to fetch and display data
+        fetchNGOs();
+      }
+      else{
+        fetchNGOapplications();
+      }
+    }
+  
+    let data = await response.json();
+  
+    // Assuming the response contains an object with the ID
+    localStorage.setItem('role', data.role);
+  } catch (error) {
+    console.error('Error fetching admin:', error);
+  }
+}
+
+
 async function getVolunteerSkillsArray(id) {
-  const response = await fetch(`/volunteers/skills/${id}`); // Replace with your API endpoint
+  const response = await fetch(`/volunteers/skills/${id}`, {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
   return "Skills: " + data.join(", ");
 }
 
 async function fetchVolunteers() {
-  const response = await fetch("/volunteers"); // Replace with your API endpoint
+  const response = await fetch("/volunteers", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
+  const volCount = document.getElementById("volcount")
+  volCount.innerText = `(${data.length})`
   const volDiv = document.querySelector(".leftHomeDiv");
 
-  data.forEach((volunteer) => {
-    getVolunteerSkillsArray(volunteer.volunteerid)
-      .then(skillstr => {
-        const volItem = document.createElement("div");
-        volItem.classList.add("volunteer"); // Add a CSS class for styling
+  //get the volunteer's skills, and then return an array of {volunteer, skillstr}
+  const skillPromises = data.map(volunteer => 
+    getVolunteerSkillsArray(volunteer.volunteerid).then(skillstr => ({ volunteer, skillstr }))
+  );
 
-        const volImage = document.createElement("img");
-        volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
-        volImage.setAttribute("src", volunteer.profilepicture)
+  //ensure ALL volunteers have been returned (to prevent volunteers not being loaded cos page refresh too fast etc)
+  const volunteersWithSkills = await Promise.all(skillPromises);
 
-        const volInfo = document.createElement("div");
-        volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
+  volunteersWithSkills.forEach(({ volunteer, skillstr }) => {
+    const volItem = document.createElement("div");
+    volItem.classList.add("volunteer"); // Add a CSS class for styling
 
-        const volName = document.createElement("h3");
-        volName.textContent = volunteer.name;
-        volName.classList.add("volunteer-name");
+    const volImage = document.createElement("img");
+    volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
+    volImage.setAttribute("src", volunteer.profilepicture);
 
-        const volAge = document.createElement("p");
-        let now = new Date();
-        let birth = new Date(volunteer.dateofbirth);
-        let age = new Date(now - birth);
-        volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
-        volAge.classList.add("volunteer-age");
+    const volInfo = document.createElement("div");
+    volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
 
-        const volSkills = document.createElement("p");
-        volSkills.textContent = skillstr; // Use the resolved skill string here
-        volSkills.classList.add("volunteer-skills");
+    const volName = document.createElement("h3");
+    volName.textContent = volunteer.name;
+    volName.classList.add("volunteer-name");
 
-        const volRemoveBtn = document.createElement("button");
-        volRemoveBtn.textContent = "✕";
-        volRemoveBtn.classList.add("remove-volunteer");
-        volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
-        volRemoveBtn.addEventListener("click", deleteUser);
+    const volAge = document.createElement("p");
+    let now = new Date();
+    let birth = new Date(volunteer.dateofbirth);
+    let age = new Date(now - birth);
+    volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
+    volAge.classList.add("volunteer-age");
 
-        volItem.appendChild(volImage);
-        volItem.appendChild(volInfo);
-        volInfo.appendChild(volName);
-        volInfo.appendChild(volAge);
-        volInfo.appendChild(volSkills);
-        volItem.appendChild(volRemoveBtn);
-        volDiv.appendChild(volItem);
-      });
+    const volSkills = document.createElement("p");
+    volSkills.textContent = skillstr; //use skillstr to show all vol skills
+    volSkills.classList.add("volunteer-skills");
+
+    const volRemoveBtn = document.createElement("button");
+    volRemoveBtn.textContent = "✕";
+    volRemoveBtn.classList.add("remove-volunteer");
+    volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
+    volRemoveBtn.addEventListener("click", deleteUser);
+
+    volItem.appendChild(volImage);
+    volItem.appendChild(volInfo);
+    volInfo.appendChild(volName);
+    volInfo.appendChild(volAge);
+    volInfo.appendChild(volSkills);
+    volItem.appendChild(volRemoveBtn);
+    volDiv.appendChild(volItem);
   });
 }
 
 async function fetchNGOs() {
-  const response = await fetch("/ngos/status/A"); // Replace with your API endpoint
+  const response = await fetch("/ngos/status/A", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
+  const ngoCount = document.getElementById("ngocount")
+  ngoCount.innerText = `(${data.length})`
   const ngoDiv = document.querySelector(".rightHomeDiv");
 
   data.forEach((ngo) => {
@@ -102,7 +170,13 @@ async function fetchNGOs() {
 }
 
 async function fetchNGOapplications() {
-  const response = await fetch("/ngos/status/P"); // Replace with your API endpoint
+  const response = await fetch("/ngos/status/P", {
+    method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+  }); // Replace with your API endpoint
   const data = await response.json();
 
   const ngoDiv = document.querySelector(".fullHomeDiv");
@@ -155,7 +229,6 @@ async function fetchNGOapplications() {
 }
 
 
-
 async function deleteUser(event) {
   const popup = document.querySelector(".user-popup")
   const nobutton = document.getElementById("userpopup-no")
@@ -178,6 +251,10 @@ async function deleteUser(event) {
     }
     const response = await fetch(apistring, {
       method: "DELETE", //specify the DELETE method
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
     }); // Replace with your API endpoint
     if (response.ok) {
       alert("User deleted successfully! Please reload the page.");
@@ -205,6 +282,10 @@ async function acceptNGOApplication(event) {
     let apistring = `/ngos/${userid}/A`
     const response = await fetch(apistring, {
       method: "PATCH", //specify the method
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
     }); // Replace with your API endpoint
     if (response.ok) {
       alert("NGO accepted successfully! Please reload the page.");
@@ -216,13 +297,34 @@ async function acceptNGOApplication(event) {
   }
 }
 
-//check if is dashboard page or applications page
-if (document.querySelector(".leftHomeDiv")) {
-  fetchVolunteers(); // Call the function to fetch and display data
-  fetchNGOs();
-}
-else{
-  fetchNGOapplications();
+async function redirect(url) {
+  let redirectresponse = await fetch(url, {
+    method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+  }})
+  if (redirectresponse.redirected) {
+    
+      window.location.href = redirectresponse.url;
+  } else {
+      return redirectresponse.text().then(text => {
+          alert('Redirection failed: ' + text);
+      });
+  }
 }
 
+initialiseAdmin()
 
+//redirect logic
+const dashbtn = document.getElementById("admindashboard")
+const applicationsbtn = document.getElementById("adminapplications")
+dashbtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  redirect('/admin/dashboard');
+});
+
+applicationsbtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  redirect('/admin/applications');
+});
