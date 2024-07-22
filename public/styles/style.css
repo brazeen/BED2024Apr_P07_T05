@@ -931,3 +931,79 @@ body {
     background: #ddd;
     transition: all ease-in-out 0.3s;
 }
+
+/*selectuser.html styling*/
+.selectuserbody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.button {
+    background-color: #FFDD57;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.button-large {
+    font-size: 24px;
+    padding: 20px 40px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.options {
+    background-color: #d3d3d3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 300px;
+}
+
+.options .link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    border-radius: 25px;
+    overflow: hidden; /* Ensure the pseudo-element stays within the bounds */
+}
+
+.options .link:hover {
+    background-color: #FFDD57;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+
+.signup-link {
+    margin-top: 20px;
+    color: blue;
+    text-decoration: none;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+}
+.signup-link:hover {
+    text-decoration: underline;
+}
