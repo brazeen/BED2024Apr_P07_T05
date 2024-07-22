@@ -1,98 +1,59 @@
-const admin = require("../models/admin");
+const Admin = require("../models/admin");
 const { user } = require("../dbConfig")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken");
+require("dotenv").config()
 
-async function getAdmin(req, res) {
+const getAdminByUsername = async (req, res) => {
+    const Adminname = parseInt(req.params.name);
+    try {
+        const admin = await Admin.getAdminByUsername(Adminname);
+        if(!admin) {
+            return res.status(404).send("Admin not found");
+        }
+        res.json(admin);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving admin");
+    }
+};
+
+async function loginAdmin(req, res) {
+  const { username, password } = req.body;
+
   try {
-    const users = await admin.getAdmin();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching admin." });
+    // Validate user credentials
+    const admin = await Admin.getAdminByUsername(username);
+    if (!admin) {
+      return res.status(401).json({ message: "Invalid username" });
+    }
+    // Compare password with hash
+    const isMatch = await bcrypt.compare(password, admin.adminpasswordHash);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    // Generate JWT token
+    const payload = {
+      id: admin.adminid,
+      role: "admin",
+    };  
+    const token = jwt.sign(payload, process.env.ACCESS_SECRET_KEY, { expiresIn: "3600s" }); // Expires in 1 hour
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      admin: {
+        id: admin.adminid,
+        role: "admin"
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
-async function searchAdmin(req, res) {
-    const searchTerm = req.query.searchTerm; 
-  
-    try {    
-      const users = await admin.searchAdmin(searchTerm);
-      res.json(users);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error searching admin" });
-    }
-  }
-const getAllAdmin = async (req, res) => {
-    try {
-        const user = await admin.getAllAdmin();
-        res.json(user);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error retrieving admin");
-    }
-};
-
-const getAdminById = async (req, res) => {
-    const AdminId = parseInt(req.params.id);
-    try {
-        const book = await admin.getAdminById(AdminId);
-        if(!book) {
-            return res.status(404).send("Admin not found");
-        }
-        res.json(book);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error retrieving admin");
-    }
-};
-
-const createAdmin = async (req, res) => {
-    const newAdmin = req.body;
-    try {
-      const createdAdmin = await admin.createAdmin(newAdmin);
-      res.status(201).json(createdAdmin);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error creating admin");
-    }
-};
-
-const updateAdmin = async (req, res) => {
-    const AdminId = parseInt(req.params.id);
-    const newAdminData = req.body;
-  
-    try {
-      const updatedAdmin = await admin.updateAdmin(AdminId, newAdminData);
-      if (!updatedAdmin) {
-        return res.status(404).send("Admin not found");
-      }
-      res.json(updatedAdmin);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error updating admin");
-    }
-  };
-  
-  const deleteAdmin = async (req, res) => {
-    const AdminId = parseInt(req.params.id);
-  
-    try {
-      const success = await admin.deleteAdmin(AdminId);
-      if (!success) {
-        return res.status(404).send("Admin not found");
-      }
-      res.status(204).send();
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error deleting admin");
-    }
-};
-  
   module.exports = {
-    getAllAdmin,
-    createAdmin,
-    getAdminById,
-    updateAdmin,
-    deleteAdmin,
-    searchAdmin
+    getAdminByUsername,
+    loginAdmin
   };

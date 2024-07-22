@@ -5,7 +5,7 @@ let testvolid;
 // Function to retrieve volunteer ID
 async function getVolunteerId() {
     try {
-        let response = await fetch('/volunteers', {
+        let response = await fetch('/volunteers/validate', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -21,10 +21,11 @@ async function getVolunteerId() {
         let data = await response.json();
 
         // Assuming the response contains an object with the ID
-        console.log("volunteerid:", data.volunteerid);
-        testvolid = data.volunteerid;
-        console.log("volunteer role:", data.volunteerRole);
-        localStorage.setItem('volunteerid', data.volunteerid);
+        console.log("id:", data.id);
+        testvolid = data.id;
+        console.log("role:", data.role);
+        localStorage.setItem('role', data.role)
+        localStorage.setItem('id', data.id);
         return data.volunteerid;
     } catch (error) {
         console.error('Error fetching volunteer ID:', error);

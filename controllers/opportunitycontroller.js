@@ -98,6 +98,18 @@ async function incrementOpportunityCurrentVolunteers(req, res) {
   }
 }
 
+async function searchOpportunity(req, res) {
+  const searchTerm = req.query.searchTerm; // Extract search term from query params
+
+  try {    
+    const opp = await Opportunity.searchOpportunity(searchTerm);
+    res.json(opp);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error searching opportunities" });
+  }
+}
+
 module.exports = {
     getAllOpportunities,
     getOpportunityById,
@@ -106,5 +118,6 @@ module.exports = {
     deleteOpportunityById,
     updateOpportunity,
     incrementOpportunityCurrentVolunteers,
-    deleteOpportunityById
+    deleteOpportunityById,
+    searchOpportunity,
 }

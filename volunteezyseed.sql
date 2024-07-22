@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS Volunteers;
 DROP TABLE IF EXISTS Skills;
 DROP TABLE IF EXISTS NGOs;
 DROP TABLE IF EXISTS Admins;
-
+DROP TABLE IF EXISTS Messages;
 
 CREATE TABLE Volunteers (
     volunteerid INT PRIMARY KEY IDENTITY(1,1),
@@ -80,6 +80,14 @@ CREATE TABLE Admins (
     adminname NVARCHAR(100),
     adminpasswordHash NVARCHAR(100),
 );
+
+CREATE TABLE Messages (
+    messageid INT PRIMARY KEY IDENTITY(1,1),
+    volunteerid INT FOREIGN KEY REFERENCES Volunteers(volunteerid) ON DELETE CASCADE,
+    ngoid INT FOREIGN KEY REFERENCES NGOs(ngoid) ON DELETE CASCADE,
+    content NVARCHAR(500),
+    timestamp DATETIME DEFAULT GETDATE()
+)
 
 -- Volunteer population
 INSERT INTO Volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) 
@@ -197,6 +205,17 @@ VALUES
 ('Jessica Liu', '$2b$10$0.sMPsIOuiu..COINhvFSOsyjPdO1IBPeun4fDxgas/3bIkjLxmmG'), /*password123!*/
 ('Michael Tan', '$2b$10$Ag6/NPfClRUiHzGxZV9PZuyv8xswo4NB2AsK5rpwqLf2o69H1MHDC'), /*securePass45#*/
 ('Samantha Lee', '$2b$10$a7zrez37rpNx8Tti4wf2xOlsVz8H93DEn9iPaSkbhV70dyUMizvgu'); /*admin!Pass78*/
+
+INSERT INTO Messages (volunteerid, ngoid, content, timestamp)
+VALUES
+    (1, 1, 'Hello from volunteer 1 to NGO 1', GETDATE()),
+    (2, 2, 'Urgent request from volunteer 2 to NGO 2', GETDATE()),
+    (3, 1, 'Inquiry about volunteer opportunities', GETDATE()),
+    (4, 4, 'Volunteer 4 needs assistance from NGO 4', GETDATE()),
+    (5, 2, 'Thank you for the support, NGO 2', GETDATE()),
+    (1, 1, 'Update on project progress', GETDATE()),
+    (2, 4, 'Request for additional resources', GETDATE());
+
 
 
 

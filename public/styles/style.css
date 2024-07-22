@@ -1007,3 +1007,21 @@ body {
 .signup-link:hover {
     text-decoration: underline;
 }
+
+
+.searchFilter {
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+}
+
+.form-select {
+    max-width: 100px;
+}
+
+.searchFilter .form-select:first-child{ /* Target only the first form-select */
+    margin-right: 20px; /* Add right margin for spacing */
+}
+.searchFilter .form-select:last-child{
+    margin-left: 20px;
+}

@@ -3,7 +3,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '/public/images'); //do nothing when error, second parameter is path
+        cb(null, './public/images'); //do nothing when error, second parameter is path
     },
     filename: function (req, file, cb) {
         const ngoId = req.params.id;
@@ -12,6 +12,6 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage, limits: { fieldSize: 2 * 1024 * 1024 } }); //use the storage object we just defined
+const ngoupload = multer({ storage: storage, limits: { fieldSize: 2 * 1024 * 1024 } }); //use the storage object we just defined
 
-module.exports = upload;
+module.exports = ngoupload;

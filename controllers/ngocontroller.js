@@ -1,3 +1,7 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
+const path = require('path');
 const NGO = require("../models/ngo")
 
 const getAllNGOs = async (req, res) => {
@@ -74,7 +78,7 @@ const updateNGOLogo = async (req, res) => {
     const newPhoto = req.file;
     const imagepath = newPhoto.path.slice(6);
     try {
-        const ngo = await NGO.updateNGOProfilePicture(ngoId, imagepath)
+        const ngo = await NGO.updateNGOLogo(ngoId, imagepath)
         
         if (!ngo) {
           return res.status(404).send("NGO not found");
@@ -102,6 +106,48 @@ const deleteNGO = async (req, res) => {
         res.status(500).send("Error deleting NGO")
     }
 }
+
+async function comparePassword(req, res) {
+    const password = req.params.pw;
+    const ngoId = req.params.id;
+  
+    try{
+      const ngo = await NGO.getNGOById(ngoId);
+      if (!ngo) {
+        return res.status(401).json({ message: "Invalid NGO" });
+      }
+      // Compare password with hash
+      const isMatch = await bcrypt.compare(password, ngo.passwordHash);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+      res.status(200).json({ message: "Password matches" })
+    }
+    catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+  
+  async function changePassword(req, res) {
+    const password = req.params.pw;
+    const ngoId = req.params.id;
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const updatedngo = await NGO.updateNGOPassword(ngoId, hashedPassword)
+      if (!updatedngo) {
+        return res.status(404).json({ message: "NGO not found" })
+      }
+      res.status(200).json({ message: "NGO updated successfully" })
+  
+    }
+    catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+      }
+  }
+  
 /*
 
 
@@ -130,4 +176,6 @@ module.exports = {
     updateNGOStatus,
     updateNGOLogo,
     deleteNGO,
+    changePassword,
+    comparePassword
 }
