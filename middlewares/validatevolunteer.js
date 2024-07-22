@@ -42,8 +42,12 @@ function verifyJWT(req, res, next) {
             "/applications/:volunteerid/:opportunityid": ["admin", "ngo", "volunteer"],
             
             "/opportunities": ["admin", "ngo", "volunteer"],
-            "/opportunities/:id": ["admin", "ngo", "volunteer"]
-        };        
+            "/opportunities/:id": ["admin", "ngo", "volunteer"],
+            "/opportunities" : ["admin", "ngo", "volunteer"],
+            "/opportunities/skills/:id" : ["admin", "ngo", "volunteer"],
+            "/opportunities/increment/:id" :  ["admin", "ngo", "volunteer"],
+            
+        };          
 
         const requestedEndpoint = req.url;
         const volunteerRole = decoded.role;
