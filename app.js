@@ -24,7 +24,7 @@ app.use(staticMiddleware);
 
 // Volunteer routes
 app.get('/volunteers', verifyJWT, (req, res) => {
-    res.json(req.user); // Return the entire user object
+    res.json(req.user); // Return user object
 });
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
