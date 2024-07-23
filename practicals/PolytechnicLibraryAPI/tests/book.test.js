@@ -12,13 +12,13 @@ describe("Book.getAllBooks", () => {
   it("should retrieve all books from the database", async () => {
     const mockBooks = [
       {
-        id: 1,
+        book_id: 1,
         title: "The Lord of the Rings",
         author: "J.R.R. Tolkien",
         availability: "Y",
       },
       {
-        id: 2,
+        book_id: 2,
         title: "The Hitchhiker's Guide to the Galaxy",
         author: "Douglas Adams",
         availability: "N",
@@ -36,12 +36,12 @@ describe("Book.getAllBooks", () => {
     sql.connect.mockResolvedValue(mockConnection); // Return the mock connection
 
     const books = await Book.getAllBooks();
-
+    
     expect(sql.connect).toHaveBeenCalledWith(expect.any(Object));
     expect(mockConnection.close).toHaveBeenCalledTimes(1);
     expect(books).toHaveLength(2);
     expect(books[0]).toBeInstanceOf(Book);
-    expect(books[0].id).toBe(1);
+    expect(books[0].book_id).toBe(1);
     expect(books[0].title).toBe("The Lord of the Rings");
     expect(books[0].author).toBe("J.R.R. Tolkien");
     expect(books[0].availability).toBe("Y");
@@ -63,16 +63,55 @@ describe("Book.updateBookAvailability", () => {
       });
   
     it("should update the availability of a book", async () => {
-      // ... arrange: set up mock book data and mock database interaction
-      // ... act: call updateBookAvailability with the test data
-      // ... assert: check if the database was updated correctly and the updated book is returned
+      const mockBooks = [
+        {
+          book_id: 1,
+          title: "The Lord of the Rings",
+          author: "J.R.R. Tolkien",
+          availability: "Y",
+        }
+      ];
+
+      const mockRequest = {
+        query: jest.fn().mockResolvedValue({ recordset: mockBooks }),
+        input: jest.fn().mockResolvedValue(undefined),
+      };
+      const mockConnection = {
+        request: jest.fn().mockReturnValue(mockRequest),
+        close: jest.fn().mockResolvedValue(undefined),
+      };
+
+      sql.connect.mockResolvedValue(mockConnection); // Return the mock connection
+
+      const books = await Book.updateBookAvailability(1, 'N');
+    
+      expect(sql.connect).toHaveBeenCalledWith(expect.any(Object));
+      expect(mockConnection.close).toHaveBeenCalledTimes(2);
+      expect(books).toBeInstanceOf(Book);
+      expect(books.title).toBe("The Lord of the Rings");
+      expect(books.author).toBe("J.R.R. Tolkien");
       
     });
   
     it("should return null if book with the given id does not exist", async () => {
-      // ... arrange: set up mocks for a non-existent book id
-      // ... act: call updateBookAvailability
-      // ... assert: expect the function to return null
+
+      const mockRequest = {
+        query: jest.fn().mockResolvedValue({ recordset: [] }),
+        input: jest.fn().mockResolvedValue(undefined),
+      };
+      const mockConnection = {
+        request: jest.fn().mockReturnValue(mockRequest),
+        close: jest.fn().mockResolvedValue(undefined),
+      };
+
+      sql.connect.mockResolvedValue(mockConnection); // Return the mock connection
+
+      const books = await Book.updateBookAvailability(3, 'N');
+
+      expect(sql.connect).toHaveBeenCalledWith(expect.any(Object));
+      expect(mockConnection.close).toHaveBeenCalledTimes(2);
+
+      expect(books).toBeNull()
     });
   
     // Add more tests for error scenarios (e.g., database error)

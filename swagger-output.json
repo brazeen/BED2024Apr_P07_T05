@@ -13,7 +13,7 @@
   "paths": {
     "/users/validate": {
       "get": {
-        "description": "",
+        "description": "Validates users to ensure they are authenticated",
         "parameters": [
           {
             "name": "authorization",
@@ -36,7 +36,7 @@
     },
     "/volunteers": {
       "get": {
-        "description": "",
+        "description": "Retrieves all registered volunteers",
         "parameters": [
           {
             "name": "authorization",
@@ -60,7 +60,7 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Creates a new volunteer",
         "parameters": [
           {
             "name": "authorization",
@@ -119,7 +119,7 @@
     },
     "/volunteers/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves a volunteer by their volunteerId",
         "parameters": [
           {
             "name": "id",
@@ -152,7 +152,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Deletes a volunteer found by their volunteerId",
         "parameters": [
           {
             "name": "id",
@@ -185,7 +185,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Updates the attributes of a volunteer found by their volunteerId",
         "parameters": [
           {
             "name": "id",
@@ -220,7 +220,7 @@
     },
     "/volunteers/skills/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves a volunteer's skills found by their volunteerId",
         "parameters": [
           {
             "name": "id",
@@ -252,7 +252,7 @@
     },
     "/volunteers/login": {
       "post": {
-        "description": "",
+        "description": "Logs a volunteer into the Volunteezy platform",
         "parameters": [
           {
             "name": "body",
@@ -285,7 +285,7 @@
     },
     "/volunteers/profilepicture/{id}": {
       "post": {
-        "description": "",
+        "description": "Uploads an image for a volunteer's profile picture",
         "parameters": [
           {
             "name": "id",
@@ -320,7 +320,7 @@
     },
     "/volunteers/{id}/{hash}": {
       "patch": {
-        "description": "",
+        "description": "Updates a volunteer's password hash",
         "parameters": [
           {
             "name": "id",
@@ -361,7 +361,7 @@
     },
     "/volunteers/changepw/{id}/{pw}": {
       "patch": {
-        "description": "",
+        "description": "Hashes the password provided and updates the volunteer's password hash",
         "parameters": [
           {
             "name": "id",
@@ -402,7 +402,7 @@
     },
     "/volunteers/{id}/{pw}": {
       "post": {
-        "description": "",
+        "description": "Compares the password given with the volunteer's current password",
         "parameters": [
           {
             "name": "id",
@@ -440,7 +440,7 @@
     },
     "/ngos": {
       "get": {
-        "description": "",
+        "description": "Retrieves all registered NGOs",
         "parameters": [
           {
             "name": "authorization",
@@ -466,7 +466,7 @@
     },
     "/ngos/status/{status}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an NGO's registration status (A for accepted, P for pending)",
         "parameters": [
           {
             "name": "status",
@@ -498,7 +498,7 @@
     },
     "/ngos/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an NGO by their ngoId",
         "parameters": [
           {
             "name": "id",
@@ -531,7 +531,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Updates the attributes of an NGO found by their ngoId",
         "parameters": [
           {
             "name": "id",
@@ -561,7 +561,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Deletes an NGO found by their ngoId",
         "parameters": [
           {
             "name": "id",
@@ -596,7 +596,7 @@
     },
     "/ngos/{id}/{status}": {
       "patch": {
-        "description": "",
+        "description": "Updates an NGO's registration status found by their ngoId",
         "parameters": [
           {
             "name": "id",
@@ -637,7 +637,7 @@
     },
     "/ngos/logo/{id}": {
       "post": {
-        "description": "",
+        "description": "Uploads an image for an NGO's logo",
         "parameters": [
           {
             "name": "id",
@@ -672,7 +672,7 @@
     },
     "/ngos/changepw/{id}/{pw}": {
       "patch": {
-        "description": "",
+        "description": "Hashes the password provided and updates the NGO's password hash",
         "parameters": [
           {
             "name": "id",
@@ -713,7 +713,7 @@
     },
     "/ngos/{id}/{pw}": {
       "post": {
-        "description": "",
+        "description": "Compares the password given with the NGO's current password",
         "parameters": [
           {
             "name": "id",
@@ -751,7 +751,7 @@
     },
     "/applications/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an application by their applicationId",
         "parameters": [
           {
             "name": "id",
@@ -786,7 +786,7 @@
     },
     "/applications/volunteer/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves applications by their volunteerId",
         "parameters": [
           {
             "name": "id",
@@ -821,7 +821,7 @@
     },
     "/applications/{volunteerid}/{opportunityid}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an application by their volunteerId and opportunityId",
         "parameters": [
           {
             "name": "volunteerid",
@@ -860,7 +860,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Deletes an application found by their volunteerId and opportunityId",
         "parameters": [
           {
             "name": "volunteerid",
@@ -901,7 +901,7 @@
     },
     "/applications/array/{opportunityid}/{status}": {
       "get": {
-        "description": "",
+        "description": "Retrieves all applications of an opportunity with a certain status (A for accepted, R for rejected and P for pending)",
         "parameters": [
           {
             "name": "opportunityid",
@@ -939,7 +939,7 @@
     },
     "/applications": {
       "post": {
-        "description": "",
+        "description": "Creates a new application",
         "parameters": [
           {
             "name": "authorization",
@@ -965,7 +965,7 @@
     },
     "/applications/{volunteerid}/{opportunityid}/{status}": {
       "patch": {
-        "description": "",
+        "description": "Updates an application's status found by their volunteerId and opportunityId",
         "parameters": [
           {
             "name": "volunteerid",
@@ -1012,7 +1012,7 @@
     },
     "/opportunities": {
       "get": {
-        "description": "",
+        "description": "Retrieves all opportunities",
         "parameters": [
           {
             "name": "authorization",
@@ -1036,7 +1036,7 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Creates a new opportunity",
         "parameters": [
           {
             "name": "authorization",
@@ -1062,7 +1062,7 @@
     },
     "/opportunities/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an opportunity by their opportunityId",
         "parameters": [
           {
             "name": "id",
@@ -1095,7 +1095,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Deletes a opportunity found by their opportunityId",
         "parameters": [
           {
             "name": "id",
@@ -1128,7 +1128,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Updates the attributes of an opportunity found by their opportunityId",
         "parameters": [
           {
             "name": "id",
@@ -1163,7 +1163,7 @@
     },
     "/opportunities/skills/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an opportunity's skills found by their opportunityId",
         "parameters": [
           {
             "name": "id",
@@ -1198,7 +1198,7 @@
     },
     "/opportunities/increment/{id}": {
       "patch": {
-        "description": "",
+        "description": "Increments the current volunteers of an opportunity by 1",
         "parameters": [
           {
             "name": "id",
@@ -1233,7 +1233,7 @@
     },
     "/admins/{name}": {
       "get": {
-        "description": "",
+        "description": "Retrieves an admin by their adminname attribute",
         "parameters": [
           {
             "name": "name",
@@ -1257,7 +1257,7 @@
     },
     "/admins/login": {
       "post": {
-        "description": "",
+        "description": "Logs an Admin into the Volunteezy platform",
         "parameters": [
           {
             "name": "body",
@@ -1290,7 +1290,7 @@
     },
     "/": {
       "get": {
-        "description": "",
+        "description": "Route to the starting page of the website to choose logins",
         "responses": {
           "default": {
             "description": ""
@@ -1300,7 +1300,7 @@
     },
     "/login/admin": {
       "get": {
-        "description": "",
+        "description": "Route to the admin login page",
         "responses": {
           "default": {
             "description": ""
@@ -1310,7 +1310,7 @@
     },
     "/volunteer/index": {
       "get": {
-        "description": "",
+        "description": "Route to the index page of the volunteer",
         "parameters": [
           {
             "name": "authorization",
@@ -1330,7 +1330,7 @@
     },
     "/volunteer/profile": {
       "get": {
-        "description": "",
+        "description": "Route to the profile page of the volunteer",
         "parameters": [
           {
             "name": "authorization",
@@ -1350,7 +1350,7 @@
     },
     "/admin/dashboard": {
       "get": {
-        "description": "",
+        "description": "Route to the dashboard page of the admin",
         "parameters": [
           {
             "name": "authorization",
@@ -1370,7 +1370,7 @@
     },
     "/admin/applications": {
       "get": {
-        "description": "",
+        "description": "Route to the applications page of the admin",
         "parameters": [
           {
             "name": "authorization",
