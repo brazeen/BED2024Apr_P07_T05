@@ -11,55 +11,26 @@
 </head>
 <body>
 
-    <div style="display: flex; height: 100vh;">
+<div style="display: flex; height: 100vh;">
   <!-- Sidebar with user list -->
-  <div style="width: 25%; background-color: #f0f0f0; padding: 16px;">
+  <div id="chatHistory" style="width: 25%; background-color: #f0f0f0; padding: 16px;">
     <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Chats</h2>
-    <div style="margin-top: 8px;">
-      <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 8px; border-radius: 8px; background-color: #e0e0e0; cursor: pointer;">
-        <img src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="User avatar" style="border-radius: 50%; width: 32px; height: 32px; margin-right: 8px;">
-        <div>
-          <p style="font-size: 14px; font-weight: 600; color: #4a4a4a;">Jane</p>
-          <p style="font-size: 14px; color: #7a7a7a;">Volunteer Opportunities</p>
-        </div>
-      </div>
-      <!-- Additional user chat items -->
-    </div>
   </div>
 
   <!-- Main chat interface -->
   <div style="flex-grow: 1; display: flex; flex-direction: column; border-top: 1px solid #ccc;">
     <!-- Chat header -->
-    <div style="position: sticky; top: 0; z-index: 10; background-color: #ffffff; padding: 16px; border-bottom: 1px solid #e0e0e0;">
+    <div class="chat-header" id="header" style="position: sticky; top: 0; z-index: 10; background-color: #ffffff; padding: 16px; border-bottom: 1px solid #e0e0e0;">
       <div style="display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center;">
-          <img src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="User avatar" style="border-radius: 50%; width: 40px; height: 40px; margin-right: 8px;">
-          <h1 style="font-size: 24px; font-weight: 700;">Jane</h1>
+          <img class="chat-header-avatar" src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="User avatar" style="border-radius: 50%; width: 40px; height: 40px; margin-right: 8px;">
+          <h1 class="chat-header-name" style="font-size: 24px; font-weight: 700;">Jane</h1>
         </div>
       </div>
     </div>
 
     <!-- Chat history -->
-    <div style="flex-grow: 1; overflow-y: auto;">
-      <div style="flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; gap: 8px; max-width: 640px; margin: 0 auto;">
-          <img src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="Jane" style="border-radius: 50%; width: 32px; height: 32px;">
-          <div>
-            <p style="font-weight: 500;">Jane</p>
-            <p style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; word-break: break-word;">Hi there! How can I help you today?</p>
-            <span style="display: block; font-size: 14px; margin-top: 8px;">Today 10:32 AM</span>
-          </div>
-        </div>
-        <div style="display: flex; gap: 8px; max-width: 640px; margin: 0 auto;">
-          <img src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="John" style="border-radius: 50%; width: 32px; height: 32px;">
-          <div>
-            <p style="font-weight: 500;">John</p>
-            <p style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; word-break: break-word;">I'm interested in volunteering for the upcoming event. Could you provide me with more details?</p>
-            <span style="display: block; font-size: 14px; margin-top: 8px;">Today 10:35 AM</span>
-          </div>
-        </div>
-        <!-- Additional chat history items -->
-      </div>
+    <div class="chat-history" style="flex-grow: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px;">
     </div>
 
     <!-- Message input area -->
@@ -74,5 +45,6 @@
   </div>
 </div>
 
+<script src="./scripts/messagingScreen.js"></script>
 </body>
 </html>
