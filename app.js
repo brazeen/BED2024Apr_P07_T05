@@ -58,6 +58,7 @@ app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.upd
 app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
 app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
+app.post("/ngos", ngocontroller.registerNGO);
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
