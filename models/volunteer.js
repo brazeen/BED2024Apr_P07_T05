@@ -201,6 +201,23 @@ class Volunteer {
 
         return this.getVolunteerById(id)
     }
+
+    static async searchVolunteers(searchTerm) {
+        const connection = await sql.connect(dbConfig)
+        
+        const sqlQuery = `SELECT * FROM Volunteers WHERE name LIKE '%${searchTerm}%'`
+    
+        const request = connection.request()
+        
+        const result = await request.query(sqlQuery);
+    
+        connection.close()
+    
+        return result.recordset.map(
+            (row) => new Volunteer(row.volunteerid, row.name, row.email, row.passwordHash, row.bio, row.dateofbirth, row.profilepicture)
+        ) //convert rows to volunteers
+    }
+    
     /*
     
 

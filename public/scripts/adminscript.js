@@ -3,7 +3,17 @@ if (!token) {
     window.location.href = '/'; //replace with the main login page BUT IT HASNT BEEN MADE 
 }
 
+document.getElementById('searchVolunteers').addEventListener('input', async function () {
+  const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
 
+  await fetchVolunteers(searchTerm);
+});
+
+document.getElementById('searchNGOs').addEventListener('input', async function () {
+  const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
+
+  await fetchNGOs(searchTerm);
+});
 
 async function initialiseAdmin() {
   try {
@@ -51,8 +61,16 @@ async function getVolunteerSkillsArray(id) {
   return "Skills: " + data.join(", ");
 }
 
-async function fetchVolunteers() {
-  const response = await fetch("/volunteers", {
+async function fetchVolunteers(searchTerm = '') {
+  //if searchTerm exists, put it inside the url and search but if not just fetch all
+  let url;
+  if (searchTerm == '') {
+    url = '/volunteers'
+  }
+  else {
+    url = `/volunteers/search/user?searchTerm=${encodeURIComponent(searchTerm)}`
+  }
+  const response = await fetch(url, {
     method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,6 +82,9 @@ async function fetchVolunteers() {
   const volCount = document.getElementById("volcount")
   volCount.innerText = `(${data.length})`
   const volDiv = document.querySelector(".leftHomeDiv");
+
+  //clear the current content so that it doesnt get loaded twice when searched 
+  volDiv.innerHTML = '';
 
   //get the volunteer's skills, and then return an array of {volunteer, skillstr}
   const skillPromises = data.map(volunteer => 
@@ -115,8 +136,16 @@ async function fetchVolunteers() {
   });
 }
 
-async function fetchNGOs() {
-  const response = await fetch("/ngos/status/A", {
+async function fetchNGOs(searchTerm = '') {
+  //if searchTerm exists, put it inside the url and search but if not just fetch all
+  let url;
+  if (searchTerm == '') {
+    url = '/ngos/status/A'
+  }
+  else {
+    url = `/ngos/search/user?searchTerm=${encodeURIComponent(searchTerm)}`
+  }
+  const response = await fetch(url, {
     method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,6 +157,9 @@ async function fetchNGOs() {
   const ngoCount = document.getElementById("ngocount")
   ngoCount.innerText = `(${data.length})`
   const ngoDiv = document.querySelector(".rightHomeDiv");
+
+  //clear div
+  ngoDiv.innerHTML = '';
 
   data.forEach((ngo) => {
     const ngoItem = document.createElement("div");

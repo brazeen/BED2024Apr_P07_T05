@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config()
 
 const getAdminByUsername = async (req, res) => {
-    const Adminname = parseInt(req.params.name);
+    const Adminname = req.params.name;
     try {
         const admin = await Admin.getAdminByUsername(Adminname);
         if(!admin) {

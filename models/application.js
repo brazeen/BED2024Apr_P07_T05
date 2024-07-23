@@ -10,7 +10,8 @@ class Application {
     }
 
     static async getApplicationById(id) {
-        const connection = await sql.connect(dbConfig);
+        try {
+            const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `SELECT * FROM Applications WHERE applicationid = @applicationid`; //params
 
@@ -23,39 +24,58 @@ class Application {
         return result.recordset[0] ?
             new Application(result.recordset[0].applicationid, result.recordset[0].volunteerid, result.recordset[0].opportunityid, result.recordset[0].status)
         : null; //convert rows
+        }
+        catch(error) {
+            console.error(error)
+            throw new Error("Database error")
+        }
+        
     }
 
     static async getApplicationByVolunteerId(id) {
-        const connection = await sql.connect(dbConfig);
+        try {
+            const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid`; //params
+            const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid`; //params
 
-        const request = connection.request();
-        request.input("volunteerid", id)
-        const result = await request.query(sqlQuery);
+            const request = connection.request();
+            request.input("volunteerid", id)
+            const result = await request.query(sqlQuery);
 
-        connection.close();
+            connection.close();
 
-        return result.recordset.map(
-            (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
-        ) //convert rows
+            return result.recordset.map(
+                (row) => new Application(row.applicationid, row.volunteerid, row.opportunityid, row.status)
+            ) //convert rows
+        }
+        catch (error) {
+            console.error(error)
+            throw new Error("Database error")
+        }
+        
     }
 
     static async getApplicationByVolunteerAndOpportunityId(volunteerid, opportunityid) {
-        const connection = await sql.connect(dbConfig);
+        try {
+            const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid AND opportunityid = @opportunityid`; //params
+            const sqlQuery = `SELECT * FROM Applications WHERE volunteerid = @volunteerid AND opportunityid = @opportunityid`; //params
 
-        const request = connection.request();
-        request.input("volunteerid", volunteerid)
-        request.input("opportunityid", opportunityid)
-        const result = await request.query(sqlQuery);
+            const request = connection.request();
+            request.input("volunteerid", volunteerid)
+            request.input("opportunityid", opportunityid)
+            const result = await request.query(sqlQuery);
 
-        connection.close();
+            connection.close();
 
-        return result.recordset[0] ?
-            new Application(result.recordset[0].applicationid, result.recordset[0].volunteerid, result.recordset[0].opportunityid, result.recordset[0].status)
-        : null; //convert rows
+            return result.recordset[0] ?
+                new Application(result.recordset[0].applicationid, result.recordset[0].volunteerid, result.recordset[0].opportunityid, result.recordset[0].status)
+            : null; //convert rows
+        }
+        catch(error) {
+            console.error(error)
+            throw new Error("Database error")
+        }
     }
 
     static async getApplicationsByOpportunityandStatus(opportunityid, status) {

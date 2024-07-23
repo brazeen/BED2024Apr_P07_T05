@@ -8,7 +8,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     console.log("email:", email);
     console.log("password:", password);
     try {
-        const response = await fetch('/volunteers/login', {
+        const response = await fetch('/ngo/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -19,16 +19,16 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         const result = await response.json();
 
         if (response.ok) {
-            alert('Volunteer logged in successfully!');
+            alert('NGO logged in successfully!');
             console.log("token:",result.token);
             localStorage.setItem('token', result.token); // Store JWT token
-            window.location.href = '/volindex.html'; // Redirect to the desired page
+            window.location.href = '/ngodashboard.html'; // Redirect to the desired page
             document.getElementById('registrationForm').reset();
         } else {
-            showAlert('Error logging in volunteer: ' + result.message);
+            showAlert('Error logging in NGO: ' + result.message);
         }
     } catch (error) {
-        showAlert('Error logging in volunteer: ' + error.message);
+        showAlert('Error logging in NGO: ' + error.message);
     }
 });
 

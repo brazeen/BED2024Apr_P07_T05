@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="/styles/style.css" rel="stylesheet">
+    <title>Volunteezy | NGO Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <style>
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-success text-center">Volunteezy</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="alert alert-danger" id="alertMessage" style="display:none;"></div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3 style="display: flex; justify-content: center; align-items: center;">NGO</h3>
+                        <form id="registrationForm">
+                            <div class="step active" id="step-1">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control" id="email" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" required />
+                                </div>
+                                <div class="button-container">
+                                    <button type="submit" class="btn btn-orange">Log In</button>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="login-link">
+        <a aria-current="page" href="ngosignuppage.html">Sign up</a>
+    </div>
+    
+    <script src="/scripts/ngologinscript.js"></script>
+</body>
+</html>

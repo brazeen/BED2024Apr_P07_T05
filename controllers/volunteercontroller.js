@@ -235,6 +235,17 @@ async function changePassword(req, res) {
     }
 }
 
+async function searchVolunteers(req, res) {
+  const searchTerm = req.query.searchTerm; // Extract search term from query params
+  
+  try {    
+    const volunteers = await Volunteer.searchVolunteers(searchTerm);
+    res.json(volunteers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error searching volunteers" });
+  }
+}
 
 
 module.exports = {
@@ -250,4 +261,5 @@ module.exports = {
     comparePassword,
     updateVolunteerPassword,
     changePassword,
+    searchVolunteers
 }
