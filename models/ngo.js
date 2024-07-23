@@ -18,7 +18,7 @@ class NGO {
     static async getAllNGOs() {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM NGOs`; //code to get all volunteers
+        const sqlQuery = `SELECT * FROM NGOs`; //code to get all NGOs
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -27,7 +27,7 @@ class NGO {
 
         return result.recordset.map(
             (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
-        ) //convert rows to volunteers
+        ) //convert rows to NGOs
     }
 
     static async getNGOsByStatus(status) {
@@ -150,6 +150,79 @@ class NGO {
 
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
+
+    static async searchAcceptedNGOs(searchTerm) {
+        const connection = await sql.connect(dbConfig)
+        
+        const sqlQuery = `SELECT * FROM NGOs WHERE name LIKE '%${searchTerm}%' AND status = 'A'`
+    
+        const request = connection.request()
+        
+        const result = await request.query(sqlQuery);
+    
+        connection.close()
+    
+        return result.recordset.map(
+            (row) => new NGO(row.ngoid, row.name, row.email, row.passwordHash, row.logo, row.description, row.contactperson, row.contactnumber, row.address, row.status)
+        ) //convert rows to NGOs
+    }
+    
+    static async getNGOByEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM NGOs WHERE email = @email`; //params
+
+        const request = connection.request();
+        request.input("email", email)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
+            : null; // not found
+    }
+
+    static async getNGOByName(username) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM NGOs WHERE name = @name`; //params
+
+        const request = connection.request();
+        request.input("name", username)
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new new NGO(result.recordset[0].ngoid, result.recordset[0].name, result.recordset[0].email, result.recordset[0].passwordHash, result.recordset[0].logo, result.recordset[0].description, result.recordset[0].contactperson, result.recordset[0].contactnumber, result.recordset[0].address, result.recordset[0].status)
+            : null; // not found
+    }
+
+    static async createNGO(newNGOData) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `INSERT INTO NGOs (name, email, passwordHash, description, contactperson, contactnumber, address, logo, status) VALUES (@name, @email, @passwordHash, @description, @contactperson, @contactnumber, @address, @logo, 'P'); SELECT SCOPE_IDENTITY() AS ngoid;`
+
+        const request = connection.request()
+        request.input("name", newNGOData.name)
+        request.input("email", newNGOData.email)
+        request.input("passwordHash", newNGOData.passwordHash)
+        request.input("description", newNGOData.description)
+        request.input("contactperson", newNGOData.contactperson)
+        request.input("contactnumber", newNGOData.contactnumber)
+        request.input("address", newNGOData.address)
+        request.input("logo", newNGOData.logo)
+        request.input("status", newNGOData.status || null)
+
+
+        const result = await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getNGOById(result.recordset[0].ngoid)
+    }
+
     /*
     
 

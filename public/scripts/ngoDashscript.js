@@ -1,4 +1,45 @@
-const token = localStorage.getItem("token")
+const token = localStorage.getItem("token") // Retrieve token from localStorage
+console.log("local storage token:", token);
+let nid;
+
+async function getNGOId() {
+  try {
+      let response = await fetch('/users/validate', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+          }
+      });
+
+      // Check if the response is OK (status code 200-299)
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let data = await response.json();
+
+      // Assuming the response contains an object with the ID
+      console.log("id:", data.id);
+      nid = data.id;
+      console.log("role:", data.role);
+      localStorage.setItem('ngoid', nid)
+      return data.id;
+  } catch (error) {
+      console.error('Error fetching ngo ID:', error);
+  }
+}
+
+async function initializeApp() {
+  // Ensure the global volunteer ID is set
+  await getNGOId();
+
+  // Now you can call other methods that depend on the global volunteer ID
+  console.log("Global NGO ID is set to:", nid);
+
+  // Example: Call other methods here
+  displayOpportunities();
+}
 
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
@@ -21,7 +62,7 @@ function formatDate(dateString) {
   
 
 async function fetchOpportunity() {
-        let response = await fetch(`/opportunities`, {
+        let response = await fetch(`/opportunities/ngos/${nid}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -75,4 +116,5 @@ async function displayOpportunities() {
       
     });
 }
-  displayOpportunities();
+
+initializeApp();
