@@ -29,7 +29,7 @@ class Opportunity {
 
         return result.recordset.map(
             (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
-        ) //convert rows to volunteers
+        ) //convert rows to opps
     }
 
     static async createOpportunity(newOpp) {
@@ -166,24 +166,43 @@ class Opportunity {
     static async searchOpportunity(searchTerm) {
         const connection = await sql.connect(dbConfig);
     
-        try {
-          const query = `
-            SELECT o.opportunityid, o.ngoid, o.title, o.description, o.address, o.region, o.date, o.starttime, o.endtime, o.age, o.maxvolunteers, o.currentvolunteers, s.skillname FROM Opportunities o
-            INNER JOIN OpportunitySkills os ON os.opportunityid = o.opportunityid
-            INNER JOIN Skills s ON s.skillid = os.skillid
-            WHERE region LIKE '%${searchTerm}%'
-            OR date LIKE '%${searchTerm}%'
-            OR skillid LIKE '%${searchTerm}%'
-          `;
     
-          const result = await connection.request().input('searchTerm', sql.NVarChar, '%' + searchTerm + '%').query(query);
-          return result.recordset;
-        } catch (error) {
-          throw new Error("Error searching Opportunities");
-        } finally {
-          await connection.close(); // Close connection even on errors
-        }
-      }
+        const sqlQuery = `
+        SELECT o.opportunityid, o.ngoid, o.title, o.description, o.address, o.region, o.date, o.starttime, o.endtime, o.age, o.maxvolunteers, o.currentvolunteers, s.skillname FROM Opportunities o
+        INNER JOIN OpportunitySkills os ON os.opportunityid = o.opportunityid
+        INNER JOIN Skills s ON s.skillid = os.skillid
+        WHERE o.region LIKE '%${searchTerm}%'
+        OR o.date LIKE '%${searchTerm}%'
+        OR s.skillname LIKE '%${searchTerm}%'
+        `;
+
+        const request = connection.request()
+        
+        const result = await request.query(sqlQuery);
+    
+        connection.close()
+
+        return result.recordset.map(
+        (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+        ) //convert rows to opps
+        
+    }
+
+    static async getOpportunityByNGOid(ngoid) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Opportunities WHERE ngoid = @ngoid`; //params
+
+        const request = connection.request();
+        request.input("ngoid", ngoid);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+            ) //convert rows to opps
+    }
 
 }
 
