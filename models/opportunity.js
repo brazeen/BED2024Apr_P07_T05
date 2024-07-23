@@ -2,7 +2,7 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Opportunity {
-    constructor(opportunityid, ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers) {
+    constructor(opportunityid, ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers, photo) {
         this.opportunityid = opportunityid;
         this.ngoid = ngoid;
         this.title = title;
@@ -15,6 +15,7 @@ class Opportunity {
         this.age = age;
         this.maxvolunteers = maxvolunteers;
         this.currentvolunteers = currentvolunteers;
+        this.photo = photo;
     }
 
     static async getAllOpportunities() {
@@ -28,14 +29,14 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers, row.photo)
         ) //convert rows to opps
     }
 
     static async createOpportunity(newOpp) {
         const connection = await sql.connect(dbConfig);
         //insert values
-        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers) VALUES (1, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0);`;
+        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers, photo) VALUES (@ngoid, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0, @photo);`;
 
         const request = connection.request();
         request.input("ngoid", newOpp.ngoid);
@@ -48,6 +49,7 @@ class Opportunity {
         request.input("endtime", newOpp.endtime);
         request.input("age", newOpp.age);
         request.input("maxvolunteers", newOpp.maxvolunteers);
+        request.input("photo", newOpp.photo)
         
 
 
@@ -76,10 +78,11 @@ class Opportunity {
     static async updateOpportunity(id, newOppData) {
         const connection = await sql.connect(dbConfig);
     
-        const sqlQuery = `UPDATE Opportunities SET ngoid = 1, title = @title, description = @description, address = @address, region = @region, date = @date, starttime = @starttime, endtime = @endtime, age = @age, maxvolunteers = @maxvolunteers, currentVolunteers = 0 WHERE opportunityid = @opportunityid`; // Parameterized query
+        const sqlQuery = `UPDATE Opportunities SET ngoid = @ngoid, title = @title, description = @description, address = @address, region = @region, date = @date, starttime = @starttime, endtime = @endtime, age = @age, maxvolunteers = @maxvolunteers, photo = @photo WHERE opportunityid = @opportunityid`; // Parameterized query
     
         const request = connection.request();
         request.input("opportunityid", id);
+        request.input("ngoid", newOppData.ngoid || null)
         request.input("title", newOppData.title || null); // Handle optional fields
         request.input("description", newOppData.description || null);
         request.input("address", newOppData.address || null);
@@ -89,6 +92,7 @@ class Opportunity {
         request.input("endtime", newOppData.endtime || null);
         request.input("age", newOppData.age || null);
         request.input("maxvolunteers", newOppData.maxvolunteers || null);
+        request.input("photo", newOppData.photo || null)
     
         await request.query(sqlQuery);
     
@@ -122,6 +126,7 @@ class Opportunity {
                 result.recordset[0].age,
                 result.recordset[0].maxvolunteers,
                 result.recordset[0].currentvolunteers,
+                result.recordset[0].photo
             )
             : null; //not found
     }
@@ -168,7 +173,7 @@ class Opportunity {
     
     
         const sqlQuery = `
-        SELECT o.opportunityid, o.ngoid, o.title, o.description, o.address, o.region, o.date, o.starttime, o.endtime, o.age, o.maxvolunteers, o.currentvolunteers, s.skillname FROM Opportunities o
+        SELECT o.opportunityid, o.ngoid, o.title, o.description, o.address, o.region, o.date, o.starttime, o.endtime, o.age, o.maxvolunteers, o.currentvolunteers, o.photo, s.skillname FROM Opportunities o
         INNER JOIN OpportunitySkills os ON os.opportunityid = o.opportunityid
         INNER JOIN Skills s ON s.skillid = os.skillid
         WHERE o.region LIKE '%${searchTerm}%'
@@ -183,7 +188,7 @@ class Opportunity {
         connection.close()
 
         return result.recordset.map(
-        (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+        (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers, row.photo)
         ) //convert rows to opps
         
     }
@@ -200,7 +205,7 @@ class Opportunity {
         connection.close();
 
         return result.recordset.map(
-            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers, row.photo)
             ) //convert rows to opps
     }
 
