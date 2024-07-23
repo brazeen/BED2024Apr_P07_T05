@@ -110,6 +110,20 @@ async function searchOpportunity(req, res) {
   }
 }
 
+const getOpportunityByNGOid = async (req, res) => {
+  const ngoid = req.params.id;
+  try {
+    const opportunity = await Opportunity.getOpportunityByNGOid(ngoid)
+    if (!opportunity) {
+      return res.status(404).send("Opportunity not found")
+    }
+    res.json(opportunity);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Opportunity");
+  }
+};
+
 module.exports = {
     getAllOpportunities,
     getOpportunityById,
@@ -120,4 +134,5 @@ module.exports = {
     incrementOpportunityCurrentVolunteers,
     deleteOpportunityById,
     searchOpportunity,
+    getOpportunityByNGOid
 }

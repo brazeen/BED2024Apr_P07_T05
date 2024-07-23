@@ -28,12 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);
 
 //verifyJWT middleware to routes that need authentication
-
-
-// Volunteer routes
 app.get('/users/validate', verifyJWT, (req, res) => {
     res.json(req.user); // Return the entire user object
 });
+
+// Volunteer routes
 app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
@@ -85,6 +84,7 @@ app.get("/opportunities/skills/:id", verifyJWT,opportunitycontroller.getOpportun
 app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.incrementOpportunityCurrentVolunteers);
 app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
+app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
 
 //admin routes
 app.get("/admins/:name", admincontroller.getAdminByUsername)

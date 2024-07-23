@@ -47,18 +47,19 @@ function verifyJWT(req, res, next) {
             
             "/opportunities": ["admin", "ngo", "volunteer"],
             "/opportunities/:id": ["admin", "ngo", "volunteer"],
+            "/opportunities/ngos/:id": ["admin", "ngo"],
 
             '/users/validate' : ["admin", "ngo", "volunteer"]
         };        
 
         const requestedEndpoint = req.url;
-        const volunteerRole = decoded.role;
-        const volunteerid = decoded.id;
+        const role = decoded.role;
+        const id = decoded.id;
 
         const authorizedRole = Object.entries(authorizedRoles).find(
             ([endpoint, roles]) => {
                 const regex = new RegExp(`^${endpoint.replace(/:[^\s/]+/g, '[^/]+')}$`);
-                return regex.test(requestedEndpoint) && roles.includes(volunteerRole);
+                return regex.test(requestedEndpoint) && roles.includes(role);
             }
         );
 
@@ -67,7 +68,7 @@ function verifyJWT(req, res, next) {
         }
 
         // Attach user details to the request object for further use in the route handlers
-        req.user = { volunteerid: volunteerid, volunteerRole: volunteerRole};
+        req.user = { id: id, role: role};
         next();
     }); 
 }

@@ -188,6 +188,22 @@ class Opportunity {
         
     }
 
+    static async getOpportunityByNGOid(ngoid) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Opportunities WHERE ngoid = @ngoid`; //params
+
+        const request = connection.request();
+        request.input("ngoid", ngoid);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new Opportunity(row.opportunityid, row.ngoid, row.title, row.description, row.address, row.region, row.date, row.starttime, row.endtime, row.age, row.maxvolunteers, row.currentvolunteers)
+            ) //convert rows to opps
+    }
+
 }
 
 
