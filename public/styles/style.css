@@ -238,23 +238,32 @@ nav {
 }
 
 .edit-btn, .delete-btn, .update-btn, .submit-btn, #change-password-btn {
-    background-color: #FFEB3B;
+    color: white;
+    background-color: #ffbc36;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
     margin: 0 10px;
+    width: 120px;
+    font-size: 12px;
+    margin: 5%;
 }
 
-.delete-btn {
-    background-color: #FF6347;
+.logout-btn {
     color: white;
-}
-
-.update-btn, #change-password-btn {
     background-color: #ffbc36;
-    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+    width: 120px;
+    font-size: 15px;
+    margin-left: 80%;
+    margin-top: 1%;
 }
 
 .delete-popup {
@@ -611,20 +620,6 @@ body {
     margin: 5px 0;
 }
 
-.delete-btn {
-    background-color: #ffcc00;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 100px;
-    font-size: 14px;
-    margin-top: 10px;
-    margin-left: auto;
-    display: block;
-}
-
 .contact-info, .past-events, .description {
     margin-bottom: 20px;
 }
@@ -795,9 +790,8 @@ body {
 
 
 #change-password-btn {
-    margin: 20px;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 12px;
     cursor: pointer;
 }
 
@@ -1024,4 +1018,23 @@ body {
 }
 .searchFilter .form-select:last-child{
     margin-left: 20px;
+}
+
+/*volmessage.html*/
+.chat-history #name{
+    font-weight: 500
+}
+
+.chat-history #content {
+    background-color: #ffffff; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    padding: 12px; 
+    border-radius: 8px; 
+    word-break: break-word;
+}
+
+.chat-history span {
+    display: block; 
+    font-size: 14px; 
+    margin-top: 8px;
 }

@@ -21,11 +21,11 @@ async function getVolunteerId() {
         let data = await response.json();
 
         // Assuming the response contains an object with the ID
-        console.log("id:", data.volunteerid);
-        testvolid = data.volunteerid;
-        console.log("role:", data.volunteerRole);
-        localStorage.setItem('volunteerid', data.volunteerid)
-        return data.volunteerid;
+        console.log("id:", data.id);
+        testvolid = data.id;
+        console.log("role:", data.role);
+        localStorage.setItem('volunteerid', data.id)
+        return data.id;
     } catch (error) {
         console.error('Error fetching volunteer ID:', error);
     }
