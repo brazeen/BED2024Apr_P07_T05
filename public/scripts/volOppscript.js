@@ -3,8 +3,8 @@ if (!token) {
     window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
 }
 let currentVolunteerId = localStorage.getItem("id");
-let currentOpportunityId = 4 //still hardcoded for now
-const id = localStorage.getItem('id')
+const urlParams = new URLSearchParams(window.location.search)
+const currentOpportunityId = urlParams.get('id')
 
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
