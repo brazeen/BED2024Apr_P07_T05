@@ -49,6 +49,8 @@ function verifyJWT(req, res, next) {
             "/opportunities/:id": ["admin", "ngo", "volunteer"],
             "/opportunities/ngos/:id": ["admin", "ngo"],
 
+            "/skills": ["admin", "ngo"],
+
             '/users/validate' : ["admin", "ngo", "volunteer"]
         };        
 
