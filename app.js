@@ -7,6 +7,7 @@ const ngocontroller = require("./controllers/ngocontroller")
 const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const admincontroller = require("./controllers/admincontroller")
+const chatcontroller = require("./controllers/chatcontroller")
 const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
@@ -45,6 +46,9 @@ app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteer
 app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
 app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 app.get("/volunteers/search/user", verifyJWT, volunteercontroller.searchVolunteers)
+app.get('/volunteers/:id/messages', chatcontroller.getVolunteerMessages);
+app.get('/volunteers/chats/:id', chatcontroller.getVolunteerChats);
+
 
 // NGO routes
 app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
