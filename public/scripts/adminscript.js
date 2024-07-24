@@ -1,6 +1,6 @@
 const token = localStorage.getItem('token');
 if (!token) {
-    window.location.href = '/'; //replace with the main login page BUT IT HASNT BEEN MADE 
+    window.location.href = '/login'; 
 }
 
 document.getElementById('searchVolunteers').addEventListener('input', async function () {
@@ -87,53 +87,56 @@ async function fetchVolunteers(searchTerm = '') {
   volDiv.innerHTML = '';
 
   //get the volunteer's skills, and then return an array of {volunteer, skillstr}
-  const skillPromises = data.map(volunteer => 
-    getVolunteerSkillsArray(volunteer.volunteerid).then(skillstr => ({ volunteer, skillstr }))
-  );
-
-  //ensure ALL volunteers have been returned (to prevent volunteers not being loaded cos page refresh too fast etc)
-  const volunteersWithSkills = await Promise.all(skillPromises);
-
-  volunteersWithSkills.forEach(({ volunteer, skillstr }) => {
-    const volItem = document.createElement("div");
-    volItem.classList.add("volunteer"); // Add a CSS class for styling
-
-    const volImage = document.createElement("img");
-    volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
-    volImage.setAttribute("src", volunteer.profilepicture);
-
-    const volInfo = document.createElement("div");
-    volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
-
-    const volName = document.createElement("h3");
-    volName.textContent = volunteer.name;
-    volName.classList.add("volunteer-name");
-
-    const volAge = document.createElement("p");
-    let now = new Date();
-    let birth = new Date(volunteer.dateofbirth);
-    let age = new Date(now - birth);
-    volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
-    volAge.classList.add("volunteer-age");
-
-    const volSkills = document.createElement("p");
-    volSkills.textContent = skillstr; //use skillstr to show all vol skills
-    volSkills.classList.add("volunteer-skills");
-
-    const volRemoveBtn = document.createElement("button");
-    volRemoveBtn.textContent = "✕";
-    volRemoveBtn.classList.add("remove-volunteer");
-    volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
-    volRemoveBtn.addEventListener("click", deleteUser);
-
-    volItem.appendChild(volImage);
-    volItem.appendChild(volInfo);
-    volInfo.appendChild(volName);
-    volInfo.appendChild(volAge);
-    volInfo.appendChild(volSkills);
-    volItem.appendChild(volRemoveBtn);
-    volDiv.appendChild(volItem);
-  });
+  if (data) {
+    const skillPromises = data.map(volunteer => 
+      getVolunteerSkillsArray(volunteer.volunteerid).then(skillstr => ({ volunteer, skillstr }))
+    );
+  
+    //ensure ALL volunteers have been returned (to prevent volunteers not being loaded cos page refresh too fast etc)
+    const volunteersWithSkills = await Promise.all(skillPromises);
+  
+    volunteersWithSkills.forEach(({ volunteer, skillstr }) => {
+      const volItem = document.createElement("div");
+      volItem.classList.add("volunteer"); // Add a CSS class for styling
+  
+      const volImage = document.createElement("img");
+      volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
+      volImage.setAttribute("src", volunteer.profilepicture);
+  
+      const volInfo = document.createElement("div");
+      volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
+  
+      const volName = document.createElement("h3");
+      volName.textContent = volunteer.name;
+      volName.classList.add("volunteer-name");
+  
+      const volAge = document.createElement("p");
+      let now = new Date();
+      let birth = new Date(volunteer.dateofbirth);
+      let age = new Date(now - birth);
+      volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
+      volAge.classList.add("volunteer-age");
+  
+      const volSkills = document.createElement("p");
+      volSkills.textContent = skillstr; //use skillstr to show all vol skills
+      volSkills.classList.add("volunteer-skills");
+  
+      const volRemoveBtn = document.createElement("button");
+      volRemoveBtn.textContent = "✕";
+      volRemoveBtn.classList.add("remove-volunteer");
+      volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
+      volRemoveBtn.addEventListener("click", deleteUser);
+  
+      volItem.appendChild(volImage);
+      volItem.appendChild(volInfo);
+      volInfo.appendChild(volName);
+      volInfo.appendChild(volAge);
+      volInfo.appendChild(volSkills);
+      volItem.appendChild(volRemoveBtn);
+      volDiv.appendChild(volItem);
+    });
+  }
+  
 }
 
 async function fetchNGOs(searchTerm = '') {
