@@ -1,8 +1,6 @@
 let volunteer;
 let placeholderid = localStorage.getItem('volunteerid');
-console.log("placeholder id:", placeholderid);
 const token = localStorage.getItem('token');    
-console.log("token:", token);
 async function fetchVolunteerProfile(id) {
     try {
         const response = await fetch(`/volunteers/${id}`, {
