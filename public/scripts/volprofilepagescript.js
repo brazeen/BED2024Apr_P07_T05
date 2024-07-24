@@ -21,10 +21,10 @@ async function fetchVolunteerProfile(id) {
         volunteerItem.classList.add("data"); // Add a CSS class for styling
 
         // Create elements for email, username, etc. and populate with vol data
-        const email = document.createElement("h2");
-        email.textContent = `Email: ${volunteer.email}`;
         const username = document.createElement("h2");
         username.textContent = `Name: ${volunteer.name}`;
+        const email = document.createElement("h2");
+        email.textContent = `Email: ${volunteer.email}`;
         const bio = document.createElement("h2");
         bio.textContent = `Bio: ${volunteer.bio}`;
 
@@ -35,7 +35,7 @@ async function fetchVolunteerProfile(id) {
         dateofbirth.textContent = `Date of birth: ${formattedDOB}`;
 
         // Append all elements to the volItem div
-        volunteerItem.append(email, username, bio, dateofbirth);
+        volunteerItem.append(username, email, bio, dateofbirth);
 
         // Append the volItem div to the volList
         volunteerList.appendChild(volunteerItem);
@@ -126,7 +126,6 @@ async function updateProfile() {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                     }
                 });
@@ -252,6 +251,13 @@ async function changePassword() {
     })
 }
 
+document.querySelector('.logout-btn').addEventListener('click', logout)
+
+function logout() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('volunteerid')
+    window.location.href="/login"
+}
 
 
     
