@@ -23,8 +23,8 @@ const staticMiddleware = express.static("public");
 
 // Serve the Swagger UI at a specific route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 app.use(staticMiddleware);
 
 //verifyJWT middleware to routes that need authentication
@@ -86,7 +86,7 @@ app.post("/admins/login", admincontroller.loginAdmin)
 
 //html routes
 //login routes
-app.get('/', (req, res) => {
+app.get('/login', (req, res) => {
     res.redirect('/index.html')
 });
 app.get('/login/admin', (req, res) => {
@@ -101,7 +101,7 @@ app.get('/volunteer/profile', verifyJWT, (req, res) => {
     res.redirect('/volunteerprofilepage.html');
 });
 app.get('/login/volunteer', (req, res) => {
-    res.redirect('/volunteeroginpage.html');
+    res.redirect('/volunteerloginpage.html');
 })
 
 //ngo routes
