@@ -86,12 +86,9 @@ app.post("/admins/login", admincontroller.loginAdmin)
 
 
 //html routes
-//login routes
+//common
 app.get('/login', (req, res) => {
     res.redirect('/index.html')
-});
-app.get('/login/admin', (req, res) => {
-    res.redirect('/adminloginpage.html')
 });
 
 //volunteer routes
@@ -115,8 +112,14 @@ app.get('/ngo/profile', verifyJWT, (req, res) => {
 app.get('/login/ngo', (req, res) => {
     res.redirect('/ngologinpage.html');
 })
+app.get('/register/ngo', (req, res) => {
+    res.redirect('/ngosignuppage.html');
+})
 
 //admin routes
+app.get('/login/admin', (req, res) => {
+    res.redirect('/adminloginpage.html')
+});
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
     res.redirect('/admindashboard.html');
 });
