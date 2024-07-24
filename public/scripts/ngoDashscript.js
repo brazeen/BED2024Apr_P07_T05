@@ -1,5 +1,4 @@
 const token = localStorage.getItem("token") // Retrieve token from localStorage
-console.log("local storage token:", token);
 let nid;
 
 async function getNGOId() {
