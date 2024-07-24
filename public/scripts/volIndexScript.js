@@ -1,6 +1,9 @@
 // Retrieve token from localStorage
 const token = localStorage.getItem('token');
-console.log("local storage token:", token);
+if (!token) {
+    window.location.href = "/login"
+}
+
 let testvolid;
 // Function to retrieve volunteer ID
 async function getVolunteerId() {
@@ -21,13 +24,13 @@ async function getVolunteerId() {
         let data = await response.json();
 
         // Assuming the response contains an object with the ID
-        console.log("id:", data.volunteerid);
-        testvolid = data.volunteerid;
-        console.log("role:", data.volunteerRole);
-        localStorage.setItem('volunteerid', data.volunteerid)
-        return data.volunteerid;
+        console.log("id:", data.id);
+        testvolid = data.id;
+        console.log("role:", data.role);
+        localStorage.setItem('volunteerid', data.id)
+        return data.id;
     } catch (error) {
-        console.error('Error fetching volunteer ID:', error);
+        console.error('Error fetching ID:', error);
     }
 }
 
