@@ -50,8 +50,11 @@ function verifyJWT(req, res, next) {
             "/opportunities/ngos/:id": ["admin", "ngo"],
 
             "/skills": ["admin", "ngo"],
+            "/admin/dashboard": ["admin"],
+            "/admin/applications": ["admin"],
 
             '/users/validate' : ["admin", "ngo", "volunteer"]
+
         };        
 
         const requestedEndpoint = req.url;
