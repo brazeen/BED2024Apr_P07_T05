@@ -611,20 +611,6 @@ body {
     margin: 5px 0;
 }
 
-.delete-btn {
-    background-color: #ffcc00;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 100px;
-    font-size: 14px;
-    margin-top: 10px;
-    margin-left: auto;
-    display: block;
-}
-
 .contact-info, .past-events, .description {
     margin-bottom: 20px;
 }
@@ -860,10 +846,11 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    color:black;
 }
 
 .passwordpopup-submit:hover {
-    background-color: #f6ff00;
+    background-color: #c0c700;
 }
 /*---------------volsearch.html---------------*/
 
@@ -1024,4 +1011,26 @@ body {
 }
 .searchFilter .form-select:last-child{
     margin-left: 20px;
+}
+
+.logout-btn {
+    background-color: #ff4b5c; /* Red background color */
+    color: #fff; /* White text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.logout-btn:hover {
+    background-color: #ff2d3d; /* Darker red on hover */
+    transform: translateY(-2px); /* Lift the button slightly on hover */
+}
+
+.logout-btn:active {
+    background-color: #ff1a28; /* Even darker red when active */
+    transform: translateY(0); /* Return to original position when active */
 }
