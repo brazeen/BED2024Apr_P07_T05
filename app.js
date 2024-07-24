@@ -58,6 +58,7 @@ app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
 app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
 app.post("/ngos", ngocontroller.registerNGO);
+app.post('/ngo/login', ngocontroller.loginNGO);
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
@@ -114,7 +115,6 @@ app.get('/ngo/profile', verifyJWT, (req, res) => {
 app.get('/login/ngo', (req, res) => {
     res.redirect('/ngologinpage.html');
 })
-app.post('/ngo/login', ngocontroller.loginNGO);
 
 //admin routes
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
