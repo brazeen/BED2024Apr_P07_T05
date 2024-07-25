@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const volunteerId = getVolunteerId();
-    console.log('volunteerid:', volunteerId);
+    const ngoId = getNgoId();
+    console.log('ngoid:', ngoId);
 
     try {
         // Fetch chat history
-        const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`);
+        const chatResponse = await fetch(`/ngo/chats/${ngoId}`);
         if (!chatResponse.ok) throw new Error('Network response was not ok');
         const chatData = await chatResponse.json();
         
@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, volunteerId);
+            await loadMessagesForChat(chatId, ngoId);
             console.log("current chatid:", chatId);
 
             // Update the chat ID for the message creation
-            setupMessageForm(volunteerId, chatId);
+            setupMessageForm(ngoId, chatId);
         });
         
     } catch (error) {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function getVolunteerId() {
+function getNgoId() {
     return localStorage.getItem('volunteerid');
 }
 
@@ -60,30 +60,45 @@ function displayMessages(messages, chatId, volunteerId) {
     const chatHistoryContent = document.querySelector('.chat-history');
     chatHistoryContent.innerHTML = '';
 
+    let messageMatched = false;
+
     messages.forEach(message => {
         if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
+            messageMatched = true;
+            
+            console.log("Message matches criteria:", message);
             
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
+            messageElement.style.display = 'flex';
+            messageElement.style.gap = '8px';
+            messageElement.style.maxWidth = '640px';
+            messageElement.style.margin = '0 auto';
 
             const avatar = document.createElement('img');
             avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; 
             avatar.alt = message.senderName;
-            avatar.classList.add('message-avatar');
+            avatar.style.borderRadius = '50%';
+            avatar.style.width = '32px';
+            avatar.style.height = '32px';
 
             const messageContent = document.createElement('div');
-            messageContent.classList.add('message-content');
             
             const userName = document.createElement('p');
-            userName.classList.add('message-username');
+            userName.style.fontWeight = '500';
             userName.textContent = message.senderName;
 
             const messageText = document.createElement('p');
-            messageText.classList.add('message-text');
+            messageText.style.backgroundColor = '#ffffff';
+            messageText.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            messageText.style.padding = '12px';
+            messageText.style.borderRadius = '8px';
+            messageText.style.wordBreak = 'break-word';
             messageText.textContent = message.content;
 
             const timestamp = document.createElement('span');
-            timestamp.classList.add('message-timestamp');
+            timestamp.style.display = 'block';
+            timestamp.style.fontSize = '14px';
+            timestamp.style.marginTop = '8px';
             timestamp.textContent = formatDateTime(message.timestamp);
 
             messageContent.appendChild(userName);
@@ -94,6 +109,8 @@ function displayMessages(messages, chatId, volunteerId) {
             messageElement.appendChild(messageContent);
 
             chatHistoryContent.appendChild(messageElement);
+        } else {
+            console.log("Message does not match criteria:", message);
         }
     });
 }
