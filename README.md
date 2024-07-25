@@ -2,7 +2,7 @@
 Team members: Brandon Koh Ziheng, Toh Yang Yi, Donovan Lye Yong Lin
 
 ## Directory
-Ensure directory is the root directory of this repository and npm i to install all libraries
+Ensure directory is the root directory of this repository<br>`npm i` to install all libraries
 
 ## Seeding
 The seed can be found in volunteezyseed.sql
@@ -11,5 +11,5 @@ The seed can be found in volunteezyseed.sql
 `node app.js`
 
 ## Documentation
-Swagger generated documentation is at /api-docs
+Swagger generated documentation is at /api-docs<br>
 run `npm test` to test Jest code
