@@ -634,7 +634,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    margin-left: 15%;
+    margin-left: 20%;
     width: 50%;
     padding-top: 35px;
 }
@@ -692,7 +692,7 @@ body {
         width: 80px;
         height: 50px;
         font-size: 10px;
-        margin-left: 80%;
+        margin-left: 70%;
     }
 
     .ngo-list {
@@ -1098,10 +1098,11 @@ body {
 
 .message {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-start; /* Align items to the start of the container */
     gap: 8px;
     max-width: 640px;
     margin: 0 auto;
+    text-align: left; /* Ensure text inside is left-aligned */
 }
 
 .message-avatar {
@@ -1145,8 +1146,8 @@ body {
     gap: 8px;
 }
 
-#messageInput {
-    flex-grow: 1;
+#message-input {
+    width: 80%; /* Adjust this percentage to fit your layout */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -1159,4 +1160,8 @@ body {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+.message-username {
+    background-color: #ccc;
 }
