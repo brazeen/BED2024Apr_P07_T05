@@ -7,6 +7,7 @@ function oppFormSubmission(){
     const starttime = document.getElementById("time1");
     const endtime = document.getElementById("time2");
     const address = document.getElementById("address");
+    const region = document.getElementById("region");
     const age = document.getElementById("age");
     const maxvolunteers = document.getElementById("count");
 
@@ -24,12 +25,12 @@ function oppFormSubmission(){
 
         // Collect the data from the form
         const newOpportunity = {
-            ngoid: 1,
+            ngoid: nid,
             title: title.value,
             description: description.value,
             date: date.value,
             starttime: starttime.value,
-            region: 'west',
+            region: region.value,
             endtime: endtime.value,
             address: address.value,
             age: age.value,
@@ -43,6 +44,7 @@ function oppFormSubmission(){
             date.value === "" ||
             starttime.value === "" ||
             endtime.value === "" ||
+            region.value === "" ||
             address.value.trim() === "" ||
             age.value === "" ||
             maxvolunteers.value === ""
@@ -69,6 +71,22 @@ function oppFormSubmission(){
 
             if (response.ok) {
                 const createdOpp = await response.json();
+                const opportunityId = createdOpp[0].opportunityid; // Extract created opportunity ID
+
+                // Create opportunity skills
+                for (const skillName of selectedSkills) {
+                    const oppSkillData = {
+                    skillid: skillName,  // Use skill name directly (no need for manual mapping)
+                    opportunityid: opportunityId
+                    };
+
+                    await fetch('/opportunityskills', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify(oppSkillData)
+                    });
+                }
+
                 console.log("Opportunity Created: ", createdOpp);
                 alert("New opportunity created!");
                 window.location.href = 'ngodashboard.html';

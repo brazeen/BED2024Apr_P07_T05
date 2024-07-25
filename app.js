@@ -8,6 +8,7 @@ const applicationcontroller = require("./controllers/applicationcontroller")
 const opportunitycontroller = require("./controllers/opportunitycontroller")
 const admincontroller = require("./controllers/admincontroller")
 const chatcontroller = require("./controllers/chatcontroller")
+const skillcontroller = require("./controllers/skillcontroller")
 const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
@@ -83,6 +84,9 @@ app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.increm
 app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
+
+//skill routes
+app.post("/skills", skillcontroller.createOppSkills);
 
 //admin routes
 app.get("/admins/:name", admincontroller.getAdminByUsername)
