@@ -19,8 +19,8 @@ function verifyJWT(req, res, next) {
         }
         const authorizedRoles = {
             "/volunteers": ["admin", "volunteer"],
-            "/volunteers/:id": ["admin", "volunteer"],
-            "/volunteers/skills/:id": ["admin", "volunteer"],
+            "/volunteers/:id": ["admin", "volunteer", "ngo"],
+            "/volunteers/skills/:id": ["admin", "volunteer", "ngo"],
             "/volunteers/profilepicture/:id": ["admin", "volunteer"],
             "/volunteers/:id/:hash": ["admin", "volunteer"],
             "/volunteers/changepw/:id/:pw": ["admin", "volunteer"],
@@ -30,7 +30,7 @@ function verifyJWT(req, res, next) {
             
             "/ngos": ["admin", "ngo"],
             "/ngos/status/:status": ["admin", "ngo"],
-            "/ngos/:id": ["admin", "ngo"],
+            "/ngos/:id": ["admin", "ngo", "volunteer"],
             "/ngos/:id/:status": ["admin", "ngo"],
             "/ngos/logo/:id": ["admin", "ngo"],
             "/ngos/changepw/:id/:pw": ["admin", "ngo"],
@@ -48,6 +48,8 @@ function verifyJWT(req, res, next) {
             "/opportunities": ["admin", "ngo", "volunteer"],
             "/opportunities/:id": ["admin", "ngo", "volunteer"],
             "/opportunities/ngos/:id": ["admin", "ngo"],
+            "/opportunities/increment/:id": ["admin", "ngo"],
+            "/opportunities/skills/:id": ["admin", "ngo", "volunteer"],
 
             "/skills": ["admin", "ngo"],
             "/admin/dashboard": ["admin"],

@@ -3,17 +3,20 @@ if (!token) {
     window.location.href = '/login'; 
 }
 
-document.getElementById('searchVolunteers').addEventListener('input', async function () {
-  const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
+if (document.getElementById('searchVolunteers') && document.getElementById('searchNGOs')) {
+  document.getElementById('searchVolunteers').addEventListener('input', async function () {
+    const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
+  
+    await fetchVolunteers(searchTerm);
+  });
+  
+  document.getElementById('searchNGOs').addEventListener('input', async function () {
+    const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
+  
+    await fetchNGOs(searchTerm);
+  });
+}
 
-  await fetchVolunteers(searchTerm);
-});
-
-document.getElementById('searchNGOs').addEventListener('input', async function () {
-  const searchTerm = this.value.trim(); //get the value of the search but trim the spaces
-
-  await fetchNGOs(searchTerm);
-});
 
 async function initialiseAdmin() {
   try {
@@ -208,12 +211,11 @@ async function fetchNGOapplications() {
   const response = await fetch("/ngos/status/P", {
     method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
   }); // Replace with your API endpoint
   const data = await response.json();
-
+  console.log(data)
   const ngoDiv = document.querySelector(".fullHomeDiv");
 
   data.forEach((ngo) => {

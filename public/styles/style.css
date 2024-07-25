@@ -575,12 +575,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100vw;
     margin: 20px;
 }  
 
 .logo-container {
     margin-right: 20px;
-    width: 50%;
+    width: 40%;
     padding-top: 35px;
 }
 

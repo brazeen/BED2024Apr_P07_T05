@@ -11,21 +11,31 @@ applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteer
 
 
 async function fetchNGOInOpportunity(opportunity) {
-    let response = await fetch(`/ngos/${opportunity.ngoid}`); // Replace with your API endpoint
+    let response = await fetch(`/ngos/${opportunity.ngoid}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`}
+         // Replace with your API endpoint
+    }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let ngo = await response.json();
     return ngo;
 }
 
 async function fetchOpportunitySkills(id) {
-    let response = await fetch(`/opportunities/skills/${id}`); // Replace with your API endpoint
+    let response = await fetch(`/opportunities/skills/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`}
+    }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let skills = await response.json(); 
     return skills;
 }
 
 async function fetchOpportunity(id) {
-    let response = await fetch(`/opportunities/${id}`); // Replace with your API endpoint
+    let response = await fetch(`/opportunities/${id}`, {
+        headers: {
+                    'Authorization': `Bearer ${token}`}
+    }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunity = await response.json();
     return opportunity;
@@ -91,7 +101,10 @@ async function applyForOpportunity(volid, oppid) {
         opportunityid: oppid,
         status: applicationstatus
     }
-    let response = await fetch(`/applications/${volid}/${oppid}`)
+    let response = await fetch(`/applications/${volid}/${oppid}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`}
+    })
     if (response.status != 404) {
         alert("An application for this opportunity has already been made.")
         return;
@@ -99,8 +112,7 @@ async function applyForOpportunity(volid, oppid) {
     response = await fetch('/applications', {
         method: 'POST',
         headers: {
-          'content-type': 'application/json'
-        },
+            'Authorization': `Bearer ${token}`},
         body: JSON.stringify(newApplication)
       });// Replace with your API endpoint
       

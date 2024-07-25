@@ -64,6 +64,7 @@ document.querySelector('.delete-btn').addEventListener('click', function() {
 });
 
 async function deleteVolunteerProfile(id) {
+
     const response = await fetch(`/volunteers/${id}`, {
         method: 'DELETE',
         headers: {
@@ -73,6 +74,10 @@ async function deleteVolunteerProfile(id) {
     });
     if (response.ok) {
         alert("Account successfully deleted.");
+        localStorage.removeItem('token')
+        localStorage.removeItem('volunteerid')
+        window.location.href = '/login'
+
     } else {
         alert("Unable to delete account.");
     }
