@@ -27,6 +27,9 @@ function verifyJWT(req, res, next) {
             "/volunteers/:id/:pw": ["admin", "volunteer"],
             "/volunteers/login": ["admin", "volunteer"],
             "/volunteers/search/user": ["admin", "volunteer"],
+            '/volunteers/:id/messages': ["admin", "volunteer"],
+            '/volunteers/chats/:id' : ["admin", "volunteer"],
+            '/volunteers/createMessage': ["admin", "volunteer"],
             
             "/ngos": ["admin", "ngo"],
             "/ngos/status/:status": ["admin", "ngo"],
@@ -36,6 +39,9 @@ function verifyJWT(req, res, next) {
             "/ngos/changepw/:id/:pw": ["admin", "ngo"],
             "/ngos/:id/:pw": ["admin", "ngo"],
             "/ngos/search/user": ["admin", "ngo"],
+            '/ngos/:id/messages' : ["admin", "ngo"],
+            '/ngos/chats/:id' : ["admin", "ngo"],
+            '/ngos/createMessage' : ["admin", "ngo"],
         
             "/applications/:id": ["admin", "ngo", "volunteer"],
             "/applications/volunteer/:id": ["admin", "ngo", "volunteer"],

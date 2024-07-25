@@ -83,6 +83,15 @@ async function deleteVolunteerProfile(id) {
     }
 }
 
+document.querySelector('.logout-btn').addEventListener('click', logout);
+
+//function to logout user
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('volunteerid');
+    window.location.href = "../selectuser.html";
+}
+
 //when update button is pressed, the updateProfile method gets called
 document.querySelector('.update-btn').addEventListener('click', updateProfile);
 

@@ -45,9 +45,9 @@ app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteer
 app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
 app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 app.get("/volunteers/search/user", verifyJWT, volunteercontroller.searchVolunteers)
-app.get('/volunteers/:id/messages', chatcontroller.getVolunteerMessages);
-app.get('/volunteers/chats/:id', chatcontroller.getVolunteerChats);
-app.post('/volunteers/createMessage', chatcontroller.createMessage);
+app.get('/volunteers/:id/messages', chatcontroller.getVolunteerMessages); // verifyjwt to be added
+app.get('/volunteers/chats/:id', verifyJWT,chatcontroller.getVolunteerChats);
+app.post('/volunteers/createMessage', chatcontroller.createMessage); // verifyjwt to be added
 
 
 // NGO routes
@@ -62,10 +62,10 @@ app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
 app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
 app.post("/ngos", ngocontroller.registerNGO);
-app.get('/ngo/:id/messages', chatcontroller.getNgoMessages);
-app.get('/ngo/chats/:id', chatcontroller.getNgoChats);
-app.post('/ngo/createMessage', chatcontroller.createMessage);
-app.post('/ngo/login', ngocontroller.loginNGO);
+app.get('/ngos/:id/messages', chatcontroller.getNgoMessages); // verifyjwt to be added
+app.get('/ngos/chats/:id', verifyJWT,chatcontroller.getNgoChats);
+app.post('/ngos/createMessage', chatcontroller.createMessage); // verifyjwt to be added
+app.post('/ngos/login', ngocontroller.loginNGO);
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid

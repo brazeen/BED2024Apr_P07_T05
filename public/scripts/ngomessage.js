@@ -1,13 +1,22 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const ngoId = getNgoId();
-    console.log('ngoid:', ngoId);
-
+    const token = localStorage.getItem('token')
+    let senderName;
+    fetchNgoProfile(ngoId, token)
     try {
+        senderName = await fetchNgoProfile(ngoId, token);
+        console.log("sender name:", senderName)
         // Fetch chat history
-        const chatResponse = await fetch(`/ngo/chats/${ngoId}`);
+        const chatResponse = await fetch(`/ngos/chats/${ngoId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });;
         if (!chatResponse.ok) throw new Error('Network response was not ok');
         const chatData = await chatResponse.json();
-        
+        console.log("chat:", chatData)
         // Display chat history
         displayChatHistory(chatData.chats);
 
@@ -19,18 +28,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             const chatId = chatItem.dataset.chatId;
             const chatName = chatItem.dataset.chatName;
             const chatAvatar = chatItem.dataset.chatAvatar;
-
             console.log(`Chat clicked: ${chatName} (ID: ${chatId})`);
 
             // Update the chat header with the selected chat details
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, ngoId);
+            console.log("ngoid:", ngoId)
+            await loadMessagesForChat(chatId, ngoId, token);
             console.log("current chatid:", chatId);
 
             // Update the chat ID for the message creation
-            setupMessageForm(ngoId, chatId);
+            setupMessageForm(ngoId, chatId, senderName, token);
         });
         
     } catch (error) {
@@ -38,19 +47,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function getNgoId() {
-    return localStorage.getItem('volunteerid');
+// Function to extract sender's name
+async function fetchNgoProfile(ngoId, token) {
+    try {
+        const response = await fetch(`/ngos/${ngoId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });
+        const ngo = await response.json();
+        return ngo.name; // Return the sender's name
+    } catch (error) {
+        console.error('Error fetching ngo name:', error);
+    }
 }
 
-async function loadMessagesForChat(chatId, volunteerId) {
+function getNgoId() {
+    return localStorage.getItem('ngoid');
+}
+
+async function loadMessagesForChat(chatId, ngoId, token) {
     try {
         // Fetch messages for the selected chat
-        const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`);
+        const messageResponse = await fetch(`/ngos/${ngoId}/messages`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                //'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });;
         if (!messageResponse.ok) throw new Error('Network response was not ok');
         const messageData = await messageResponse.json();
-
+        console.log("message data:", messageData)
         const messages = Array.isArray(messageData) ? messageData : [messageData];
-        displayMessages(messages, chatId, volunteerId);
+        console.log("messages:", messages)
+        displayMessages(messages, chatId, ngoId);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
@@ -60,57 +93,36 @@ function displayMessages(messages, chatId, volunteerId) {
     const chatHistoryContent = document.querySelector('.chat-history');
     chatHistoryContent.innerHTML = '';
 
-    let messageMatched = false;
-
     messages.forEach(message => {
         if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
-            messageMatched = true;
             
-            console.log("Message matches criteria:", message);
-            
+            console.log("message sender:", message.volunteerName);
             const messageElement = document.createElement('div');
-            messageElement.style.display = 'flex';
-            messageElement.style.gap = '8px';
-            messageElement.style.maxWidth = '640px';
-            messageElement.style.margin = '0 auto';
+            messageElement.classList.add('message');
 
-            const avatar = document.createElement('img');
-            avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; 
-            avatar.alt = message.senderName;
-            avatar.style.borderRadius = '50%';
-            avatar.style.width = '32px';
-            avatar.style.height = '32px';
 
             const messageContent = document.createElement('div');
+            messageContent.classList.add('message-content');
             
             const userName = document.createElement('p');
-            userName.style.fontWeight = '500';
+            userName.classList.add('message-username');
             userName.textContent = message.senderName;
 
             const messageText = document.createElement('p');
-            messageText.style.backgroundColor = '#ffffff';
-            messageText.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-            messageText.style.padding = '12px';
-            messageText.style.borderRadius = '8px';
-            messageText.style.wordBreak = 'break-word';
+            messageText.classList.add('message-text');
             messageText.textContent = message.content;
 
             const timestamp = document.createElement('span');
-            timestamp.style.display = 'block';
-            timestamp.style.fontSize = '14px';
-            timestamp.style.marginTop = '8px';
+            timestamp.classList.add('message-timestamp');
             timestamp.textContent = formatDateTime(message.timestamp);
 
             messageContent.appendChild(userName);
             messageContent.appendChild(messageText);
             messageContent.appendChild(timestamp);
 
-            messageElement.appendChild(avatar);
             messageElement.appendChild(messageContent);
 
             chatHistoryContent.appendChild(messageElement);
-        } else {
-            console.log("Message does not match criteria:", message);
         }
     });
 }
@@ -122,21 +134,24 @@ function displayChatHistory(chats) {
     chats.forEach(chat => {
         const chatItem = document.createElement('div');
         chatItem.classList.add('chat-item');
-        chatItem.dataset.chatId = chat.ngoid;
-        chatItem.dataset.chatName = chat.ngoName;
+        chatItem.dataset.chatId = chat.volunteerid;
+        chatItem.dataset.chatName = chat.volunteerName;
         chatItem.dataset.chatAvatar = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png';
+        chatItem.dataset.senderName = chat.senderName; // Ensure senderName is set
+        console.log("sender name in chat:", chatItem.dataset.chatName)
         chatItem.innerHTML = `
             <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 8px; border-radius: 8px; background-color: #e0e0e0; cursor: pointer;">
                 <img src="${chatItem.dataset.chatAvatar}" alt="NGO avatar" style="border-radius: 50%; width: 32px; height: 32px; margin-right: 8px;">
                 <div>
-                    <p style="font-size: 14px; font-weight: 600; color: #4a4a4a;">${chat.ngoName}</p>
-                    <p style="font-size: 14px; color: #7a7a7a;">Chat ID: ${chat.ngoid}</p>
+                    <p style="font-size: 14px; font-weight: 600; color: #4a4a4a;">${chat.volunteerName}</p>
+                    <p style="font-size: 14px; color: #7a7a7a;">Chat ID: ${chat.volunteerid}</p>
                 </div>
             </div>
         `;
         chatHistory.appendChild(chatItem);
     });
 }
+
 
 function updateChatHeader(name, avatar) {
     const chatHeader = document.querySelector('.chat-header');
@@ -159,9 +174,9 @@ function formatDateTime(dateTime) {
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function setupMessageForm(volunteerId, chatId) {
+function setupMessageForm(volunteerId, chatId, senderName, token) {
     const messageForm = document.getElementById('messageForm');
-
+    console.log(token)
     messageForm.removeEventListener('submit', handleSubmit); // Remove any existing listener
     messageForm.addEventListener('submit', handleSubmit); // Add the new listener with updated chatId
 
@@ -175,19 +190,22 @@ function setupMessageForm(volunteerId, chatId) {
         console.log("Chat ID (in handleSubmit):", chatId);
         console.log("Volunteer ID (in handleSubmit):", volunteerId);
         console.log("Message content:", messageContent);
+        console.log("sender name in create message",senderName);
 
         const newMessage = {
             volunteerid: volunteerId,
             ngoid: chatId,
             content: messageContent,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            senderName:  senderName
         };
 
         try {
-            const response = await fetch(`/volunteers/createMessage`, {
+            const response = await fetch(`/ngos/createMessage`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    //'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newMessage)
             });
@@ -196,6 +214,7 @@ function setupMessageForm(volunteerId, chatId) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
+            await loadMessagesForChat(chatId, volunteerId);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
