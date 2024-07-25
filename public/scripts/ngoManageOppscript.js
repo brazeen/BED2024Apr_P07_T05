@@ -226,6 +226,9 @@ async function fetchOpportunity() {
         const maxvol = document.createElement('p');
         maxvol.innerHTML = `<strong>Volunteers needed :</strong> ${oppData.maxvolunteers}`
 
+        const curVol = document.createElement('p');
+        curVol.innerHTML = `<strong>Current Volunteers :</strong> ${oppData.currentvolunteers}`
+
         const desc = document.createElement('p');
         desc.innerHTML = `<strong>Description :</strong> ${oppData.description}`
 
@@ -234,6 +237,7 @@ async function fetchOpportunity() {
         content.appendChild(address);
         content.appendChild(age);
         content.appendChild(maxvol);
+        content.appendChild(curVol);
         content.appendChild(desc);
 
         leftContainer.appendChild(title);
