@@ -39,7 +39,7 @@ app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
-app.post("/volunteers", verifyJWT,volunteercontroller.registerVolunteer);
+app.post("/volunteers",volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", verifyJWT,volunteercontroller.updateVolunteer);
 app.post("/volunteers/login", volunteercontroller.loginVolunteer);
 app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);

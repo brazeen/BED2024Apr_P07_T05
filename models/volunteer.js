@@ -1,5 +1,7 @@
 const sql = require("mssql")
 const dbConfig = require("../dbConfig");
+const fetch = require('node-fetch');
+require("dotenv").config()
 class Volunteer {
     constructor(volunteerid, name, email, passwordHash, bio, dateofbirth, profilepicture) {
         this.volunteerid = volunteerid;
@@ -128,25 +130,36 @@ class Volunteer {
     }
 
     static async createVolunteer(newVolunteerData) {
-        const connection = await sql.connect(dbConfig)
+        if (!newVolunteerData.profilepicture) {
+            try {
+                newVolunteerData.profilepicture = await fetchRandomImage();
+            } catch (error) {
+                console.error('Error fetching image data:', error);
+                throw new Error('Error fetching image data');
+            }
+        }
 
-        const sqlQuery = `INSERT INTO volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) VALUES (@name, @email, @passwordHash, @bio, @dateofbirth, @profilepicture); SELECT SCOPE_IDENTITY() AS volunteerid;`
+        const connection = await sql.connect(dbConfig);
 
-        const request = connection.request()
-        request.input("name", newVolunteerData.name)
-        request.input("email", newVolunteerData.email)
-        request.input("passwordHash", newVolunteerData.passwordHash)
-        request.input("bio", newVolunteerData.bio)
-        request.input("dateofbirth", newVolunteerData.dateofbirth)
-        request.input("profilepicture", newVolunteerData.profilepicture)
+        const sqlQuery = `
+            INSERT INTO volunteers (name, email, passwordHash, bio, dateofbirth, profilepicture) 
+            VALUES (@name, @email, @passwordHash, @bio, @dateofbirth, @profilepicture);
+            SELECT SCOPE_IDENTITY() AS volunteerid;
+        `;
 
+        const request = connection.request();
+        request.input("name", newVolunteerData.name);
+        request.input("email", newVolunteerData.email);
+        request.input("passwordHash", newVolunteerData.passwordHash);
+        request.input("bio", newVolunteerData.bio);
+        request.input("dateofbirth", newVolunteerData.dateofbirth);
+        request.input("profilepicture", newVolunteerData.profilepicture);
 
-        const result = await request.query(sqlQuery)
+        const result = await request.query(sqlQuery);
 
-        connection.close()
+        connection.close();
 
-        return this.getVolunteerById(result.recordset[0].volunteerid)
-
+        return this.getVolunteerById(result.recordset[0].volunteerid);
     }
 
     static async updateVolunteer(id, newVolunteerData) {
@@ -246,3 +259,30 @@ class Volunteer {
 
 
 module.exports = Volunteer;
+
+
+
+// Function to fetch a random image URL from Unsplash
+async function fetchRandomImage() {
+    const url = 'https://api.unsplash.com/photos/random';
+    const accessKey = process.env.UNSPLASHACCESSKEY; // Replace with your actual Unsplash API access key
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Client-ID ${accessKey}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.urls.regular; // Return the regular size image URL
+    } catch (error) {
+        console.error('Error fetching random image:', error);
+        throw error;
+    }
+}
+

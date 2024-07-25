@@ -57,7 +57,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const bio = document.getElementById('bio').value;
     const skills = document.getElementById('skills').value;
     const dateofbirth = document.getElementById('dob').value;
-    const profilepicture = document.getElementById('profile-pic').files[0];
+    let profilepicture;
 
     const data = {
         name,
