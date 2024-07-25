@@ -73,9 +73,19 @@ async function deleteVolunteerProfile(id) {
     });
     if (response.ok) {
         alert("Account successfully deleted.");
+        window.location.href = "../selectuser.html";
     } else {
         alert("Unable to delete account.");
     }
+}
+
+document.querySelector('.logout-btn').addEventListener('click', logout);
+
+//function to logout user
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('volunteerid');
+    window.location.href = "../selectuser.html";
 }
 
 //when update button is pressed, the updateProfile method gets called
