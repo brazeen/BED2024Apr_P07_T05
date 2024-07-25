@@ -1,13 +1,23 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const volunteerId = getVolunteerId();
+    const token = localStorage.getItem('token')
     console.log('volunteerid:', volunteerId);
-
+    console.log(token)
+    let senderName;
+    fetchVolunteerProfile(volunteerId, token)
     try {
+        senderName = await fetchVolunteerProfile(volunteerId, token);
         // Fetch chat history
-        const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`);
+        const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });;;
         if (!chatResponse.ok) throw new Error('Network response was not ok');
         const chatData = await chatResponse.json();
-        
+        console.log("chatData:", chatData)
         // Display chat history
         displayChatHistory(chatData.chats);
 
@@ -19,18 +29,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             const chatId = chatItem.dataset.chatId;
             const chatName = chatItem.dataset.chatName;
             const chatAvatar = chatItem.dataset.chatAvatar;
-
             console.log(`Chat clicked: ${chatName} (ID: ${chatId})`);
 
             // Update the chat header with the selected chat details
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, volunteerId);
+            await loadMessagesForChat(chatId, volunteerId, token);
             console.log("current chatid:", chatId);
 
             // Update the chat ID for the message creation
-            setupMessageForm(volunteerId, chatId);
+            setupMessageForm(volunteerId, chatId, senderName, token);
         });
         
     } catch (error) {
@@ -38,14 +47,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// Function to extract sender's name
+async function fetchVolunteerProfile(volunteerId, token) {
+    try {
+        const response = await fetch(`/volunteers/${volunteerId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });
+        const volunteer = await response.json();
+        return volunteer.name; // Return the sender's name
+    } catch (error) {
+        console.error('Error fetching volunteer name:', error);
+    }
+}
+
 function getVolunteerId() {
     return localStorage.getItem('volunteerid');
 }
 
-async function loadMessagesForChat(chatId, volunteerId) {
+async function loadMessagesForChat(chatId, volunteerId, token) {
     try {
         // Fetch messages for the selected chat
-        const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`);
+        const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        });
         if (!messageResponse.ok) throw new Error('Network response was not ok');
         const messageData = await messageResponse.json();
 
@@ -63,6 +95,7 @@ function displayMessages(messages, chatId, volunteerId) {
     messages.forEach(message => {
         if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
             
+            console.log("message sender:", message.senderName);
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
 
@@ -108,6 +141,8 @@ function displayChatHistory(chats) {
         chatItem.dataset.chatId = chat.ngoid;
         chatItem.dataset.chatName = chat.ngoName;
         chatItem.dataset.chatAvatar = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png';
+        chatItem.dataset.senderName = chat.senderName; // Ensure senderName is set
+        console.log("sender name in chat:", chatItem.dataset.senderName)
         chatItem.innerHTML = `
             <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 8px; border-radius: 8px; background-color: #e0e0e0; cursor: pointer;">
                 <img src="${chatItem.dataset.chatAvatar}" alt="NGO avatar" style="border-radius: 50%; width: 32px; height: 32px; margin-right: 8px;">
@@ -120,6 +155,7 @@ function displayChatHistory(chats) {
         chatHistory.appendChild(chatItem);
     });
 }
+
 
 function updateChatHeader(name, avatar) {
     const chatHeader = document.querySelector('.chat-header');
@@ -142,7 +178,8 @@ function formatDateTime(dateTime) {
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function setupMessageForm(volunteerId, chatId) {
+function setupMessageForm(volunteerId, chatId, senderName, token) {
+    console.log(token)
     const messageForm = document.getElementById('messageForm');
 
     messageForm.removeEventListener('submit', handleSubmit); // Remove any existing listener
@@ -158,19 +195,22 @@ function setupMessageForm(volunteerId, chatId) {
         console.log("Chat ID (in handleSubmit):", chatId);
         console.log("Volunteer ID (in handleSubmit):", volunteerId);
         console.log("Message content:", messageContent);
+        console.log("sender name in create message",senderName);
 
         const newMessage = {
             volunteerid: volunteerId,
             ngoid: chatId,
             content: messageContent,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            senderName:  senderName
         };
 
         try {
             const response = await fetch(`/volunteers/createMessage`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    //'Authorisation': `Bearer ${token}`
                 },
                 body: JSON.stringify(newMessage)
             });
@@ -179,6 +219,7 @@ function setupMessageForm(volunteerId, chatId) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
+            await loadMessagesForChat(chatId, volunteerId);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
