@@ -76,6 +76,9 @@ async function deleteNGOProfile(id) {
     });
     if (response.ok) {
         alert("Account successfully deleted.");
+        localStorage.removeItem('token')
+        localStorage.removeItem('ngoid')
+        window.location.href="/login"
     } else {
         alert("Unable to delete account.");
     }
