@@ -8,7 +8,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     console.log("email:", email);
     console.log("password:", password);
     try {
-        const response = await fetch('/ngo/login', {
+        const response = await fetch('/ngos/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

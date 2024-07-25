@@ -24,7 +24,7 @@
       <div style="display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center;">
           <img class="chat-header-avatar" src="https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png" alt="User avatar" style="border-radius: 50%; width: 40px; height: 40px; margin-right: 8px;">
-          <h1 class="chat-header-name" style="font-size: 24px; font-weight: 700;">Jane</h1>
+          <h1 class="chat-header-name" style="font-size: 24px; font-weight: 700;"></h1>
         </div>
       </div>
     </div>
@@ -35,16 +35,17 @@
 
     <!-- Message input area -->
     <div style="border-top: 1px solid #e0e0e0; padding: 16px;">
-      <form>
+      <form id="messageForm">
         <div style="display: flex; gap: 8px;">
-          <input type="text" placeholder="Type a message..." style="flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 8px;">
+          <input type="text" id="messageInput" placeholder="Type a message..." style="flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 8px;">
           <button type="submit" style="padding: 8px 16px; background-color: #007bff; color: #ffffff; border: none; border-radius: 8px; cursor: pointer;">Send</button>
         </div>
       </form>
     </div>
+    
   </div>
 </div>
 
-<script src="./scripts/messagingScreen.js"></script>
+<script src="./scripts/volmessage.js"></script>
 </body>
 </html>

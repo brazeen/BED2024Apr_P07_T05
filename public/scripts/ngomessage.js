@@ -1,23 +1,22 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const volunteerId = getVolunteerId();
+    const ngoId = getNgoId();
     const token = localStorage.getItem('token')
-    console.log('volunteerid:', volunteerId);
-    console.log(token)
     let senderName;
-    fetchVolunteerProfile(volunteerId, token)
+    fetchNgoProfile(ngoId, token)
     try {
-        senderName = await fetchVolunteerProfile(volunteerId, token);
+        senderName = await fetchNgoProfile(ngoId, token);
+        console.log("sender name:", senderName)
         // Fetch chat history
-        const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`, {
+        const chatResponse = await fetch(`/ngos/chats/${ngoId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
-        });;;
+        });;
         if (!chatResponse.ok) throw new Error('Network response was not ok');
         const chatData = await chatResponse.json();
-        console.log("chatData:", chatData)
+        console.log("chat:", chatData)
         // Display chat history
         displayChatHistory(chatData.chats);
 
@@ -35,11 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, volunteerId, token);
+            console.log("ngoid:", ngoId)
+            await loadMessagesForChat(chatId, ngoId, token);
             console.log("current chatid:", chatId);
 
             // Update the chat ID for the message creation
-            setupMessageForm(volunteerId, chatId, senderName, token);
+            setupMessageForm(ngoId, chatId, senderName, token);
         });
         
     } catch (error) {
@@ -48,41 +48,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Function to extract sender's name
-async function fetchVolunteerProfile(volunteerId, token) {
+async function fetchNgoProfile(ngoId, token) {
     try {
-        const response = await fetch(`/volunteers/${volunteerId}`, {
+        const response = await fetch(`/ngos/${ngoId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
         });
-        const volunteer = await response.json();
-        return volunteer.name; // Return the sender's name
+        const ngo = await response.json();
+        return ngo.name; // Return the sender's name
     } catch (error) {
-        console.error('Error fetching volunteer name:', error);
+        console.error('Error fetching ngo name:', error);
     }
 }
 
-function getVolunteerId() {
-    return localStorage.getItem('volunteerid');
+function getNgoId() {
+    return localStorage.getItem('ngoid');
 }
 
-async function loadMessagesForChat(chatId, volunteerId, token) {
+async function loadMessagesForChat(chatId, ngoId, token) {
     try {
         // Fetch messages for the selected chat
-        const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`, {
+        const messageResponse = await fetch(`/ngos/${ngoId}/messages`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                //'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
-        });
+        });;
         if (!messageResponse.ok) throw new Error('Network response was not ok');
         const messageData = await messageResponse.json();
-
+        console.log("message data:", messageData)
         const messages = Array.isArray(messageData) ? messageData : [messageData];
-        displayMessages(messages, chatId, volunteerId);
+        console.log("messages:", messages)
+        displayMessages(messages, chatId, ngoId);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
@@ -95,14 +96,10 @@ function displayMessages(messages, chatId, volunteerId) {
     messages.forEach(message => {
         if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
             
-            console.log("message sender:", message.senderName);
+            console.log("message sender:", message.volunteerName);
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
 
-            const avatar = document.createElement('img');
-            avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; 
-            avatar.alt = message.senderName;
-            avatar.classList.add('message-avatar');
 
             const messageContent = document.createElement('div');
             messageContent.classList.add('message-content');
@@ -123,7 +120,6 @@ function displayMessages(messages, chatId, volunteerId) {
             messageContent.appendChild(messageText);
             messageContent.appendChild(timestamp);
 
-            messageElement.appendChild(avatar);
             messageElement.appendChild(messageContent);
 
             chatHistoryContent.appendChild(messageElement);
@@ -138,17 +134,17 @@ function displayChatHistory(chats) {
     chats.forEach(chat => {
         const chatItem = document.createElement('div');
         chatItem.classList.add('chat-item');
-        chatItem.dataset.chatId = chat.ngoid;
-        chatItem.dataset.chatName = chat.ngoName;
+        chatItem.dataset.chatId = chat.volunteerid;
+        chatItem.dataset.chatName = chat.volunteerName;
         chatItem.dataset.chatAvatar = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png';
         chatItem.dataset.senderName = chat.senderName; // Ensure senderName is set
-        console.log("sender name in chat:", chatItem.dataset.senderName)
+        console.log("sender name in chat:", chatItem.dataset.chatName)
         chatItem.innerHTML = `
             <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 8px; border-radius: 8px; background-color: #e0e0e0; cursor: pointer;">
                 <img src="${chatItem.dataset.chatAvatar}" alt="NGO avatar" style="border-radius: 50%; width: 32px; height: 32px; margin-right: 8px;">
                 <div>
-                    <p style="font-size: 14px; font-weight: 600; color: #4a4a4a;">${chat.ngoName}</p>
-                    <p style="font-size: 14px; color: #7a7a7a;">Chat ID: ${chat.ngoid}</p>
+                    <p style="font-size: 14px; font-weight: 600; color: #4a4a4a;">${chat.volunteerName}</p>
+                    <p style="font-size: 14px; color: #7a7a7a;">Chat ID: ${chat.volunteerid}</p>
                 </div>
             </div>
         `;
@@ -179,9 +175,8 @@ function formatDateTime(dateTime) {
 }
 
 function setupMessageForm(volunteerId, chatId, senderName, token) {
-    console.log(token)
     const messageForm = document.getElementById('messageForm');
-
+    console.log(token)
     messageForm.removeEventListener('submit', handleSubmit); // Remove any existing listener
     messageForm.addEventListener('submit', handleSubmit); // Add the new listener with updated chatId
 
@@ -206,11 +201,11 @@ function setupMessageForm(volunteerId, chatId, senderName, token) {
         };
 
         try {
-            const response = await fetch(`/volunteers/createMessage`, {
+            const response = await fetch(`/ngos/createMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorisation': `Bearer ${token}`
+                    //'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newMessage)
             });
