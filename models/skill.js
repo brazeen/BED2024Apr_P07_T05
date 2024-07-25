@@ -22,6 +22,17 @@ class Skill {
         ) //convert rows to volunteers
     }
 
+    static async createOppSkills(newOppSkills) {
+        const connection = await sql.connect(dbConfig);
+        //insert values
+        const sqlQuery = `INSERT INTO OpportunitySkills (skillid, opportunityid) VALUES (SELECT skillid FROM Skills, SELECT opportunityid FROM Opportunities); SELECT SCOPE_IDENTITY() AS id;`;
+
+        const request = connection.request();
+        request.input("skillid", newOppSkills.skillid);
+        request.input("opportunityid", newOppSkills.opportunityid);
+    }
+
+
     /*
     static async getVolunteerById(id) {
         const connection = await sql.connect(dbConfig);
