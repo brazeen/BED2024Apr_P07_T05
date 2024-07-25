@@ -30,7 +30,7 @@ function verifyJWT(req, res, next) {
             
             "/ngos": ["admin", "ngo"],
             "/ngos/status/:status": ["admin", "ngo"],
-            "/ngos/:id": ["admin", "ngo"],
+            "/ngos/:id": ["admin", "ngo", "volunteer"],
             "/ngos/:id/:status": ["admin", "ngo"],
             "/ngos/logo/:id": ["admin", "ngo"],
             "/ngos/changepw/:id/:pw": ["admin", "ngo"],
