@@ -22,8 +22,8 @@ const staticMiddleware = express.static("public");
 
 // Serve the Swagger UI at a specific route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 app.use(staticMiddleware);
 
 //verifyJWT middleware to routes that need authentication
@@ -64,6 +64,7 @@ app.post("/ngos", ngocontroller.registerNGO);
 app.get('/ngo/:id/messages', chatcontroller.getNgoMessages);
 app.get('/ngo/chats/:id', chatcontroller.getNgoChats);
 app.post('/ngo/createMessage', chatcontroller.createMessage);
+app.post('/ngo/login', ngocontroller.loginNGO);
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid
@@ -75,13 +76,6 @@ app.patch("/applications/:volunteerid/:opportunityid/:status", verifyJWT,applica
 app.delete("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.deleteApplication);
 
 // Opportunity routes
-app.get("/opportunities", opportunitycontroller.getAllOpportunities);
-app.get("/opportunities/:id", opportunitycontroller.getOpportunityById);
-app.post("/opportunities", opportunitycontroller.createOpportunity);
-app.get("/opportunities/skills/:id", opportunitycontroller.getOpportunitySkills);
-app.patch("/opportunities/increment/:id", opportunitycontroller.incrementOpportunityCurrentVolunteers);
-app.delete("/opportunities/:id", opportunitycontroller.deleteOpportunityById);
-app.put("/opportunities/:id", opportunitycontroller.updateOpportunity);
 app.get("/opportunities/search/listing", opportunitycontroller.searchOpportunity);
 app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
 app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
@@ -98,12 +92,9 @@ app.post("/admins/login", admincontroller.loginAdmin)
 
 
 //html routes
-//login routes
-app.get('/', (req, res) => {
+//common
+app.get('/login', (req, res) => {
     res.redirect('/index.html')
-});
-app.get('/login/admin', (req, res) => {
-    res.redirect('/adminloginpage.html')
 });
 
 //volunteer routes
@@ -113,6 +104,9 @@ app.get('/volunteer/index', verifyJWT, (req, res) => {
 app.get('/volunteer/profile', verifyJWT, (req, res) => {
     res.redirect('/volunteerprofilepage.html');
 });
+app.get('/login/volunteer', (req, res) => {
+    res.redirect('/volunteerloginpage.html');
+})
 
 //ngo routes
 app.get('/ngo/dashboard', verifyJWT, (req,res) => {
@@ -124,9 +118,14 @@ app.get('/ngo/profile', verifyJWT, (req, res) => {
 app.get('/login/ngo', (req, res) => {
     res.redirect('/ngologinpage.html');
 })
-app.post('/ngo/login', ngocontroller.loginNGO);
+app.get('/register/ngo', (req, res) => {
+    res.redirect('/ngosignuppage.html');
+})
 
 //admin routes
+app.get('/login/admin', (req, res) => {
+    res.redirect('/adminloginpage.html')
+});
 app.get('/admin/dashboard', verifyJWT, (req, res) => {
     res.redirect('/admindashboard.html');
 });

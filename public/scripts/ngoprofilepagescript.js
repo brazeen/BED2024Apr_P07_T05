@@ -1,9 +1,17 @@
-//yangyi
-let placeholderid = 1
-let ngo;
+const token = localStorage.getItem('token');
+if (!token) {
+    window.location.href = "/login"
+}
+
+let placeholderid = localStorage.getItem('ngoid');
 async function fetchNgoProfile(id) {
     try {
-        const response = await fetch(`/ngos/${id}`); // Replace with your API endpoint
+        const response = await fetch(`/ngos/${id}`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            }
+        }); // Replace with your API endpoint
         ngo = await response.json();
 
         const ngoList = document.getElementsByClassName("ngo-list")[0]; // Correctly select the element
@@ -61,7 +69,10 @@ document.querySelector('.delete-btn').addEventListener('click', function() {
 
 async function deleteNGOProfile(id) {
     const response = await fetch(`/ngos/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
     });
     if (response.ok) {
         alert("Account successfully deleted.");
@@ -119,7 +130,10 @@ async function updateProfile() {
 
                 const picResponse = await fetch(`/ngos/logo/${ngo.ngoid}`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
                 });
     
                 if (picResponse.ok) {
@@ -150,7 +164,8 @@ async function updateProfile() {
             const response = await fetch(`/ngos/${ngo.ngoid}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newNGOData)
             });
@@ -199,7 +214,10 @@ async function changePassword() {
         try {
             //check if the current password is correct
             let response = await fetch(`/ngos/${ngo.ngoid}/${currentpw}`, {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
             });
             if (!response.ok) {
                 alert("Invalid current password");
@@ -212,7 +230,10 @@ async function changePassword() {
             }
             //continue if no errors
             response = await fetch(`/ngos/changepw/${ngo.ngoid}/${newpw}`, {
-                method: "PATCH"
+                method: "PATCH",
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
             });
             if (response.ok) {
                 alert("Password successfully changed");
@@ -233,6 +254,13 @@ async function changePassword() {
     })
 }
 
+document.querySelector('.logout-btn').addEventListener('click', logout)
+
+function logout() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('ngoid')
+    window.location.href="/login"
+}
 
 
     
