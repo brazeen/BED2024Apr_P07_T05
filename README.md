@@ -5,7 +5,7 @@ Team members: Brandon Koh Ziheng, Toh Yang Yi, Donovan Lye Yong Lin
 Ensure directory is the root directory of this repository<br>`npm i` to install all libraries
 
 ## Seeding
-The seed can be found in volunteezyseed.sql
+The seed can be found in volunteezyseed.sql<br>Required SQL login info is found in `dbConfig.js`
 
 ## Running
 `node app.js`
