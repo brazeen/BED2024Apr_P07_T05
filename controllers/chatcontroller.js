@@ -38,7 +38,7 @@ async function getNgoMessages(req, res) {
 async function getNgoChats(req, res) {
     const ngoid = parseInt(req.params.id);
     try {
-        const chats = await Chat.getVolunteerChats(ngoid);
+        const chats = await Chat.getNgoChats(ngoid);
         res.json({ chats });
     } catch (error) {
         console.error(error);
