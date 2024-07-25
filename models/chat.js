@@ -34,8 +34,31 @@ class Chat {
         console.error('Error fetching messages:', err);
         throw err;
     }
-}
-
+    }
+    static async getNgoMessages(id) {
+        try {
+            const connection = await sql.connect(dbConfig);
+            const sqlQuery = `
+            SELECT m.messageid, m.volunteerid, m.ngoid, m.content, m.timestamp, v.name AS senderName
+            FROM Messages m
+            INNER JOIN NGOs n ON m.ngoid = n.ngoid
+            WHERE m.ngoid = @id
+            ORDER BY m.timestamp;  -- Ensure messages are ordered by timestamp
+            `;
+            const request = connection.request();
+            request.input("id", sql.Int, id);
+            const result = await request.query(sqlQuery);
+            connection.close();
+    
+            // Map each record to a Chat instance
+            return result.recordset.map(record => 
+                new Chat(record.messageid, record.volunteerid, record.ngoid, record.content, record.timestamp, record.senderName)
+            );
+        } catch (err) {
+            console.error('Error fetching messages:', err);
+            throw err;
+        }
+    }
     
     static async getVolunteerChats(id) {
         try {
@@ -58,6 +81,48 @@ class Chat {
             console.error('Error fetching chats:', err);
             throw err;
         }
+    }
+
+    static async getNgoChats(id) {
+        try {
+            const connection = await sql.connect(dbConfig);
+            const sqlQuery = `
+                SELECT DISTINCT n.name, m.ngoid
+                FROM NGOs n
+                INNER JOIN Messages m ON m.ngoid = n.ngoid
+                WHERE n.ngoid = @id
+            `;
+            const request = connection.request();
+            request.input("id", sql.Int, id);
+            const result = await request.query(sqlQuery);
+            connection.close();
+            return result.recordset.map(record => ({
+                ngoName: record.name,
+                ngoid: record.ngoid
+            }));
+        } catch (err) {
+            console.error('Error fetching chats:', err);
+            throw err;
+        }
+    }
+
+    static async createMessage(newMessage) {
+        const connection = await sql.connect(dbConfig);
+        //insert values
+        const sqlQuery = `INSERT INTO Messages (volunteerid, ngoid, content, timestamp) VALUES (@volunteerid, @ngoid, @content, @timestamp )`;
+
+        const request = connection.request();
+        request.input("volunteerid", newMessage.volunteerid);
+        request.input("ngoid", newMessage.ngoid);
+        request.input("content", newMessage.content);
+        request.input("timestamp", newMessage.timestamp);
+        
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return this.getVolunteerMessages();
+
     }
     
 }

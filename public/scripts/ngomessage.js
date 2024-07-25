@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const volunteerId = getVolunteerId();
-    console.log('volunteerid:', volunteerId);
+    const ngoId = getNgoId();
+    console.log('ngoid:', ngoId);
 
     try {
         // Fetch chat history
-        const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`);
+        const chatResponse = await fetch(`/ngo/chats/${ngoId}`);
         if (!chatResponse.ok) throw new Error('Network response was not ok');
         const chatData = await chatResponse.json();
         
@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('chatHistory').addEventListener('click', async (event) => {
             const chatItem = event.target.closest('.chat-item');
             if (!chatItem) return;
-
+            console.log("chatitem:", chatItem)
             const chatId = chatItem.dataset.chatId;
-            const chatName = chatItem.dataset.chatName; // Get the chat name
-            const chatAvatar = chatItem.dataset.chatAvatar; // Get the chat avatar
+            const chatName = chatItem.dataset.chatName;
+            const chatAvatar = chatItem.dataset.chatAvatar;
 
             console.log(`Chat clicked: ${chatName} (ID: ${chatId})`);
 
@@ -26,14 +26,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, volunteerId);
+            await loadMessagesForChat(chatId, ngoId);
+            console.log("current chatid:", chatId);
+
+            // Update the chat ID for the message creation
+            setupMessageForm(ngoId, chatId);
         });
+        
     } catch (error) {
         console.error('Error fetching data:', error);
     }
 });
 
-function getVolunteerId() {
+function getNgoId() {
     return localStorage.getItem('volunteerid');
 }
 
@@ -44,9 +49,7 @@ async function loadMessagesForChat(chatId, volunteerId) {
         if (!messageResponse.ok) throw new Error('Network response was not ok');
         const messageData = await messageResponse.json();
 
-        // Check if messageData is an array
         const messages = Array.isArray(messageData) ? messageData : [messageData];
-        // Display messages
         displayMessages(messages, chatId, volunteerId);
     } catch (error) {
         console.error('Error fetching messages:', error);
@@ -55,16 +58,13 @@ async function loadMessagesForChat(chatId, volunteerId) {
 
 function displayMessages(messages, chatId, volunteerId) {
     const chatHistoryContent = document.querySelector('.chat-history');
-    chatHistoryContent.innerHTML = ''; // Clear existing messages
+    chatHistoryContent.innerHTML = '';
 
-    let messageMatched = false; // Flag to track if any message matches
+    let messageMatched = false;
 
     messages.forEach(message => {
-
-
-        // Ensure both sides of the comparison are of the same type
         if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
-            messageMatched = true; // Set flag to true if a message matches
+            messageMatched = true;
             
             console.log("Message matches criteria:", message);
             
@@ -75,7 +75,7 @@ function displayMessages(messages, chatId, volunteerId) {
             messageElement.style.margin = '0 auto';
 
             const avatar = document.createElement('img');
-            avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; // Placeholder URL
+            avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; 
             avatar.alt = message.senderName;
             avatar.style.borderRadius = '50%';
             avatar.style.width = '32px';
@@ -113,26 +113,18 @@ function displayMessages(messages, chatId, volunteerId) {
             console.log("Message does not match criteria:", message);
         }
     });
-
-    if (!messageMatched) {
-        console.log("No messages matched the criteria.");
-    }
 }
-
-
-
-
 
 function displayChatHistory(chats) {
     const chatHistory = document.getElementById('chatHistory');
-    chatHistory.innerHTML = ''; // Clear existing chat history
+    chatHistory.innerHTML = '';
 
     chats.forEach(chat => {
         const chatItem = document.createElement('div');
         chatItem.classList.add('chat-item');
-        chatItem.dataset.chatId = chat.ngoid; // Use data attribute for chat ID
-        chatItem.dataset.chatName = chat.ngoName; // Use data attribute for chat name
-        chatItem.dataset.chatAvatar = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; // Placeholder for chat avatar
+        chatItem.dataset.chatId = chat.ngoid;
+        chatItem.dataset.chatName = chat.ngoName;
+        chatItem.dataset.chatAvatar = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png';
         chatItem.innerHTML = `
             <div style="display: flex; align-items: center; margin-bottom: 16px; padding: 8px; border-radius: 8px; background-color: #e0e0e0; cursor: pointer;">
                 <img src="${chatItem.dataset.chatAvatar}" alt="NGO avatar" style="border-radius: 50%; width: 32px; height: 32px; margin-right: 8px;">
@@ -165,4 +157,48 @@ function formatDateTime(dateTime) {
         hour12: true
     };
     return new Intl.DateTimeFormat('en-US', options).format(date);
+}
+
+function setupMessageForm(volunteerId, chatId) {
+    const messageForm = document.getElementById('messageForm');
+
+    messageForm.removeEventListener('submit', handleSubmit); // Remove any existing listener
+    messageForm.addEventListener('submit', handleSubmit); // Add the new listener with updated chatId
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const messageInput = document.getElementById('messageInput');
+        const messageContent = messageInput.value.trim();
+
+        if (messageContent === '') return;
+
+        console.log("Chat ID (in handleSubmit):", chatId);
+        console.log("Volunteer ID (in handleSubmit):", volunteerId);
+        console.log("Message content:", messageContent);
+
+        const newMessage = {
+            volunteerid: volunteerId,
+            ngoid: chatId,
+            content: messageContent,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            const response = await fetch(`/volunteers/createMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newMessage)
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const createdMessage = await response.json();
+            console.log('Message sent successfully:', createdMessage);
+            messageInput.value = ''; // Clear input after sending the message
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    }
 }

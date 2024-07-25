@@ -15,8 +15,6 @@ const ngoupload = require('./middlewares/ngoupload');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 
-
-
 require("dotenv").config()
 
 const app = express();
@@ -39,7 +37,7 @@ app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
-app.post("/volunteers", verifyJWT,volunteercontroller.registerVolunteer);
+app.post("/volunteers", volunteercontroller.registerVolunteer);
 app.put("/volunteers/:id", verifyJWT,volunteercontroller.updateVolunteer);
 app.post("/volunteers/login", volunteercontroller.loginVolunteer);
 app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
@@ -49,6 +47,7 @@ app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 app.get("/volunteers/search/user", verifyJWT, volunteercontroller.searchVolunteers)
 app.get('/volunteers/:id/messages', chatcontroller.getVolunteerMessages);
 app.get('/volunteers/chats/:id', chatcontroller.getVolunteerChats);
+app.post('/volunteers/createMessage', chatcontroller.createMessage);
 
 
 // NGO routes
@@ -63,6 +62,9 @@ app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
 app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
 app.post("/ngos", ngocontroller.registerNGO);
+app.get('/ngo/:id/messages', chatcontroller.getNgoMessages);
+app.get('/ngo/chats/:id', chatcontroller.getNgoChats);
+app.post('/ngo/createMessage', chatcontroller.createMessage);
 app.post('/ngo/login', ngocontroller.loginNGO);
 
 // Application routes
