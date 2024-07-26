@@ -1,6 +1,4 @@
 //donovan
-const volunteerid = localStorage.getItem('volunteerid');
-console.log("volunteerid:", volunteerid);
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
     const startTime = new Date(startTimeString);
@@ -143,46 +141,3 @@ async function filterOpp() {
 displaySuggestedOpp();
 addKeywords();
 
-function setupMessageForm(volunteerId, chatId) {
-    const messageForm = document.getElementById('messageForm');
-
-    messageForm.removeEventListener('chat-btn', handleSubmit); // Remove any existing listener
-    messageForm.addEventListener('chat-btn', handleSubmit); // Add the new listener with updated chatId
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const messageInput = document.getElementById('messageInput');
-        const messageContent = messageInput.value.trim();
-
-        if (messageContent === '') return;
-
-        console.log("Chat ID (in handleSubmit):", chatId);
-        console.log("Volunteer ID (in handleSubmit):", volunteerId);
-        console.log("Message content:", messageContent);
-
-        const newMessage = {
-            volunteerid: volunteerId,
-            ngoid: chatId,
-            content: messageContent,
-            timestamp: new Date().toISOString()
-        };
-
-        try {
-            const response = await fetch(`/volunteers/createMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newMessage)
-            });
-
-            if (!response.ok) throw new Error('Network response was not ok');
-
-            const createdMessage = await response.json();
-            console.log('Message sent successfully:', createdMessage);
-            messageInput.value = ''; // Clear input after sending the message
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    }
-}
