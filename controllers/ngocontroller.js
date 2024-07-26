@@ -163,6 +163,10 @@ async function loginNGO(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    if (ngo.status!= "A") {
+      return res.status(403).json({ message: "Not accepted into platform by admin" })
+    }
+
     // Generate JWT token
     const payload = {
       id: ngo.ngoid,
@@ -232,8 +236,7 @@ const createNGO = async (req, res) => {
 
 
 async function registerNGO(req, res) {
-  const { name, email, password, description, contactperson, contactnumber, address, logo , status} = req.body;
-  const relativePath = path.join('./public/images', `${name}_logo.jpg`);
+  const { name, email, password, description, contactperson, contactnumber, address , status} = req.body;
   try {
     // Validate user data
     if (String(password).length < 5) {
@@ -254,7 +257,7 @@ async function registerNGO(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log(hashedPassword);
-    const newNGO = {name: name, email: email, passwordHash: hashedPassword, description: description, contactperson: contactperson, contactnumber: contactnumber, address: address, logo: relativePath, status: status}
+    const newNGO = {name: name, email: email, passwordHash: hashedPassword, description: description, contactperson: contactperson, contactnumber: contactnumber, address: address, status: status}
     const createdNGO = await NGO.createNGO(newNGO);
     return res.status(201).json({ message: "NGO created successfully" });
   } catch (err) {
