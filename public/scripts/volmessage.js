@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(ngoId, volunteerId, token);
+            await loadMessagesForChat(ngoId, volunteerId, token, senderName);
             console.log("current ngoId:", ngoId);
 
             // Update the chat ID for the message creation
@@ -69,7 +69,7 @@ function getVolunteerId() {
     return localStorage.getItem('volunteerid');
 }
 
-async function loadMessagesForChat(ngoId, volunteerId, token) {
+async function loadMessagesForChat(ngoId, volunteerId, token, senderName) {
     try {
         // Fetch messages for the selected chat
         const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`, {
@@ -82,13 +82,13 @@ async function loadMessagesForChat(ngoId, volunteerId, token) {
         const messageData = await messageResponse.json();
 
         const messages = Array.isArray(messageData) ? messageData : [messageData];
-        displayMessages(messages, ngoId, volunteerId);
+        displayMessages(messages, ngoId, volunteerId, senderName);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
 }
 
-function displayMessages(messages, ngoId, volunteerId) {
+function displayMessages(messages, ngoId, volunteerId, senderName) {
     const chatHistoryContent = document.querySelector('.chat-history');
     chatHistoryContent.innerHTML = '';
 
@@ -100,7 +100,12 @@ function displayMessages(messages, ngoId, volunteerId) {
 
             const userName = document.createElement('div');
             userName.classList.add('chat-bubble-header');
-            userName.textContent = message.senderName;
+            //if sender is volunteer, display 'You' as username
+            if (message.senderName === senderName) {
+                userName.textContent = 'You'
+            } else {
+                userName.textContent = message.senderName;
+            }
 
             const messageText = document.createElement('div');
             messageText.classList.add('chat-bubble-message');
@@ -208,7 +213,7 @@ function setupMessageForm(volunteerId, ngoId, senderName, token) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
-            await loadMessagesForChat(ngoId, volunteerId, token);
+            await loadMessagesForChat(ngoId, volunteerId, token, senderName);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
