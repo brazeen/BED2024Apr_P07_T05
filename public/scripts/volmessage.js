@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let senderName;
     fetchVolunteerProfile(volunteerId, token)
     try {
+        //get sender's name
         senderName = await fetchVolunteerProfile(volunteerId, token);
         // Fetch chat history
         const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`, {
@@ -26,20 +27,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             const chatItem = event.target.closest('.chat-item');
             if (!chatItem) return;
             console.log("chatitem:", chatItem)
-            const chatId = chatItem.dataset.chatId;
+            const ngoId = chatItem.dataset.chatId;
             const chatName = chatItem.dataset.chatName;
             const chatAvatar = chatItem.dataset.chatAvatar;
-            console.log(`Chat clicked: ${chatName} (ID: ${chatId})`);
+            console.log(`Chat clicked: ${chatName} (ID: ${ngoId})`);
 
             // Update the chat header with the selected chat details
             updateChatHeader(chatName, chatAvatar);
 
             // Load messages for the selected chat
-            await loadMessagesForChat(chatId, volunteerId, token);
-            console.log("current chatid:", chatId);
+            await loadMessagesForChat(ngoId, volunteerId, token);
+            console.log("current ngoId:", ngoId);
 
             // Update the chat ID for the message creation
-            setupMessageForm(volunteerId, chatId, senderName, token);
+            setupMessageForm(volunteerId, ngoId, senderName, token);
         });
         
     } catch (error) {
@@ -68,7 +69,7 @@ function getVolunteerId() {
     return localStorage.getItem('volunteerid');
 }
 
-async function loadMessagesForChat(chatId, volunteerId, token) {
+async function loadMessagesForChat(ngoId, volunteerId, token) {
     try {
         // Fetch messages for the selected chat
         const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`, {
@@ -82,49 +83,37 @@ async function loadMessagesForChat(chatId, volunteerId, token) {
         const messageData = await messageResponse.json();
 
         const messages = Array.isArray(messageData) ? messageData : [messageData];
-        displayMessages(messages, chatId, volunteerId);
+        displayMessages(messages, ngoId, volunteerId);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
 }
 
-function displayMessages(messages, chatId, volunteerId) {
+function displayMessages(messages, ngoId, volunteerId) {
     const chatHistoryContent = document.querySelector('.chat-history');
     chatHistoryContent.innerHTML = '';
 
     messages.forEach(message => {
-        if (Number(message.ngoid) === Number(chatId) && Number(message.volunteerid) === Number(volunteerId)) {
-            
-            console.log("message sender:", message.senderName);
+        if (Number(message.ngoid) === Number(ngoId) && Number(message.volunteerid) === Number(volunteerId)) {
+
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
+            messageElement.classList.add('chat-bubble');
 
-            const avatar = document.createElement('img');
-            avatar.src = 'https://storage.gignite.ai/mediaengine/Placeholder_view_vector.svg.png'; 
-            avatar.alt = message.senderName;
-            avatar.classList.add('message-avatar');
-
-            const messageContent = document.createElement('div');
-            messageContent.classList.add('message-content');
-            
-            const userName = document.createElement('p');
-            userName.classList.add('message-username');
+            const userName = document.createElement('div');
+            userName.classList.add('chat-bubble-header');
             userName.textContent = message.senderName;
 
-            const messageText = document.createElement('p');
-            messageText.classList.add('message-text');
+            const messageText = document.createElement('div');
+            messageText.classList.add('chat-bubble-message');
             messageText.textContent = message.content;
 
-            const timestamp = document.createElement('span');
-            timestamp.classList.add('message-timestamp');
+            const timestamp = document.createElement('div');
+            timestamp.classList.add('chat-bubble-timestamp');
             timestamp.textContent = formatDateTime(message.timestamp);
 
-            messageContent.appendChild(userName);
-            messageContent.appendChild(messageText);
-            messageContent.appendChild(timestamp);
-
-            messageElement.appendChild(avatar);
-            messageElement.appendChild(messageContent);
+            messageElement.appendChild(userName);
+            messageElement.appendChild(messageText);
+            messageElement.appendChild(timestamp);
 
             chatHistoryContent.appendChild(messageElement);
         }
@@ -136,6 +125,7 @@ function displayChatHistory(chats) {
     chatHistory.innerHTML = '';
 
     chats.forEach(chat => {
+        console.log("chats:", chat)
         const chatItem = document.createElement('div');
         chatItem.classList.add('chat-item');
         chatItem.dataset.chatId = chat.ngoid;
@@ -178,12 +168,12 @@ function formatDateTime(dateTime) {
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
-function setupMessageForm(volunteerId, chatId, senderName, token) {
+function setupMessageForm(volunteerId, ngoId, senderName, token) {
     console.log(token)
     const messageForm = document.getElementById('messageForm');
 
     messageForm.removeEventListener('submit', handleSubmit); // Remove any existing listener
-    messageForm.addEventListener('submit', handleSubmit); // Add the new listener with updated chatId
+    messageForm.addEventListener('submit', handleSubmit); // Add the new listener with updated ngoId
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -192,14 +182,14 @@ function setupMessageForm(volunteerId, chatId, senderName, token) {
 
         if (messageContent === '') return;
 
-        console.log("Chat ID (in handleSubmit):", chatId);
+        console.log("Chat ID (in handleSubmit):", ngoId);
         console.log("Volunteer ID (in handleSubmit):", volunteerId);
         console.log("Message content:", messageContent);
         console.log("sender name in create message",senderName);
 
         const newMessage = {
             volunteerid: volunteerId,
-            ngoid: chatId,
+            ngoid: ngoId,
             content: messageContent,
             timestamp: new Date().toISOString(),
             senderName:  senderName
@@ -219,7 +209,7 @@ function setupMessageForm(volunteerId, chatId, senderName, token) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
-            await loadMessagesForChat(chatId, volunteerId);
+            await loadMessagesForChat(ngoId, volunteerId);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
