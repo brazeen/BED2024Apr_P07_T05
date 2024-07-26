@@ -3,12 +3,28 @@ if (!token) {
     window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
 }
 let currentVolunteerId = localStorage.getItem("id");
+console.log("volunteer id:", currentVolunteerId)
+//initialize ngoId first
+let ngoId;
 const urlParams = new URLSearchParams(window.location.search)
 const currentOpportunityId = urlParams.get('id')
-
+console.log("ngoId:", ngoId);
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
+const chatButton = document.querySelector(".chat-button");
 
+//ensure ngoid is set before creating chat
+(async function initialize() {
+    try {
+        const opportunity = { ngoid: currentOpportunityId }; // Assuming you have the opportunity details
+        await fetchNGOInOpportunity(opportunity);
+        console.log("current vol id:", currentVolunteerId)
+        console.log("current ngoid:", ngoId)
+        chatButton.addEventListener("click", () => createChat(currentVolunteerId, ngoId));
+    } catch (error) {
+        console.error('Error fetching NGO data:', error);
+    }
+})();
 
 async function fetchNGOInOpportunity(opportunity) {
     let response = await fetch(`/ngos/${opportunity.ngoid}`, {
@@ -18,6 +34,9 @@ async function fetchNGOInOpportunity(opportunity) {
     }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let ngo = await response.json();
+    //set ngoId
+    ngoId = ngo.ngoid
+    console.log("ngoID in fetch ngo opp:", ngoId)
     return ngo;
 }
 
@@ -123,6 +142,36 @@ async function applyForOpportunity(volid, oppid) {
 }
 
 displayOpportunity(currentOpportunityId)
+
+//function to create chat
+async function createChat(volunteerId, ngoId) {
+        const newMessage = {
+            volunteerid: volunteerId,
+            ngoid: ngoId,
+            content: 'chat created',
+            timestamp: new Date().toISOString(),
+            senderName:  ' '
+        };
+
+        try {
+            const response = await fetch(`/volunteers/createMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'Authorisation': `Bearer ${token}`
+                },
+                body: JSON.stringify(newMessage)
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            window.href = 'volmessage.html'
+            const createdChat = await response.json();
+            console.log('Message sent successfully:', createdChat);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    
+}
 
 
 
