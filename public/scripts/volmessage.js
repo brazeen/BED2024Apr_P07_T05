@@ -75,7 +75,6 @@ async function loadMessagesForChat(ngoId, volunteerId, token) {
         const messageResponse = await fetch(`/volunteers/${volunteerId}/messages`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
         });
@@ -200,7 +199,7 @@ function setupMessageForm(volunteerId, ngoId, senderName, token) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorisation': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newMessage)
             });
@@ -209,7 +208,7 @@ function setupMessageForm(volunteerId, ngoId, senderName, token) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
-            await loadMessagesForChat(ngoId, volunteerId);
+            await loadMessagesForChat(ngoId, volunteerId, token);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);

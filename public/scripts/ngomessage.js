@@ -74,8 +74,7 @@ async function loadMessagesForChat(volunteerId, ngoId, token) {
         const messageResponse = await fetch(`/ngos/${ngoId}/messages`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                //'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
         });;
         if (!messageResponse.ok) throw new Error('Network response was not ok');
@@ -198,7 +197,7 @@ function setupMessageForm(ngoId, volunteerId, senderName, token) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newMessage)
             });
@@ -207,7 +206,7 @@ function setupMessageForm(ngoId, volunteerId, senderName, token) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
-            await loadMessagesForChat(volunteerId, ngoId);
+            await loadMessagesForChat(volunteerId, ngoId, token);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
