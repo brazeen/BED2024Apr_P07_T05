@@ -242,10 +242,9 @@ module.exports = Volunteer;
 
 
 
-// Function to fetch a random image URL from Unsplash
 async function fetchRandomImage() {
     const url = 'https://api.unsplash.com/photos/random';
-    const accessKey = process.env.UNSPLASHACCESSKEY; // Replace with your actual Unsplash API access key
+    const accessKey = process.env.UNSPLASHACCESSKEY; 
 
     try {
         const response = await fetch(url, {
@@ -259,7 +258,7 @@ async function fetchRandomImage() {
         }
 
         const data = await response.json();
-        return data.urls.regular; // Return the regular size image URL
+        return data.urls.regular; 
     } catch (error) {
         console.error('Error fetching random image:', error);
         throw error;

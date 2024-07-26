@@ -7,6 +7,7 @@ const validateNGO = (req, res, next) => {
     description: Joi.string().max(255).required(),
     contactperson: Joi.string().min(3).max(100).required(),
     contactnumber: Joi.string().pattern(/^[0-9]{7,15}$/).required(), //between 7 to 15 digit
+    password: Joi.string().min(3).required(),
     address: Joi.string().max(255).required()
   });
 

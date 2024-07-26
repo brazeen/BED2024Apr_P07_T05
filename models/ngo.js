@@ -200,6 +200,14 @@ class NGO {
     }
 
     static async createNGO(newNGOData) {
+        if (!newNGOData.logo) {
+            try {
+                newNGOData.logo = await fetchRandomImage();
+            } catch (error) {
+                console.error('Error fetching image data:', error);
+                throw new Error('Error fetching image data');
+            }
+        }
         const connection = await sql.connect(dbConfig)
 
         const sqlQuery = `INSERT INTO NGOs (name, email, passwordHash, description, contactperson, contactnumber, address, logo, status) VALUES (@name, @email, @passwordHash, @description, @contactperson, @contactnumber, @address, @logo, 'P'); SELECT SCOPE_IDENTITY() AS ngoid;`
@@ -213,8 +221,6 @@ class NGO {
         request.input("contactnumber", newNGOData.contactnumber)
         request.input("address", newNGOData.address)
         request.input("logo", newNGOData.logo)
-        request.input("status", newNGOData.status || null)
-
 
         const result = await request.query(sqlQuery)
 
@@ -222,49 +228,32 @@ class NGO {
 
         return this.getNGOById(result.recordset[0].ngoid)
     }
-
-    /*
-    
-
-    static async createBook(newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`
-
-        const request = connection.request()
-        request.input("title", newBookData.title)
-        request.input("author", newBookData.author)
-
-        const result = await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(result.recordset[0].id)
-
-    }
-
-    static async updateBook(id, newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Books SET title = @title, author = @author WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-        request.input("title", newBookData.title || null)
-        request.input("author", newBookData.author || null)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(id)
-    }
-
-    
-        */
 }
 
 
 
 
 module.exports = NGO;
+
+async function fetchRandomImage() {
+    const url = 'https://api.unsplash.com/photos/random';
+    const accessKey = process.env.UNSPLASHACCESSKEY; 
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Client-ID ${accessKey}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.urls.regular; 
+    } catch (error) {
+        console.error('Error fetching random image:', error);
+        throw error;
+    }
+}
