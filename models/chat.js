@@ -69,7 +69,7 @@ class Chat {
 				SELECT DISTINCT n.name, m.ngoid
                 FROM NGOs n
                 INNER JOIN Messages m ON m.ngoid = n.ngoid
-                WHERE n.ngoid = @id
+                WHERE m.volunteerid = @id
             `;
             const request = connection.request();
             request.input("id", sql.Int, id);
@@ -128,6 +128,26 @@ class Chat {
         return this.getVolunteerMessages();
 
     }
+
+    //function to create a new chat
+   /* static async createChat(newChat) {
+        const connection = await sql.connect(dbConfig);
+        //insert values
+        const sqlQuery = `INSERT INTO Messages (volunteerid, ngoid, content, timestamp, sender) VALUES (@volunteerid, @ngoid, @content, @timestamp, @senderName )`;
+
+        const request = connection.request();
+        request.input("volunteerid", newChat.volunteerid);
+        request.input("ngoid", newChat.ngoid);
+        request.input("content", newChat.content);
+        request.input("timestamp", newChat.timestamp);
+        request.input("senderName", newChat.senderName)
+        
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return this.getVolunteerMessages();
+    }*/
     
 }
 
