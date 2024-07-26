@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Load messages for the selected chat
             console.log("ngoid:", ngoId)
-            await loadMessagesForChat(volunteerId, ngoId, token);
+            await loadMessagesForChat(volunteerId, ngoId, token, senderName);
             console.log("current volunteerid:", volunteerId);
 
             // Update the chat ID for the message creation
@@ -68,7 +68,7 @@ function getNgoId() {
     return localStorage.getItem('ngoid');
 }
 
-async function loadMessagesForChat(volunteerId, ngoId, token) {
+async function loadMessagesForChat(volunteerId, ngoId, token, senderName) {
     try {
         // Fetch messages for the selected chat
         const messageResponse = await fetch(`/ngos/${ngoId}/messages`, {
@@ -82,13 +82,13 @@ async function loadMessagesForChat(volunteerId, ngoId, token) {
         console.log("message data:", messageData)
         const messages = Array.isArray(messageData) ? messageData : [messageData];
         console.log("messages:", messages)
-        displayMessages(messages, volunteerId, ngoId);
+        displayMessages(messages, volunteerId, ngoId, senderName);
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
 }
 
-function displayMessages(messages, volunteerId, ngoId) {
+function displayMessages(messages, volunteerId, ngoId, senderName) {
     const chatHistoryContent = document.querySelector('.chat-history');
     chatHistoryContent.innerHTML = '';
 
@@ -98,9 +98,15 @@ function displayMessages(messages, volunteerId, ngoId) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-bubble');
 
+            //if sender is ngo, display 'You' as name
             const userName = document.createElement('div');
             userName.classList.add('chat-bubble-header');
-            userName.textContent = message.senderName;
+            if (message.senderName === senderName) {
+                userName.textContent = 'You'
+            } else {
+                userName.textContent = message.senderName;
+            }
+
 
             const messageText = document.createElement('div');
             messageText.classList.add('chat-bubble-message');
