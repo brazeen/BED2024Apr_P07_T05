@@ -1,4 +1,5 @@
 //donovan
+const token = localStorage.getItem("token")
 function oppFormSubmission(){
     // Get references to the form elements and the post button
     const title = document.getElementById("title");
@@ -10,6 +11,24 @@ function oppFormSubmission(){
     const region = document.getElementById("region");
     const age = document.getElementById("age");
     const maxvolunteers = document.getElementById("count");
+    const photo = document.getElementById("media");
+
+    var selectedSkills = [];
+    const skillCheckboxes = document.querySelectorAll('.form-check-input');
+    for (var checkbox of skillCheckboxes) {
+        checkbox.addEventListener('click', function(){
+            if (this.checked == true){
+                console.log(this.value);
+                selectedSkills.push(this.value);
+                console.log(selectedSkills);
+            }
+            else {
+                console.log("You unchecked this box");
+                selectedSkills = selectedSkills.filter(i => i !== this.value);
+                console.log(selectedSkills);
+            }
+        })
+    }
 
     //form submission btn
     const postBtn = document.getElementById("post-btn");
@@ -25,7 +44,7 @@ function oppFormSubmission(){
 
         // Collect the data from the form
         const newOpportunity = {
-            ngoid: nid,
+            ngoid: localStorage.getItem("ngoid"),
             title: title.value,
             description: description.value,
             date: date.value,
@@ -36,6 +55,7 @@ function oppFormSubmission(){
             age: age.value,
             maxvolunteers: maxvolunteers.value,
             currentVolunteers: 0,
+            photo: photo.value
         };
 
         //Input validation
@@ -65,31 +85,40 @@ function oppFormSubmission(){
                 method: 'POST',
                 headers: {
                     'content-type' :'application/json',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 },
                 body: JSON.stringify(newOpportunity)
             });
 
             if (response.ok) {
                 const createdOpp = await response.json();
-                const opportunityId = createdOpp[0].opportunityid; // Extract created opportunity ID
+                const opportunityid = createdOpp.opportunityid;
 
-                // Create opportunity skills
-                for (const skillName of selectedSkills) {
-                    const oppSkillData = {
-                    skillid: skillName,  // Use skill name directly (no need for manual mapping)
-                    opportunityid: opportunityId
-                    };
+                try {
+                    // Create opportunity skills
+                    for (const skillname of selectedSkills) {
+                        const oppSkillData = {
+                        skillid: skillname,  // Use skill name directly
+                        opportunityid: opportunityid
+                        };
 
-                    await fetch('/opportunityskills', {
-                    method: 'POST',
-                    headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify(oppSkillData)
-                    });
+                        await fetch(`/skills`, {
+                        method: 'POST',
+                        headers: { 'content-type': 'application/json' ,
+                            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                        },
+                        body: JSON.stringify(oppSkillData)
+                        });
+                        console.log("Skills:", oppSkillData)
+                    }
                 }
-
+                catch (error) {
+                    console.log("Error posting opportunity skills:", error);
+                }
+                
                 console.log("Opportunity Created: ", createdOpp);
                 alert("New opportunity created!");
-                window.location.href = 'ngodashboard.html';
+                //window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);

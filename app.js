@@ -86,7 +86,7 @@ app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity)
 app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
 
 //skill routes
-app.post("/skills", skillcontroller.createOppSkills);
+app.post("/skills", verifyJWT,skillcontroller.createOppSkills);
 
 //admin routes
 app.get("/admins/:name", admincontroller.getAdminByUsername)

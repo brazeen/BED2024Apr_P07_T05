@@ -36,7 +36,7 @@ class Opportunity {
     static async createOpportunity(newOpp) {
         const connection = await sql.connect(dbConfig);
         //insert values
-        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers, photo) VALUES (@ngoid, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0, @photo);`;
+        const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers, photo) VALUES (@ngoid, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0, @photo); SELECT SCOPE_IDENTITY() AS opportunityid;`;
 
         const request = connection.request();
         request.input("ngoid", newOpp.ngoid);
@@ -57,7 +57,7 @@ class Opportunity {
 
         connection.close();
 
-        return this.getAllOpportunities();
+        return this.getOpportunityById(result.recordset[0].opportunityid);
 
     }
 
