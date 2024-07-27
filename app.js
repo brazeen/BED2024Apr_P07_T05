@@ -79,7 +79,7 @@ app.patch("/applications/:volunteerid/:opportunityid/:status", verifyJWT,applica
 app.delete("/applications/:volunteerid/:opportunityid", verifyJWT,applicationcontroller.deleteApplication);
 
 // Opportunity routes
-app.get("/opportunities/search/listing", opportunitycontroller.searchOpportunity);
+app.get("/opportunities/search/listing",verifyJWT, opportunitycontroller.searchOpportunity);
 app.get("/opportunities", verifyJWT,opportunitycontroller.getAllOpportunities);
 app.get("/opportunities/:id", verifyJWT,opportunitycontroller.getOpportunityById);
 app.post("/opportunities", verifyJWT,opportunitycontroller.createOpportunity);

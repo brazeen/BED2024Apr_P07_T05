@@ -49,9 +49,11 @@ class Skill {
         request.input("skillname", newOppSkillsData.skillid);
         request.input("opportunityid", newOppSkillsData.opportunityid);
 
-        await request.query(sqlQuery);
+        const result = await request.query(sqlQuery);
     
         connection.close();
+
+        return result;
     }
 
     static async getOpportunitySkillsById(id) {
@@ -74,11 +76,6 @@ class Skill {
             : null; //not found
     }
 
-
-    }
-
-
-   
 
 }
 
