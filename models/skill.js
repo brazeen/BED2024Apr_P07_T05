@@ -2,7 +2,8 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Skill {
-    constructor(skillid, skillname) {
+    constructor(skillid, skillname, volunteerid) {
+        this.volunteerid = volunteerid
         this.skillid = skillid;
         this.skillname = skillname;
     }

@@ -728,6 +728,56 @@ body {
     padding-top: 35px;
 }
 
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.dropdown-multiselect {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropdown-multiselect-content {
+    display: flex;
+    text-align: left;
+    position: absolute;
+    background-color: white;
+    min-width: 100%;
+    border: 1px solid #ddd;
+    z-index: 1;
+    display: none;
+}
+
+.dropdown-multiselect-content:active {
+    display: flex;
+    text-align: left;
+    position: absolute;
+    background-color: white;
+    min-width: 100%;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+.dropdown-multiselect-content label {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-multiselect-content input {
+    margin-right: 10px;
+}
+
+.dropdown-multiselect.active .dropdown-multiselect-content {
+    display: block;
+}
+
+
 /*----------------Volunteerloginpage------------*/
 .btn-orange {
     background-color: orange;
