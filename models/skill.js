@@ -38,6 +38,41 @@ class Skill {
         return result;
     }
 
+    static async updateOppSkills(id, newOppSkillsData) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `UPDATE OpportunitySkills SET skillid = (SELECT skillid FROM Skills WHERE skillname = @skillname) WHERE opportunityid = @opportunityid;`;
+
+        const request = connection.request();
+        request.input("id", id);
+        request.input("skillname", newOppSkillsData.skillid);
+        request.input("opportunityid", newOppSkillsData.opportunityid);
+
+        await request.query(sqlQuery);
+    
+        connection.close();
+    }
+
+    static async getOpportunitySkillsById(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM OpportunitySkills WHERE opportunityid = @opportunityid`; //params
+
+        const request = connection.request();
+        request.input("opportunityid", id);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Skill(
+                result.recordset[0].id,
+                result.recordset[0].skillid,
+                result.recordset[0].opportunityid,
+            )
+            : null; //not found
+    }
+
 }
 
 

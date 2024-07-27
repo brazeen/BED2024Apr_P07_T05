@@ -12,8 +12,40 @@ const createOppSkills = async (req, res) => {
   }
 }
 
+const updateOppSkills = async (req, res) => {
+    const id = parseInt(req.params.id);
+    const newOppSkillsData = req.body;
+
+    try {
+        const updatedOppSkills = await Skill.updateOppSkills(id, newOppSkillsData);
+        if (!updatedOppSkills) {
+        return res.status(404).send("Opportunity skills not found");
+        }
+        res.json(updatedOppSkills);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error updating opportunity skills");
+    }
+}
+
+const getOpportunitySkillsById = async (req, res) => {
+    const opportunityid = req.params.id;
+    try {
+      const oppSkills = await Skill.getOpportunitySkillsById(opportunityid)
+      if (!oppSkills) {
+        return res.status(404).send("Opportunity skills not found")
+      }
+      res.json(oppSkills);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving Opportunity skills");
+    }
+  };
+
 
 
 module.exports = {
-    createOppSkills
+    createOppSkills,
+    updateOppSkills,
+    getOpportunitySkillsById
 }
