@@ -124,6 +124,44 @@ const getOpportunityByNGOid = async (req, res) => {
   }
 };
 
+const createOppPhoto = async (req, res) => {
+  const oppId = req.params.id;
+  const newPhoto = req.file;
+  const imagepath = newPhoto.path.slice(6);
+  try {
+      const opportunity = await Opportunity.createOppPhoto(oppId, imagepath)
+      
+      if (!opportunity) {
+        return res.status(404).send("Opportunity not found");
+      }
+      res.status(201).json({ photo: imagepath }) //send a OK status code
+      //send the new photo path as response
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating Opportunity photo")
+  }
+}
+
+const updateOppPhoto = async (req, res) => {
+  const oppId = req.params.id;
+  const newPhoto = req.file;
+  const imagepath = newPhoto.path.slice(6);
+  try {
+      const opportunity = await Opportunity.updateOppPhoto(oppId, imagepath)
+      
+      if (!opportunity) {
+        return res.status(404).send("Opportunity photo not found");
+      }
+      res.status(201) //send a OK status code
+      
+  }
+  catch(error) {
+      console.error(error)
+      res.status(500).send("Error updating opportunity photo")
+  }
+}
+
 module.exports = {
     getAllOpportunities,
     getOpportunityById,
@@ -134,5 +172,7 @@ module.exports = {
     incrementOpportunityCurrentVolunteers,
     deleteOpportunityById,
     searchOpportunity,
-    getOpportunityByNGOid
+    getOpportunityByNGOid,
+    createOppPhoto,
+    updateOppPhoto
 }

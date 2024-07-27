@@ -11,7 +11,7 @@ function oppFormSubmission(){
     const region = document.getElementById("region");
     const age = document.getElementById("age");
     const maxvolunteers = document.getElementById("count");
-    const photo = document.getElementById("media");
+    const insertphoto = document.getElementById("photo");
 
     var selectedSkills = [];
     const skillCheckboxes = document.querySelectorAll('.form-check-input');
@@ -55,7 +55,7 @@ function oppFormSubmission(){
             age: age.value,
             maxvolunteers: maxvolunteers.value,
             currentVolunteers: 0,
-            photo: photo.value
+            photo: null //placeholder first
         };
 
         //Input validation
@@ -80,6 +80,7 @@ function oppFormSubmission(){
             alert("Maximum volunteers must be between 1 and 100.");
             return;
         }
+
         try {
             const response = await fetch('/opportunities',{
                 method: 'POST',
@@ -93,6 +94,37 @@ function oppFormSubmission(){
             if (response.ok) {
                 const createdOpp = await response.json();
                 const opportunityid = createdOpp.opportunityid;
+
+
+                if (insertphoto.length > 0) {
+                    const formData = new FormData();
+                    formData.append('photo', insertphoto.files[0]);
+                    Object.entries(newOpportunity).forEach(([key, value]) => {
+                        if (key != "opportunityid") {
+                            formData.append(key, value);
+                        }
+                        
+                    });
+
+                    const photoResponse = await fetch(`/opportunities/photo/${opportunityid}`, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                        }
+                    });
+                    
+                    if (photoResponse.ok) {
+                        const photoData = await photoResponse.json();
+                        console.log("photoData:", photoData)
+                        newOpportunity.photo = photoData.photo; // update photo with the new profile picture path
+                        console.log("Updated photo:", newOpportunity.photo); // Log the updated photo
+                    }
+                    else {
+                        alert("Failed to upload photo.");
+                        return;
+                    }
+                }
 
                 try {
                     // Create opportunity skills
@@ -118,7 +150,7 @@ function oppFormSubmission(){
                 
                 console.log("Opportunity Created: ", createdOpp);
                 alert("New opportunity created!");
-                window.location.href = 'ngodashboard.html';
+                //window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);
