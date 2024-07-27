@@ -11,7 +11,7 @@ const createOppSkills = async (req, res) => {
   catch(error) {
       res.status(500).send("Error creating opportunity skills")
   }
-}
+};
 
 const updateOppSkills = async (req, res) => {
     const id = parseInt(req.params.id);
@@ -27,7 +27,7 @@ const updateOppSkills = async (req, res) => {
         console.error(error);
         res.status(500).send("Error updating opportunity skills");
     }
-}
+};
 
 const getOpportunitySkillsById = async (req, res) => {
     const opportunityid = req.params.id;
