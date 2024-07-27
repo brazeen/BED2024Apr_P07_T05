@@ -928,6 +928,51 @@ body {
     transition: all ease-in-out 0.3s;
 }
 
+.sImage {
+    display: flex; 
+    flex-direction: row; 
+    margin-right: 16px; 
+    padding: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+}
+
+.sImage img {
+    width: 50%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.sDetailsDiv {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between;
+}
+
+.sText h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sbutton {
+    display: flex; 
+    justify-content: space-between;
+}
+
+.sbutton button {
+    padding: 8px 16px; 
+    border: 1px solid #007bff; 
+    background: #007bff; 
+    color: #fff; 
+    border-radius: 4px; 
+    cursor: pointer;
+}
+
+.sText , .sbutton{
+    margin-left: 10px;
+}
+
 /*selectuser.html styling*/
 .selectuserbody {
     display: flex;
