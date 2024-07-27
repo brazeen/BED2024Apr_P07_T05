@@ -46,6 +46,11 @@ function prevStep() {
     document.getElementById('step-1').classList.add('active');
 }
 
+function toggleDropdown() {
+    const dropdown = document.getElementById('skillsDropdown');
+    dropdown.classList.toggle('active');
+}
+
 document.getElementById('registrationForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
@@ -55,18 +60,17 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const email = document.getElementById('email').value;
     const password = document.getElementById('confirm-password').value;
     const bio = document.getElementById('bio').value;
-    const skills = document.getElementById('skills').value;
+    const selectedSkills = Array.from(document.querySelectorAll('#skillsDropdown input:checked')).map(option => option.value);
+    console.log(selectedSkills)
     const dateofbirth = document.getElementById('dob').value;
-    let profilepicture;
 
     const data = {
         name,
         email,
         password,
         bio,
-        skills,
+        skills: selectedSkills,
         dateofbirth,
-        profilepicture
     };
 
     // Send JSON data to the server
@@ -90,4 +94,11 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         console.error('Error:', error);
         showAlert('Error signing up volunteer.');
     });
+});
+
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('skillsDropdown');
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove('active');
+    }
 });
