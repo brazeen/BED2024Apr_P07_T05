@@ -2,11 +2,11 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     event.preventDefault();
 
     const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const password = document.getElementById('password').value; //get elements
 
     const data = { email, password };
     console.log("email:", email);
-    console.log("password:", password);
+    console.log("password:", password); //check pulled data
     try {
         const response = await fetch('/ngos/login', {
             method: 'POST',
