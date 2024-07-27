@@ -3,6 +3,15 @@ const bcrypt = require("bcrypt");
 require("dotenv").config();
 const Volunteer = require("../models/volunteer");
 
+const getMaxVolunteerId = async (req, res) => {
+  try {
+    const maxId = await Volunteer.getMaxVolunteerId();
+    res.json({ maxVolunteerId: maxId });
+} catch (error) {
+    console.error('Error fetching max volunteer id:', error);
+    res.status(500).json({ message: 'Internal server error' });
+}
+}
 //brandon
 const getAllVolunteers = async (req, res) => {
     try {
@@ -242,6 +251,7 @@ async function searchVolunteers(req, res) {
 
 
 module.exports = {
+    getMaxVolunteerId,
     getAllVolunteers,
     getVolunteerById,
     deleteVolunteer,
