@@ -5,13 +5,17 @@ const validateVolunteer = (req, res, next) => {
     name: Joi.string().min(3).max(50).required(),
     email: Joi.string().email().required(),
     bio: Joi.string().max(255).required(),
-    dateofbirth: Joi.date().less('now').required()
-  });
+    dateofbirth: Joi.date().less('now').required(),
+    password: Joi.string().min(3).required(),
+    skills: Joi.string().required()
+    //skills: Joi.array().items(Joi.string()).required()
+  }, { unknown: true });
 
   const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
 
   if (validation.error) {
     const errors = validation.error.details.map((error) => error.message);
+    console.error(errors)
     res.status(400).json({ message: "Validation error", errors });
     return; // Terminate middleware execution on validation error
   }

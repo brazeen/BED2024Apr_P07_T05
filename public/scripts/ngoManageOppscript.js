@@ -174,7 +174,7 @@ async function manageVolunteerApplication(volid, oppid, status) {
     
 }
 
-fetchOpportunityApplications(1);
+
 
 //donovan
 async function fetchOpportunity() {
@@ -246,6 +246,9 @@ async function fetchOpportunity() {
     }
     catch (error) {
         console.error("Error loading opportunity details: ", error); //error handling
+    }
+    finally {
+        fetchOpportunityApplications(oppid);
     }
 }
 //call function when page loads
