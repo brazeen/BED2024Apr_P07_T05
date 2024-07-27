@@ -2,7 +2,8 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Skill {
-    constructor(skillid, skillname) {
+    constructor(skillid, skillname, volunteerid) {
+        this.volunteerid = volunteerid
         this.skillid = skillid;
         this.skillname = skillname;
     }
@@ -30,6 +31,19 @@ class Skill {
         const request = connection.request();
         request.input("skillid", newOppSkills.skillid);
         request.input("opportunityid", newOppSkills.opportunityid);
+    }
+
+    static async createVolunteerSkills(newVolunteerData) {
+        const connection = await sql.connect(dbConfig)
+        const sqlQuery = `INSERT INTO VolunteerSkills (skillid, volunteerid) VALUES (@skillid, @id)`
+        request.input("skillid", newVolunteerData.skillid);
+        request.input("volunteerid", newVolunteerData.volunteerid);
+
+        result = await request.query(sqlQuery);
+        
+        connection.close();
+
+        return this.getVolunteerById(result.recordset[0].volunteerid);
     }
 
 
