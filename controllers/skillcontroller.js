@@ -43,27 +43,30 @@ const getOpportunitySkillsById = async (req, res) => {
     }
   };
 
-const getAllSkills = async (req, res) => {
-  try {
-    const skills = await Skill.getAllSkills()
-    res.json(skills)
-}
-  catch(error) {
-    console.error(error)
-    res.status(500).send("Error retrieving skills")
-}
-}
+  const getSkillIdByName = async (req, res) => {
+    try {
+      const { skillname } = req.params; // Assuming skillname is passed as a URL parameter
+      const skills = await Skill.getSkillIdByName(skillname);
+      res.json(skills);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving skills");
+    }
+  };
 
-const createVolunteerSkills = async (req, res) => {
-  const newVolunteerData = req.body;
-  try {
-      const createdVolunteerSkill = await Skill.createVolunteerSkills(newVolunteerData)
-      res.status(201).json(newVolunteerData)
-  }
-  catch(error) {
-      res.status(500).send("Error creating volunteer skill")
-  }
-}
+
+  const createVolunteerSkills = async (req, res) => {
+    const newVolunteerData = req.body;
+    try {
+        // Ensure `createVolunteerSkills` method is correctly called
+        const createdVolunteerSkill = await Skill.createVolunteerSkills(newVolunteerData);
+        res.status(201).json(createdVolunteerSkill); // Return created skill data or a success message
+    } catch (error) {
+        console.error('Error creating volunteer skill:', error);
+        res.status(500).send("Error creating volunteer skill");
+    }
+};
+
 
 
 
@@ -71,7 +74,7 @@ const createVolunteerSkills = async (req, res) => {
 module.exports = {
     createOppSkills,
     createVolunteerSkills,
-    getAllSkills,
+    getSkillIdByName,
     updateOppSkills,
     getOpportunitySkillsById
 }
