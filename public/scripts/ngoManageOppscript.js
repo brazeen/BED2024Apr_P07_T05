@@ -65,7 +65,7 @@ async function displayVolunteersInApplications(application, applicationDiv) {
         }); // Replace with your API endpoint
         if (!response.ok) throw new Error('Network response was not ok');
         let volunteer = await response.json();
-        getVolunteerSkillsArray(volunteer.volunteerid)
+        getVolunteerSkillsArray(volunteer.volunteerid) //display data
             .then(skillstr => {
                 const volItem = document.createElement("div");
                 volItem.classList.add("volunteer");
@@ -179,7 +179,7 @@ async function manageVolunteerApplication(volid, oppid, status) {
 //donovan
 async function fetchOpportunity() {
     const urlParams = new URLSearchParams(window.location.search);
-    const oppid = urlParams.get('id');
+    const oppid = urlParams.get('id'); //pull out opp id from url passed down
 
     if (!oppid) {
         // Handle case where no ID is provided
@@ -188,20 +188,20 @@ async function fetchOpportunity() {
     }
 
     try {
-        const response = await fetch(`/opportunities/${oppid}` , {
+        const response = await fetch(`/opportunities/${oppid}` , { //endpoint to get opportunities
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` // Include the token in the Authorization header
             }
         });
-        if (!response.ok) {
+        if (!response.ok) { //if response is not ok, error status is displayed on console
         throw new Error(`Error fetching opportunity details: ${response.status}`);
         }
 
         const oppData = await response.json();
 
-        // Display opportunity details on the page (update elements, etc.)
+        // Display opportunity details on the page
         console.log(oppData);
         let leftContainer = document.querySelector('.leftSideDiv');
         
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', fetchOpportunity);
 
 async function removeOpportunity() {
     const urlParams = new URLSearchParams(window.location.search);
-    const oppid = urlParams.get('id');
+    const oppid = urlParams.get('id'); //pull out opp id from URL passed down
     const deleteBtn = document.querySelector('.delete-btn');
     const popup = document.querySelector('.delete-popup');
     const popupText = document.getElementById('deletepopup-text');
@@ -269,7 +269,7 @@ async function removeOpportunity() {
     });
 
     cancelpopBtn.onclick = function() {
-        popup.style.display = 'none';
+        popup.style.display = 'none'; //close popup
     };
     
     deletepopBtn.onclick = async function() {
@@ -284,7 +284,7 @@ async function removeOpportunity() {
             if (response.ok){
                 popup.style.display = 'none';
                 alert('Opportunity has been deleted!');
-                window.location.href = 'ngodashboard.html';
+                window.location.href = 'ngodashboard.html'; //redirect out of page
             }
             else if (!response.ok) {
                 throw new Error(`Error deleting opportunity : ${response.status}`);
@@ -308,7 +308,7 @@ async function editOpportunity() {
     editBtn.addEventListener('click', () => {
         //Pass opportunity ID as a query parameter
         console.log("Opportunity ID being passed:", oppid)
-        window.location.href = `ngoupdate.html?id=${oppid}`;
+        window.location.href = `ngoupdate.html?id=${oppid}`; //redirect to update page
       });
 }
 

@@ -7,7 +7,7 @@ console.log("volunteer id:", currentVolunteerId)
 //initialize ngoId first
 let ngoId;
 const urlParams = new URLSearchParams(window.location.search)
-const currentOpportunityId = urlParams.get('id')
+const currentOpportunityId = urlParams.get('oppid')
 console.log("ngoId:", ngoId);
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
