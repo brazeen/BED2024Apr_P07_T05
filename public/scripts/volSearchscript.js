@@ -1,4 +1,5 @@
 //donovan
+const token = localStorage.getItem('token');
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
     const startTime = new Date(startTimeString);
@@ -19,27 +20,54 @@ function formatDate(dateString) {
 }
 
 let searchPrompt = []; //keywords that will appear under search bar
+//fetching of all data required
 async function fetchOpportunities() {
-    let response = await fetch(`/opportunities`);
+    let response = await fetch(`/opportunities`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    });
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunity = await response.json();
     return opportunity;
 }
 
 async function fetchOpportunitySkills(id) {
-    let response = await fetch(`/opportunities/skills/${id}`); // Replace with your API endpoint
+    let response = await fetch(`/opportunities/skills/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     let skills = await response.json(); 
     return skills;
 }
+//search for certain data
+async function searchOpportunities(searchTerm) {
+    let response = await fetch(`/opportunities/search/listing?searchTerm=${encodeURIComponent(searchTerm)}`, { // ensure input can be safely included in a URL, preventing inputs that might break the URL format and misreading data.
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        }
+    });
+    if (!response.ok) throw new Error('Network response was not ok');
+    let opportunities = await response.json();
+    return opportunities;
+}
 
+//Adding names to a variable
 async function addKeywords() {    
     let keywords = await fetchOpportunities();
     searchPrompt = keywords;
     console.log(searchPrompt);
     showPrompts();
 }
-
+//search bar show prompts when have input
 function showPrompts() {
     const resultsBox = document.querySelector(".result-box");
     const inputBox = document.getElementById("input-box");
@@ -78,9 +106,11 @@ function showPrompts() {
         if(!result.length) {
             resultsBox.innerHTML = ''; //removes line under search bar when no results show
         }
+        displayFilteredOpportunities(result);
     }
 }
 
+//default display of opportunities without any filtering yet
 async function displaySuggestedOpp() {
     let opportunities = await fetchOpportunities();
     let oppDiv = document.querySelector(".suggestedOpps");
@@ -89,7 +119,7 @@ async function displaySuggestedOpp() {
         const imgDiv = document.createElement('div');
         imgDiv.classList.add('sImage');
         const putImage = document.createElement('img');
-        putImage.innerHTML = `src='https://images.unsplash.com/photo-1505761671109-90433e8a56e3?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8QmVhY2gtQ29hc3Qtd2l0aC1jb3N8fHx8fHwxNzEwNzA0MjQ1&amp;ixlib=rb-4.0.3&amp;w=1080' alt='https://images.unsplash.com/photo-1505761671109-90433e8a56e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8QmVhY2gtQ29hc3Qtd2l0aC1jb3N8fHx8fHwxNzEwNzA0MjQ1&ixlib=rb-4.0.3&w=1080'`;
+        putImage.innerHTML = `src='${opp.photo}'`;
 
         const infoDiv = document.createElement('div');
         infoDiv.classList.add('sDetailsDiv');
@@ -119,24 +149,74 @@ async function displaySuggestedOpp() {
 
 async function filterOpp() {
     const opportunities = await fetchOpportunities();
-    const regionSelect = document.querySelector('.searchFilter .form-select[aria-label="Region"]');
-    const skillSelect = document.querySelector('.searchFilter .form-select[aria-label="Skills"]');
-    const dateSelect = document.querySelector('.searchFilter .form-select[aria-label="Date"]');
+    const regionSelect = document.getElementById('searchRegion');
+    const dateSelect = document.getElementById('searchDate');
 
     const selectedRegion = regionSelect.value;
-    const selectedSkill = skillSelect.value;
     const selectedDate = dateSelect.value;
 
-    filteredOpportunities = opportunities.filter(opp => {
-        
-    })
-    // Sort opportunities based on date
-    if (selectedDate === 'newest') {
-        Opportunities.sort((a, b) => new Date(b.date) - new Date(a.date));
-    } else if (selectedDate === 'oldest') {
-        Opportunities.sort((a, b) => new Date(a.date) - new Date(b.date));
+    let filteredOpportunities = opportunities;
+
+    //filter based on region (north south east west)
+    if (selectedRegion && selectedRegion !== "Region") {
+        filteredOpportunities = filteredOpportunities.filter(opp => opp.region.toLowerCase() === selectedRegion.toLowerCase());
     }
+
+    //filter based on earliest dates
+    if (selectedDate === 'newest') {
+        filteredOpportunities.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else if (selectedDate === 'oldest') {
+        filteredOpportunities.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    displayFilteredOpportunities(filteredOpportunities);
 }
+//display the filtered opportunities by region/date
+function displayFilteredOpportunities(opportunities) {
+    const oppDiv = document.querySelector(".suggestedOpps");
+    oppDiv.innerHTML = ''; // Clear previous opportunities
+
+    if (opportunities.length === 0) {
+        const noOpportunitiesMessage = document.createElement('p');
+        noOpportunitiesMessage.textContent = "No opportunities found.";
+        noOpportunitiesMessage.style.textAlign = "center";
+        oppDiv.appendChild(noOpportunitiesMessage);
+    }
+
+    opportunities.slice(0, 5).forEach(opp => { // Limits number of opportunities displayed
+        const imgDiv = document.createElement('div');
+        imgDiv.classList.add('sImage');
+        const putImage = document.createElement('img');
+        putImage.src = `${opp.photo}`;
+        putImage.alt = 'Opportunity Image';
+
+        const infoDiv = document.createElement('div');
+        infoDiv.classList.add('sDetailsDiv');
+
+        const texts = document.createElement('div');
+        texts.classList.add('sText');
+        texts.innerHTML = `<h2 style="font-size: 20px; font-weight: bold;">${opp.title}</h2>
+                            <p style="color: #666;">${opp.address}</p>
+                            <p style="font-size: 14px; color: #888;">${formatTimeRange(opp.starttime, opp.endtime)} on ${formatDate(opp.date)}</p>`
+        const buttons = document.createElement('div');
+        buttons.classList.add('sbutton');
+        const viewBtn = document.createElement('button');
+        viewBtn.textContent = `View`;
+        viewBtn.addEventListener('click', () => {
+            window.location.href = `volopportunity.html?oppid=${opp.opportunityid}`
+        })
+
+        imgDiv.appendChild(putImage);
+        buttons.appendChild(viewBtn);
+        infoDiv.appendChild(texts);
+        infoDiv.appendChild(buttons);
+        imgDiv.appendChild(infoDiv);
+        oppDiv.appendChild(imgDiv);
+    });
+}
+
+document.getElementById('searchRegion').addEventListener('change', filterOpp);
+document.getElementById('searchDate').addEventListener('change', filterOpp);
 
 displaySuggestedOpp();
 addKeywords();
