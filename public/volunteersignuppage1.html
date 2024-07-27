@@ -9,14 +9,6 @@
     <link href="styles/style.css" rel="stylesheet">
     <title>Volunteezy | Volunteer Signup</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-    <style>
-        .step {
-            display: none;
-        }
-        .step.active {
-            display: block;
-        }
-    </style>
 </head>
 <body>
     <h1 class="text-center" style="color: #CCCC00">Volunteezy</h1>
@@ -56,16 +48,18 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="skills">Skills</label>
-                                    <select class="form-control" id="skills" required>
-                                        <option value="">Select your skill</option>
-                                        <option value="communication">Communication</option>
-                                        <option value="teamwork">Teamwork</option>
-                                        <option value="friendly">Friendly</option>
-                                        <option value="tech">Tech</option>
-                                        <option value="physical">Physical</option>
-                                        <option value="leadership">Leadership</option>
-                                        <option value="time-management">Time Management</option>
-                                    </select>
+                                    <div class="dropdown-multiselect" id="skillsDropdown">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" onclick="toggleDropdown()">Select Skills</button>
+                                        <div class="dropdown-multiselect-content">
+                                            <label><input type="checkbox" value="Communication"> Communication</label>
+                                            <label><input type="checkbox" value="Teamwork"> Teamwork</label>
+                                            <label><input type="checkbox" value="Friendly"> Friendly</label>
+                                            <label><input type="checkbox" value="Tech"> Tech</label>
+                                            <label><input type="checkbox" value="Physical"> Physical</label>
+                                            <label><input type="checkbox" value="Leadership"> Leadership</label>
+                                            <label><input type="checkbox" value="Time management"> Time Management</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="dob">Date of Birth</label>
@@ -82,7 +76,6 @@
     </div>
     <div class="login-link">
         <a aria-current="page" href="/login/volunteer">Log In</a>
-
     </div>
     
     <script src="scripts/volSignUpscript.js"></script>

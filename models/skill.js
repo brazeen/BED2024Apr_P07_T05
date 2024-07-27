@@ -2,25 +2,44 @@ const sql = require("mssql")
 const dbConfig = require("../dbConfig");
 
 class Skill {
-    constructor(skillid, skillname) {
+    constructor(skillid, skillname, volunteerid) {
+        this.volunteerid = volunteerid
         this.skillid = skillid;
         this.skillname = skillname;
     }
 
-    static async getAllSkills() {
+    static async getSkillIdByName(skillname) {
         const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `SELECT * FROM Skills`; //code to get all volunteers
-
+    
+        const sqlQuery = `SELECT * FROM Skills WHERE skillname = @skillname`;
         const request = connection.request();
+        console.log("skillname:", skillname)
+        request.input("skillname", sql.NVarChar, skillname); // Use appropriate SQL type
+    
         const result = await request.query(sqlQuery);
-
+    
         connection.close();
-
+    
         return result.recordset.map(
-            (row) => new Skill(row.skillid, row.skillname)
-        ) //convert rows to volunteers
+          (row) => new Skill(row.skillid, row.skillname)
+        ); // Convert rows to Skill instances
     }
+
+    static async createVolunteerSkills(newVolunteerData) {
+        const connection = await sql.connect(dbConfig);
+    
+        const sqlQuery = `INSERT INTO VolunteerSkills (skillid, volunteerid) VALUES (@skillid, @volunteerid)`;
+    
+        const request = connection.request(); // Ensure `request` is created
+        request.input("volunteerid", sql.Int, newVolunteerData.volunteerid); // Specify SQL data type
+        request.input("skillid", sql.Int, newVolunteerData.skillid); // Specify SQL data type
+    
+        const result = await request.query(sqlQuery);
+        connection.close();
+    
+        return result;
+    }
+    
 
     static async createOppSkills(newOppSkills) {
         const connection = await sql.connect(dbConfig);
@@ -77,7 +96,12 @@ class Skill {
     }
 
 
-}
+    }
+
+
+   
+
+
 
 
 

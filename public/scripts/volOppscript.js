@@ -2,13 +2,15 @@ const token = localStorage.getItem('token');
 if (!token) {
     window.location.href = '/login'; //replace with the main login page BUT IT HASNT BEEN MADE 
 }
-let currentVolunteerId = localStorage.getItem("id");
+const currentVolunteerId = localStorage.getItem("volunteerid");
 console.log("volunteer id:", currentVolunteerId)
 //initialize ngoId first
 let ngoId;
 const urlParams = new URLSearchParams(window.location.search)
 const currentOpportunityId = urlParams.get('oppid')
+
 console.log("ngoId:", ngoId);
+
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
 const chatButton = document.querySelector(".chat-button");
@@ -19,14 +21,12 @@ const chatButton = document.querySelector(".chat-button");
         const opportunity = { ngoid: currentOpportunityId }; // Assuming you have the opportunity details
         await fetchNGOInOpportunity(opportunity);
 
-        // Set volid to 1 first since localStorage doesn't work yet
-        currentVolunteerId = 1;
-        console.log("current vol id:", currentVolunteerId);
         console.log("current ngoid:", ngoId);
 
         chatButton.addEventListener("click", async () => {
             const bool = await checkForExistingChat(currentVolunteerId, ngoId);
             //if bool = false, chat hasn't been created so create chat
+            console.log("bool", bool)
             if (bool === false) {
                 await createChat(currentVolunteerId, ngoId);
                 window.location.href = "volmessage.html";
@@ -41,6 +41,7 @@ const chatButton = document.querySelector(".chat-button");
 })();
 
 async function checkForExistingChat(volunteerId, ngoId) {
+    console.log("volunteer id check:", volunteerId)
     try {
         // Fetch chat history
         const chatResponse = await fetch(`/volunteers/chats/${volunteerId}`, {
@@ -55,6 +56,7 @@ async function checkForExistingChat(volunteerId, ngoId) {
 
         const chatData = await chatResponse.json();
         const chats = chatData.chats;
+        console.log("chats:", chats)
         //set bool to false first
         let bool = false;
 

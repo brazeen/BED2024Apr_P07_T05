@@ -1,3 +1,4 @@
+const dbConfig = require("../dbConfig");
 const Skill = require("../models/skill");
 
 //donovan
@@ -42,10 +43,38 @@ const getOpportunitySkillsById = async (req, res) => {
     }
   };
 
+  const getSkillIdByName = async (req, res) => {
+    try {
+      const { skillname } = req.params; // Assuming skillname is passed as a URL parameter
+      const skills = await Skill.getSkillIdByName(skillname);
+      res.json(skills);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving skills");
+    }
+  };
+
+
+  const createVolunteerSkills = async (req, res) => {
+    const newVolunteerData = req.body;
+    try {
+        // Ensure `createVolunteerSkills` method is correctly called
+        const createdVolunteerSkill = await Skill.createVolunteerSkills(newVolunteerData);
+        res.status(201).json(createdVolunteerSkill); // Return created skill data or a success message
+    } catch (error) {
+        console.error('Error creating volunteer skill:', error);
+        res.status(500).send("Error creating volunteer skill");
+    }
+};
+
+
+
 
 
 module.exports = {
     createOppSkills,
+    createVolunteerSkills,
+    getSkillIdByName,
     updateOppSkills,
     getOpportunitySkillsById
 }

@@ -7,8 +7,6 @@ const validateVolunteer = (req, res, next) => {
     bio: Joi.string().max(255).required(),
     dateofbirth: Joi.date().less('now').required(),
     password: Joi.string().min(3).required(),
-    skills: Joi.string().required()
-    //skills: Joi.array().items(Joi.string()).required()
   }, { unknown: true });
 
   const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body

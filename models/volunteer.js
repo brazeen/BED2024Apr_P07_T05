@@ -13,6 +13,20 @@ class Volunteer {
         this.profilepicture = profilepicture;
     }
 
+    static async getMaxVolunteerId() {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT MAX(volunteerid) AS maxVolunteerId FROM Volunteers`; // Get the max volunteerid
+
+        const request = connection.request();
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        // Extract and return the maximum volunteerid from the result
+        return result.recordset[0].maxVolunteerId;
+    }
+
     //brandon
     static async getAllVolunteers() {
         const connection = await sql.connect(dbConfig);
