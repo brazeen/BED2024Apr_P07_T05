@@ -1,5 +1,4 @@
 //donovan
-
 //To format time (example: 05:30 PM)
 function formatTimeRange(startTimeString, endTimeString) {
     const startTime = new Date(startTimeString);
@@ -100,7 +99,6 @@ async function displaySuggestedOpp() {
         texts.innerHTML = `<h2 style="font-size: 20px; font-weight: bold;">${opp.title}</h2>
                             <p style="color: #666;">${opp.address}</p>
                             <p style="font-size: 14px; color: #888;">${formatTimeRange(opp.starttime, opp.endtime)} on ${formatDate(opp.date)}</p>`
-        
         const buttons = document.createElement('div');
         buttons.classList.add('sbutton');
         const viewBtn = document.createElement('button');
@@ -142,3 +140,4 @@ async function filterOpp() {
 
 displaySuggestedOpp();
 addKeywords();
+

@@ -12,10 +12,10 @@ const skillcontroller = require("./controllers/skillcontroller")
 const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
+const validateVolunteer = require('./middlewares/validateVolunteer');
+const validateNGO = require('./middlewares/validateNGO');
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json"); // Import generated spec
-
-
 
 require("dotenv").config()
 
@@ -39,31 +39,35 @@ app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
-app.post("/volunteers", verifyJWT,volunteercontroller.registerVolunteer);
-app.put("/volunteers/:id", verifyJWT,volunteercontroller.updateVolunteer);
+app.post("/volunteers", validateVolunteer,volunteercontroller.registerVolunteer);
+app.put("/volunteers/:id", verifyJWT, validateVolunteer, volunteercontroller.updateVolunteer);
 app.post("/volunteers/login", volunteercontroller.loginVolunteer);
 app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
 app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteerPassword);
 app.patch('/volunteers/changepw/:id/:pw', verifyJWT,volunteercontroller.changePassword);
 app.post("/volunteers/:id/:pw", verifyJWT,volunteercontroller.comparePassword);
 app.get("/volunteers/search/user", verifyJWT, volunteercontroller.searchVolunteers)
-app.get('/volunteers/:id/messages', chatcontroller.getVolunteerMessages);
-app.get('/volunteers/chats/:id', chatcontroller.getVolunteerChats);
+app.get('/volunteers/:id/messages', verifyJWT,chatcontroller.getVolunteerMessages); // verifyjwt to be added
+app.get('/volunteers/chats/:id', verifyJWT,chatcontroller.getVolunteerChats);
+app.post('/volunteers/createMessage', verifyJWT,chatcontroller.createMessage); // verifyjwt to be added
 
 
 // NGO routes
 app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
 app.get("/ngos/status/:status", verifyJWT,ngocontroller.getNGOsByStatus); // status must be R, A or P
 app.get("/ngos/:id", verifyJWT,ngocontroller.getNGOById);
-app.put("/ngos/:id", verifyJWT,ngocontroller.updateNGO);
+app.put("/ngos/:id", verifyJWT, validateNGO, ngocontroller.updateNGO);
 app.patch("/ngos/:id/:status", verifyJWT,ngocontroller.updateNGOStatus);
 app.delete("/ngos/:id", verifyJWT,ngocontroller.deleteNGO);
 app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.updateNGOLogo);
 app.patch('/ngos/changepw/:id/:pw', verifyJWT,ngocontroller.changePassword)
 app.post("/ngos/:id/:pw", verifyJWT,ngocontroller.comparePassword)
 app.get("/ngos/search/user", verifyJWT, ngocontroller.searchAcceptedNGOs)
-app.post("/ngos", ngocontroller.registerNGO);
-app.post('/ngo/login', ngocontroller.loginNGO);
+app.post("/ngos", validateNGO, ngocontroller.registerNGO);
+app.get('/ngos/:id/messages', verifyJWT,chatcontroller.getNgoMessages); // verifyjwt to be added
+app.get('/ngos/chats/:id', verifyJWT,chatcontroller.getNgoChats);
+app.post('/ngos/createMessage', verifyJWT,chatcontroller.createMessage); // verifyjwt to be added
+app.post('/ngos/login', ngocontroller.loginNGO);
 
 // Application routes
 app.get("/applications/:id", verifyJWT,applicationcontroller.getApplicationById); // by applicationid

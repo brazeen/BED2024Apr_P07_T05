@@ -146,61 +146,7 @@ class Application {
 
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
-/*
-    static async getAllVolunteers() {
-        const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Volunteers`; //code to get all volunteers
-
-        const request = connection.request();
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset.map(
-            (row) => new Volunteer(row.id, row.name, row.email, row.password, row.bio, row.dateofbirth, row.profilepicture)
-        ) //convert rows to volunteers
-    }
-
-    
-    
-
-    static async createBook(newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `INSERT INTO Books (title, author) VALUES (@title, @author); SELECT SCOPE_IDENTITY() AS id;`
-
-        const request = connection.request()
-        request.input("title", newBookData.title)
-        request.input("author", newBookData.author)
-
-        const result = await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(result.recordset[0].id)
-
-    }
-
-    static async updateBook(id, newBookData) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Books SET title = @title, author = @author WHERE id = @id`
-
-        const request = connection.request()
-        request.input("id", id)
-        request.input("title", newBookData.title || null)
-        request.input("author", newBookData.author || null)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getBookById(id)
-    }
-
-    
-        */
 }
 
 

@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const Volunteer = require("../models/volunteer");
-const path = require('path');
 
 //brandon
 const getAllVolunteers = async (req, res) => {
@@ -127,17 +126,11 @@ const updateVolunteerPassword = async (req, res) => {
 }
 
 async function registerVolunteer(req, res) {
-  const { name, email, password, bio, skills, dateofbirth, profilepicture } = req.body;
-  const relativePath = path.join('./public/images', `${name}_profile.jpg`);
+  const { name, email, password, bio, skills, dateofbirth } = req.body;
   try {
     // Validate user data
     if (String(password).length < 5) {
       return res.status(400).json({ message: "Password too short" });
-    }
-    // Check for existing username
-    const existingVolunteer = await Volunteer.getVolunteerByName(name);
-    if (existingVolunteer) {
-      return res.status(400).json({ message: "Username already exists" });
     }
     //check for existing email
     const existingVolunteerByEmail = await Volunteer.getVolunteerByEmail(email);
@@ -149,7 +142,7 @@ async function registerVolunteer(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log(hashedPassword);
-    const newVolunteer = {name: name, email: email, passwordHash: hashedPassword, bio: bio, skills: skills, dateofbirth: dateofbirth, profilepicture: relativePath }
+    const newVolunteer = {name: name, email: email, passwordHash: hashedPassword, bio: bio, skills: skills, dateofbirth: dateofbirth }
     const createdVolunteer = await Volunteer.createVolunteer(newVolunteer);
     return res.status(201).json({ message: "Volunteer created successfully" });
   } catch (err) {

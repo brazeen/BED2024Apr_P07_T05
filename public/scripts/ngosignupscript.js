@@ -58,8 +58,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const contactperson = document.getElementById('cperson').value;
     const contactnumber = document.getElementById('cno').value;
     const address = document.getElementById('address').value;
-    const logo = document.getElementById('logo').files[0];
-
+    let logo; 
+    
     const data = {
         name,
         email,
@@ -82,7 +82,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     .then(response => response.json())
     .then(data => {
         if (data.message === 'NGO created successfully') {
-            alert('NGO signed up successfully!');
+            alert('NGO signed up successfully! Your application will be reviewed by an admin.');
             document.getElementById('registrationForm').reset();
             window.location.href = 'ngologinpage.html';
         } else {

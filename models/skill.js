@@ -31,6 +31,7 @@ class Skill {
         request.input("skillname", newOppSkills.skillid);
         request.input("opportunityid", newOppSkills.opportunityid);
 
+
         const result = await request.query(sqlQuery);
 
         connection.close();
@@ -72,6 +73,12 @@ class Skill {
             )
             : null; //not found
     }
+
+
+    }
+
+
+   
 
 }
 

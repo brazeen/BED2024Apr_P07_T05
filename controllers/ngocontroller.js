@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const path = require('path');
 const NGO = require("../models/ngo")
+const sendEmail = require("../models/email")
+
 
 const getAllNGOs = async (req, res) => {
     try {
@@ -64,7 +65,14 @@ const updateNGOStatus = async (req, res) => {
           return res.status(404).send("NGO not found");
         }   
         else {
-            return res.status(200).send("NGO status updated")
+          if (status == "A") {
+            sendEmail(ngo.email, "Congratulations! Your NGO has been accepted into Volunteezy", "We are pleased to inform you that your application to join the Volunteezy platform has been approved.\nYou can now log in to your Volunteezy account and start using our platform to connect with volunteers and manage your organization's initiatives.\nWe look forward to working with you!\nSincerely,\nThe Volunteezy Team")
+          }
+          else if (status == "R") {
+            sendEmail(ngo.email, "Application for Volunteezy Platform", "Thank you for your interest in joining the Volunteezy platform.\nUnfortunately, we are unable to approve your application at this time.\nWe appreciate you considering Volunteezy and encourage you to reapply in the future.\nSincerely,\nThe Volunteezy Team")
+          }
+          
+          return res.status(200).send("NGO status updated")
         }    
     }
     catch(error) {
@@ -163,6 +171,10 @@ async function loginNGO(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    if (ngo.status!= "A") {
+      return res.status(403).json({ message: "Not accepted into platform by admin" })
+    }
+
     // Generate JWT token
     const payload = {
       id: ngo.ngoid,
@@ -232,8 +244,7 @@ const createNGO = async (req, res) => {
 
 
 async function registerNGO(req, res) {
-  const { name, email, password, description, contactperson, contactnumber, address, logo , status} = req.body;
-  const relativePath = path.join('./public/images', `${name}_logo.jpg`);
+  const { name, email, password, description, contactperson, contactnumber, address , status} = req.body;
   try {
     // Validate user data
     if (String(password).length < 5) {
@@ -254,7 +265,7 @@ async function registerNGO(req, res) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     console.log(hashedPassword);
-    const newNGO = {name: name, email: email, passwordHash: hashedPassword, description: description, contactperson: contactperson, contactnumber: contactnumber, address: address, logo: relativePath, status: status}
+    const newNGO = {name: name, email: email, passwordHash: hashedPassword, description: description, contactperson: contactperson, contactnumber: contactnumber, address: address, status: status}
     const createdNGO = await NGO.createNGO(newNGO);
     return res.status(201).json({ message: "NGO created successfully" });
   } catch (err) {
@@ -277,25 +288,6 @@ const getNGOByName = async (req, res) => {
   }
 };
 
-/*
-
-
-const createBook = async (req, res) => {
-    const newBook = req.body;
-    try {
-        const createdBook = await Book.createBook(newBook)
-        res.status(201).json(createdBook)
-    }
-    catch(error) {
-        res.status(500).send("Error creating book")
-    }
-}
-
-
-
-
-
-*/
 
 module.exports = {
     getAllNGOs,
@@ -313,3 +305,8 @@ module.exports = {
     registerNGO,
     getNGOByName
 }
+
+
+
+
+
