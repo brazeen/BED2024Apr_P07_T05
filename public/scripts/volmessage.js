@@ -29,11 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("chatitem:", chatItem)
             const ngoId = chatItem.dataset.chatId;
             const chatName = chatItem.dataset.chatName;
-            const chatAvatar = chatItem.dataset.chatAvatar;
             console.log(`Chat clicked: ${chatName} (ID: ${ngoId})`);
 
             // Update the chat header with the selected chat details
-            updateChatHeader(chatName, chatAvatar);
+            updateChatHeader(chatName);
 
             // Load messages for the selected chat
             await loadMessagesForChat(ngoId, volunteerId, token, senderName);
@@ -151,13 +150,11 @@ function displayChatHistory(chats) {
 }
 
 
-function updateChatHeader(name, avatar) {
+function updateChatHeader(name) {
     const chatHeader = document.querySelector('.chat-header');
     const chatHeaderName = chatHeader.querySelector('.chat-header-name');
-    const chatHeaderAvatar = chatHeader.querySelector('.chat-header-avatar');
 
     chatHeaderName.textContent = name;
-    chatHeaderAvatar.src = avatar;
 }
 
 function formatDateTime(dateTime) {
