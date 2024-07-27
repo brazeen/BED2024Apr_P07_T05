@@ -1,5 +1,35 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+require("dotenv").config()
+
+/*const { Configuration, OpenAIApi } = require("openai");
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY, // Make sure to set your OpenAI API key in your environment variables
+});
+
+const openai = new OpenAIApi(configuration);
+
+(async () => {
+    try {
+        const response = await openai.createChatCompletion({
+            model: "gpt-4-turbo",
+            messages: [
+                { role: "system", content: "You are a helpful assistant." },
+                { role: "user", content: "Hello, how can you assist me today?" }
+            ],
+            max_tokens: 100,
+            n: 1,
+            stop: null,
+            temperature: 0.7,
+        });
+        
+        console.log(response.data.choices[0].message.content);
+    } catch (error) {
+        console.error("Error creating chat completion:", error);
+    }
+})();*/
+
 
 class Chat {
     constructor(messageid, volunteerid, ngoid, content, timestamp, senderName) {
