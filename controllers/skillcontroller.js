@@ -2,27 +2,50 @@ const Skill = require("../models/skill");
 
 //donovan
 const createOppSkills = async (req, res) => {
-    const newOppSkills = req.body;
-    try {
-        const connection = await sql.connect(dbConfig);
-        const request = connection.request();
-        request.input("skillid", newOppSkills.skillid); 
-        request.input("opportunityid", newOppSkills.opportunityid);
-    
-        const result = await request.query(`
-          INSERT INTO OpportunitySkills (skillid, opportunityid) 
-          VALUES (@skillid, @opportunityid)
-        `);
-    
-        connection.close();
-        res.status(201).json(result); 
-      } catch (error) {
-        res.status(500).send("Error creating opportunity skills: " + error);
-      }
+  const newOppSkills = req.body;
+  try {
+      const createdOppSkills = await Skill.createOppSkills(newOppSkills)
+      res.status(201).json(createdOppSkills)
+  }
+  catch(error) {
+      res.status(500).send("Error creating opportunity skills")
+  }
 }
+
+const updateOppSkills = async (req, res) => {
+    const id = parseInt(req.params.id);
+    const newOppSkillsData = req.body;
+
+    try {
+        const updatedOppSkills = await Skill.updateOppSkills(id, newOppSkillsData);
+        if (!updatedOppSkills) {
+        return res.status(404).send("Opportunity skills not found");
+        }
+        res.json(updatedOppSkills);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error updating opportunity skills");
+    }
+}
+
+const getOpportunitySkillsById = async (req, res) => {
+    const opportunityid = req.params.id;
+    try {
+      const oppSkills = await Skill.getOpportunitySkillsById(opportunityid)
+      if (!oppSkills) {
+        return res.status(404).send("Opportunity skills not found")
+      }
+      res.json(oppSkills);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error retrieving Opportunity skills");
+    }
+  };
 
 
 
 module.exports = {
-    createOppSkills
+    createOppSkills,
+    updateOppSkills,
+    getOpportunitySkillsById
 }

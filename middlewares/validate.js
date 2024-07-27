@@ -57,7 +57,8 @@ function verifyJWT(req, res, next) {
             "/opportunities/increment/:id": ["admin", "ngo"],
             "/opportunities/skills/:id": ["admin", "ngo", "volunteer"],
 
-            "/skills": ["admin", "ngo"],
+            "/skills": ["admin", "ngo", "volunteer"],
+            "/skills/:id": ["admin", "ngo"],
             "/admin/dashboard": ["admin"],
             "/admin/applications": ["admin"],
 

@@ -1,3 +1,5 @@
+//donovan
+const token = localStorage.getItem("token")
 async function fetchCreatedOpp() {
     const urlParams = new URLSearchParams(window.location.search);
     const oppid = urlParams.get('id');
@@ -20,23 +22,66 @@ async function fetchCreatedOpp() {
     const address = document.getElementById("address");
     const age = document.getElementById("age");
     const maxvolunteers = document.getElementById("count");
-
-    try {
-    const response = await fetch(`/opportunities/${oppid}`);
-    if (!response.ok) {
-        throw new Error(`Error fetching opportunity details: ${response.status}`);
+    const region = document.getElementById("region");
+    var checkedSkills = [];
+    const skillCheckboxes = document.querySelectorAll('.form-check-input');
+    for (var checkbox of skillCheckboxes) {
+        checkbox.addEventListener('click', function(){
+            if (this.checked == true){
+                console.log(this.value);
+                checkedSkills.push(this.value);
+                console.log(checkedSkills);
+            }
+            else {
+                console.log("You unchecked this box");
+                checkedSkills = checkedSkills.filter(i => i !== this.value);
+                console.log(checkedSkills);
+            }
+        })
     }
 
-    const oppData = await response.json();
+    try {
+        const response = await fetch(`/opportunities/${oppid}`,{
+            method: 'GET',
+            headers: {
+                'content-type' :'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`Error fetching opportunity details: ${response.status}`);
+        }
 
-    document.getElementById('title').value = oppData.title;
-    document.getElementById('description').value = oppData.description;
-    document.getElementById('date').value = oppData.date.split('T')[0]; // Extract date part from ISO string
-    document.getElementById('time1').value = oppData.starttime.split('T')[1].substring(0, 5); // Extract time part (HH:mm)
-    document.getElementById('time2').value = oppData.endtime.split('T')[1].substring(0, 5); // Extract time part (HH:mm)
-    document.getElementById('address').value = oppData.address;
-    document.getElementById('age').value = oppData.age;
-    document.getElementById('count').value = oppData.maxvolunteers;
+        const oppData = await response.json();
+
+        document.getElementById('title').value = oppData.title;
+        document.getElementById('description').value = oppData.description;
+        document.getElementById('date').value = oppData.date.split('T')[0]; // Extract date part from ISO string
+        document.getElementById('time1').value = oppData.starttime.split('T')[1].substring(0, 5); // Extract time part (HH:mm)
+        document.getElementById('time2').value = oppData.endtime.split('T')[1].substring(0, 5); // Extract time part (HH:mm)
+        document.getElementById('address').value = oppData.address;
+        document.getElementById('age').value = oppData.age;
+        document.getElementById('count').value = oppData.maxvolunteers;
+        document.getElementById('region').value = oppData.region;
+        
+        const skillresponse = await fetch(`/skills/${oppid}`, {
+            method: 'GET',
+            headers: {
+                'content-type' :'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+        });
+
+        const skillData = await skillresponse.json();
+        console.log(skillData);
+        const skillsArray = Array.isArray(skillData) ? skillData : [];
+        skillsArray.forEach(value => {
+            const checkbox = document.querySelector(`input[value="${value.skillname}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+                checkedSkills.push(value.skillname);
+            }
+    });
 
     }
     catch (error) {
@@ -55,12 +100,13 @@ async function fetchCreatedOpp() {
         description: description.value,
         date: date.value,
         starttime: starttime.value,
-        region: 'west',
+        region: region.value,
         endtime: endtime.value,
         address: address.value,
         age: age.value,
         maxvolunteers: maxvolunteers.value,
         currentVolunteers: 0,
+        skills: checkedSkills
     };
 
     //Input validation
@@ -69,6 +115,7 @@ async function fetchCreatedOpp() {
     date.value === "" ||
     starttime.value === "" ||
     endtime.value === "" ||
+    region.value === "" ||
     address.value.trim() === "" ||
     age.value === "" ||
     maxvolunteers.value === ""
@@ -89,11 +136,33 @@ async function fetchCreatedOpp() {
     try {
         const response = await fetch(`/opportunities/${oppid}`, {
         method: 'PUT',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json' ,
+            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        },
         body: JSON.stringify(updatedOpportunity)
         });
 
         if (response.ok) {
+            for (const skillName of checkedSkills) {
+                const oppSkillData = {
+                    skillid: skillName,  // Use skill name
+                    opportunityid: oppid
+                };
+
+                // Update each skill
+                const updateSkillsResponse = await fetch(`/skills/${oppid}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'content-type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(oppSkillData)
+                });
+
+                if (!updateSkillsResponse.ok) {
+                    throw new Error(`Error updating skill: ${updateSkillsResponse.status}`);
+                }
+            }
         alert('Opportunity updated successfully!');
         window.location.href = 'ngodashboard.html'; // Redirect to dashboard
         } else {
