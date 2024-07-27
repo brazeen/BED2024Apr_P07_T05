@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const Volunteer = require("../models/volunteer");
-const path = require('path');
 
 //brandon
 const getAllVolunteers = async (req, res) => {

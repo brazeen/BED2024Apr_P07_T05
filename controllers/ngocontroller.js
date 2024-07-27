@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const path = require('path');
 const NGO = require("../models/ngo")
+const sendEmail = require("../models/email")
+
 
 const getAllNGOs = async (req, res) => {
     try {
@@ -64,7 +65,14 @@ const updateNGOStatus = async (req, res) => {
           return res.status(404).send("NGO not found");
         }   
         else {
-            return res.status(200).send("NGO status updated")
+          if (status == "A") {
+            sendEmail(ngo.email, "Congratulations! Your NGO has been accepted into Volunteezy", "We are pleased to inform you that your application to join the Volunteezy platform has been approved.\nYou can now log in to your Volunteezy account and start using our platform to connect with volunteers and manage your organization's initiatives.\nWe look forward to working with you!\nSincerely,\nThe Volunteezy Team")
+          }
+          else if (status == "R") {
+            sendEmail(ngo.email, "Application for Volunteezy Platform", "Thank you for your interest in joining the Volunteezy platform.\nUnfortunately, we are unable to approve your application at this time.\nWe appreciate you considering Volunteezy and encourage you to reapply in the future.\nSincerely,\nThe Volunteezy Team")
+          }
+          
+          return res.status(200).send("NGO status updated")
         }    
     }
     catch(error) {
@@ -297,3 +305,8 @@ module.exports = {
     registerNGO,
     getNGOByName
 }
+
+
+
+
+
