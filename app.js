@@ -35,6 +35,7 @@ app.get('/users/validate', verifyJWT, (req, res) => {
 });
 
 // Volunteer routes
+app.get("/volunteers/maxid", volunteercontroller.getMaxVolunteerId)
 app.get("/volunteers", verifyJWT, volunteercontroller.getAllVolunteers)
 app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
@@ -90,6 +91,8 @@ app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity)
 app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
 
 //skill routes
+app.get("/skills/:skillname", skillcontroller.getSkillIdByName);
+app.post("/skills/createVolunteerSkills", skillcontroller.createVolunteerSkills)
 app.post("/skills", verifyJWT,skillcontroller.createOppSkills);
 app.put("/skills/:id", verifyJWT, skillcontroller.updateOppSkills);
 app.get("/skills/:id", verifyJWT, skillcontroller.getOpportunitySkillsById);
