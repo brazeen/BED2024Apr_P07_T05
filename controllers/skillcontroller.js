@@ -1,3 +1,4 @@
+const dbConfig = require("../dbConfig");
 const Skill = require("../models/skill");
 
 //donovan
@@ -21,8 +22,33 @@ const createOppSkills = async (req, res) => {
       }
 }
 
+const getAllSkills = async (req, res) => {
+  try {
+    const skills = await Skill.getAllSkills()
+    res.json(skills)
+}
+  catch(error) {
+    console.error(error)
+    res.status(500).send("Error retrieving skills")
+}
+}
+
+const createVolunteerSkills = async (req, res) => {
+  const newVolunteerData = req.body;
+  try {
+      const createdVolunteerSkill = await Skill.createVolunteerSkills(newVolunteerData)
+      res.status(201).json(newVolunteerData)
+  }
+  catch(error) {
+      res.status(500).send("Error creating volunteer skill")
+  }
+}
+
+
 
 
 module.exports = {
-    createOppSkills
+    createOppSkills,
+    createVolunteerSkills,
+    getAllSkills
 }
