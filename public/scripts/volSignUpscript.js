@@ -62,8 +62,12 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const bio = document.getElementById('bio').value;
     const dateofbirth = document.getElementById('dob').value;
 
+    // Check if at least one skill is selected
     const selectedSkills = Array.from(document.querySelectorAll('#skillsDropdown input:checked')).map(option => option.value);
-    console.log(selectedSkills);
+    if (selectedSkills.length === 0) {
+        showAlert('Please select at least one skill.');
+        return;
+    }
 
     const skillIds = [];
 
