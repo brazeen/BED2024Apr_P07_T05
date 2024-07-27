@@ -69,8 +69,8 @@ async function addKeywords() {
 }
 //search bar show prompts when have input
 function showPrompts() {
-    const resultsBox = document.querySelector(".result-box");
-    const inputBox = document.getElementById("input-box");
+    const resultsBox = document.querySelector(".result-box"); //the part where prompts will appear
+    const inputBox = document.getElementById("input-box"); //the part where user types
     let ul = document.querySelector("ul");
 
     inputBox.onkeyup = function() {
@@ -144,13 +144,13 @@ async function displaySuggestedOpp() {
         imgDiv.appendChild(infoDiv);
         oppDiv.appendChild(imgDiv);
     })
-    filterOpp();
+    filterOpp(); //filter
 }
 
 async function filterOpp() {
-    const opportunities = await fetchOpportunities();
-    const regionSelect = document.getElementById('searchRegion');
-    const dateSelect = document.getElementById('searchDate');
+    const opportunities = await fetchOpportunities(); //call method to get opportunities
+    const regionSelect = document.getElementById('searchRegion'); //region filter button
+    const dateSelect = document.getElementById('searchDate'); //date filter button
 
     const selectedRegion = regionSelect.value;
     const selectedDate = dateSelect.value;
@@ -158,15 +158,15 @@ async function filterOpp() {
     let filteredOpportunities = opportunities;
 
     //filter based on region (north south east west)
-    if (selectedRegion && selectedRegion !== "Region") {
+    if (selectedRegion && selectedRegion !== "Region") { //if value is Region, no filter will occur
         filteredOpportunities = filteredOpportunities.filter(opp => opp.region.toLowerCase() === selectedRegion.toLowerCase());
     }
 
     //filter based on earliest dates
-    if (selectedDate === 'newest') {
-        filteredOpportunities.sort((a, b) => new Date(a.date) - new Date(b.date));
-    } else if (selectedDate === 'oldest') {
-        filteredOpportunities.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (selectedDate === 'Dec') {
+        filteredOpportunities.sort((a, b) => new Date(b.date) - new Date(a.date)); //Dec - Jan
+    } else if (selectedDate === 'Jan') {
+        filteredOpportunities.sort((a, b) => new Date(a.date) - new Date(b.date)); //Jan - Dec
     }
 
     displayFilteredOpportunities(filteredOpportunities);
@@ -176,10 +176,10 @@ function displayFilteredOpportunities(opportunities) {
     const oppDiv = document.querySelector(".suggestedOpps");
     oppDiv.innerHTML = ''; // Clear previous opportunities
 
-    if (opportunities.length === 0) {
+    if (opportunities.length === 0) { //display 'no opportunities found' when no opportunities are shown based on filter
         const noOpportunitiesMessage = document.createElement('p');
         noOpportunitiesMessage.textContent = "No opportunities found.";
-        noOpportunitiesMessage.style.textAlign = "center";
+        noOpportunitiesMessage.style.textAlign = "center"; //center text
         oppDiv.appendChild(noOpportunitiesMessage);
     }
 
@@ -187,7 +187,7 @@ function displayFilteredOpportunities(opportunities) {
         const imgDiv = document.createElement('div');
         imgDiv.classList.add('sImage');
         const putImage = document.createElement('img');
-        putImage.src = `${opp.photo}`;
+        putImage.src = `${opp.photo}`; //image
         putImage.alt = 'Opportunity Image';
 
         const infoDiv = document.createElement('div');
@@ -215,7 +215,7 @@ function displayFilteredOpportunities(opportunities) {
     });
 }
 
-document.getElementById('searchRegion').addEventListener('change', filterOpp);
+document.getElementById('searchRegion').addEventListener('change', filterOpp); //filter to happen when there is a change of value in the buttons
 document.getElementById('searchDate').addEventListener('change', filterOpp);
 
 displaySuggestedOpp();

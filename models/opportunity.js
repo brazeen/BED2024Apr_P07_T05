@@ -34,6 +34,14 @@ class Opportunity {
     }
 
     static async createOpportunity(newOpp) {
+        if (!newOpp.photo) {
+            try {
+                newOpp.photo = await fetchRandomImage();
+            } catch (error) {
+                console.error('Error fetching image data:', error);
+                throw new Error('Error fetching image data');
+            }
+        }
         const connection = await sql.connect(dbConfig);
         //insert values
         const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers, photo) VALUES (@ngoid, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0, @photo); SELECT SCOPE_IDENTITY() AS opportunityid;`;
@@ -209,9 +217,64 @@ class Opportunity {
             ) //convert rows to opps
     }
 
+    static async createOppPhoto(id, imagepath) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE Opportunities SET photo = @photo WHERE opportunityid = @opportunityid;`
+
+        const request = connection.request()
+        request.input("opportunityid", id)
+        request.input("photo", imagepath)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getOpportunityById(id)
+    }
+
+    static async updateOppPhoto(id, imagepath) {
+        const connection = await sql.connect(dbConfig)
+
+        const sqlQuery = `UPDATE Opportunities SET photo = @photo WHERE opportunityid = @opportunityid;`
+
+        const request = connection.request()
+        request.input("opportunityid", id)
+        request.input("photo", imagepath)
+
+        await request.query(sqlQuery)
+
+        connection.close()
+
+        return this.getOpportunityById(id)
+    }
+
 }
 
 
 
 
 module.exports = Opportunity;
+
+async function fetchRandomImage() {
+    const url = 'https://api.unsplash.com/photos/random';
+    const accessKey = process.env.UNSPLASHACCESSKEY; 
+
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Client-ID ${accessKey}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.urls.regular; 
+    } catch (error) {
+        console.error('Error fetching random image:', error);
+        throw error;
+    }
+}

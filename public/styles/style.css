@@ -296,13 +296,13 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: center; /*center items */
 }
 
 #ngocreateMain form {
     margin: 0 auto;
     width: 80%;
-    max-width: 350px;
+    max-width: 350px; /* ensure all inputs boxes have same width*/
 }
 
 #ngocreateMain h1 {
@@ -310,7 +310,7 @@ nav {
 }
 
 #post-btn, .cancel-btn {
-    padding: 10px 20px;
+    padding: 10px 20px; /* spacing between buttons */
     font-size: 16px;
     border-radius: 5px;
     margin: 10px auto;
@@ -318,9 +318,9 @@ nav {
 
 #post-btn {
     border-width: 0.5px;
-    background: #FFEB3B;
+    background: #FFEB3B; /*button colour*/
     color:#000000;
-    transition: all ease-in-out 0.3s;
+    transition: all ease-in-out 0.3s; /* transition when hovering */
 }
 
 #post-btn:hover {
@@ -332,7 +332,7 @@ nav {
     background-color: #f44336;
     border-width: 0.5px;
     color:#000000;
-    transition: all ease-in-out 0.3s;
+    transition: all ease-in-out 0.3s; /* transition when hovering */
 }
 
 .cancel-btn:hover {
@@ -349,7 +349,7 @@ nav {
 }
 
 #age, #count {
-    width: 100px;
+    width: 100px; /* shorter input box as the numbers don't really need much space*/
 }
 
 #description {
@@ -357,7 +357,7 @@ nav {
     height: 150px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) { /*responsiveness*/
     #ngocreateMain {
         width: 90%; /* Make the container take up more width on smaller screens */
         margin: 10px auto; /* Reduce margin for more space */
@@ -384,7 +384,7 @@ nav {
     padding: 50px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* center align all*/
 }
 
 #ngodashMain h1{
@@ -393,16 +393,16 @@ nav {
 
 .dashHeading {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /*text to be aligned in a row*/
     margin-right: 20px;
 }
 
-.dashHeading svg {
+.dashHeading svg { /*plus icon adjustment to align with Heading*/
     margin-left: 20px;
     margin-top: 5px;
 }
 
-.dashHeading svg :hover{
+.dashHeading svg :hover{ /*show a different appearance in colour when hover*/
     margin-left: 20px;
     margin-top: 5px;
     cursor: pointer;
@@ -412,32 +412,32 @@ nav {
 .dashContent {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: column; /*every opportunity are aligned in a column*/
     width: 45%;
     border: 0.1px solid black;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* border colour*/
     padding: 20px;
     margin: 20px auto;
 }
 
-.dashContentClick {
+.dashContentClick { /*each opportunity item*/
     display: flex;
     align-items: center;
     margin-top: 20px;
     width: 85%;
     border: 0.1px solid black;
     border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* border to separate opportunities*/
     margin-left: 50px;
     margin-bottom: 20px;
     padding: 10px;
-    transition: all ease-in-out 0.3s;
+    transition: all ease-in-out 0.3s; /*hover appearance*/
 }
 
 .dashContentClick:hover {
     cursor: pointer;
-    background-color: #cccccc;
+    background-color: #cccccc; /*slight highlight of opportunity when hovered*/
 }
 
 .dashDate {
@@ -912,7 +912,7 @@ body {
     background-color: #c0c700;
 }
 /*---------------volsearch.html---------------*/
-
+/*for search input box*/
 .searchMain {
     margin: 0;
     padding: 0;
@@ -921,7 +921,7 @@ body {
 
 .search-bar {
     width: 600px;
-    background: #ded6d6;
+    background: #ded6d6; /*colour of search bar*/
     margin: 100px auto 100px;
     border-radius: 10px;
 }
@@ -939,7 +939,7 @@ body {
     border: 0;
     outline: 0;
     font-size: 18px;
-    color: black
+    color: black /*text colour*/
 }
 
 .search-row button {
@@ -951,14 +951,14 @@ body {
 .search-row button:hover {
     color: white;
 }
-
+/* for search results box where prompts appear*/
 .result-box {
     max-height: 200px;
     overflow-y: scroll; /* Allow vertical scrolling if results overflow */
 }
 
 .result-box ul{
-    border-top: 1px solid #999;
+    border-top: 1px solid #999; /*to separate prompts from actual search bar*/
     padding: 15px 10px;
 }
 
@@ -977,7 +977,7 @@ body {
     background: #ddd;
     transition: all ease-in-out 0.3s;
 }
-
+/*gignite.ai css style moved here*/
 .sImage {
     display: flex; 
     flex-direction: row; 

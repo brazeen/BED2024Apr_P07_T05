@@ -23,6 +23,7 @@ async function fetchCreatedOpp() {
     const age = document.getElementById("age");
     const maxvolunteers = document.getElementById("count");
     const region = document.getElementById("region");
+    const photo = document.getElementById("photo");
     var checkedSkills = [];
     const skillCheckboxes = document.querySelectorAll('.form-check-input');
     for (var checkbox of skillCheckboxes) {
@@ -53,6 +54,7 @@ async function fetchCreatedOpp() {
         }
 
         const oppData = await response.json();
+        console.log(oppData);
 
         document.getElementById('title').value = oppData.title;
         document.getElementById('description').value = oppData.description;
@@ -63,6 +65,7 @@ async function fetchCreatedOpp() {
         document.getElementById('age').value = oppData.age;
         document.getElementById('count').value = oppData.maxvolunteers;
         document.getElementById('region').value = oppData.region;
+        document.getElementById('photo').src = oppData.photo;
         
         const skillresponse = await fetch(`/skills/${oppid}`, {
             method: 'GET',
@@ -91,7 +94,7 @@ async function fetchCreatedOpp() {
     const updateBtn = document.getElementById('post-btn');
     updateBtn.addEventListener('click', async (event) => {
     event.preventDefault();
-    
+
     // Collect updated opportunity data from the form
     const updatedOpportunity = {
         opportunityid: oppid,
@@ -106,6 +109,7 @@ async function fetchCreatedOpp() {
         age: age.value,
         maxvolunteers: maxvolunteers.value,
         currentVolunteers: 0,
+        photo: '',
         skills: checkedSkills
     };
 
@@ -143,6 +147,37 @@ async function fetchCreatedOpp() {
         });
 
         if (response.ok) {
+
+            if (photo.length > 0) {
+                const formData = new FormData();
+                formData.append('photo', photo.files[0]);
+                Object.entries(updatedOpportunity).forEach(([key, value]) => {
+                    if (key != "opportunityid") {
+                        formData.append(key, value);
+                    }
+                    
+                });
+
+                const photoResponse = await fetch(`/opportunities/photo/${oppid}`, {
+                    method: 'PUT',
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    }
+                });
+                
+                if (photoResponse.ok) {
+                    const photoData = await photoResponse.json();
+                    console.log("photoData:", photoData)
+                    updatedOpportunity.photo = photoData.photo; // update photo with the new profile picture path
+                    console.log("Updated photo:", updatedOpportunity.photo); // Log the updated photo
+                }
+                else {
+                    alert("Failed to upload photo.");
+                    return;
+                }
+            }
+
             for (const skillName of checkedSkills) {
                 const oppSkillData = {
                     skillid: skillName,  // Use skill name

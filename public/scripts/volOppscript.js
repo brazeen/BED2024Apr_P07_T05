@@ -8,6 +8,9 @@ console.log("volunteer id:", currentVolunteerId)
 let ngoId;
 const urlParams = new URLSearchParams(window.location.search)
 const currentOpportunityId = urlParams.get('oppid')
+
+console.log("ngoId:", ngoId);
+
 const applyButton = document.querySelector(".apply-button")
 applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
 const chatButton = document.querySelector(".chat-button");

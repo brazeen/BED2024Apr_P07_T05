@@ -12,6 +12,7 @@ const skillcontroller = require("./controllers/skillcontroller")
 const verifyJWT = require("./middlewares/validate")
 const volupload = require('./middlewares/volupload');
 const ngoupload = require('./middlewares/ngoupload');
+const oppupload = require('./middlewares/oppupload');
 const validateVolunteer = require('./middlewares/validateVolunteer');
 const validateNGO = require('./middlewares/validateNGO');
 const swaggerUi = require("swagger-ui-express");
@@ -89,6 +90,8 @@ app.patch("/opportunities/increment/:id", verifyJWT,opportunitycontroller.increm
 app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportunityById);
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
+app.post("/opportunities/photo/:id", verifyJWT,oppupload.single('photo'), opportunitycontroller.createOppPhoto);
+app.put("/opportunities/photo/:id", verifyJWT, oppupload.single('photo'), opportunitycontroller.updateOppPhoto);
 
 //skill routes
 app.get("/skills/:skillname", skillcontroller.getSkillIdByName);

@@ -74,9 +74,9 @@ async function fetchOpportunity() {
 }
 async function displayOpportunities() {
 
-    let opportunities = await fetchOpportunity();
-    console.log(opportunities);
-    let parentContainer = document.querySelector(".dashContent")
+    let opportunities = await fetchOpportunity(); //call function to get opportunities
+    console.log(opportunities); //checking of fetched opportunities 
+    let parentContainer = document.querySelector(".dashContent") //display data in html
     opportunities.forEach(opportunity => {
 
       const oInfo = document.createElement('section');
@@ -84,7 +84,7 @@ async function displayOpportunities() {
 
       const oDate = document.createElement('span');
       oDate.classList.add('dashDate');
-      oDate.textContent = formatDate(opportunity.date);
+      oDate.textContent = formatDate(opportunity.date); //formatDate function to convert date to desired format
 
       const oBody = document.createElement('section');
       oBody.classList.add('dashBody');
@@ -97,7 +97,7 @@ async function displayOpportunities() {
       const endtime = opportunity.endtime;
       const oTime = document.createElement('p');
       oTime.classList.add('dashTime');
-      oTime.textContent = `${formatTimeRange(starttime, endtime)}`;
+      oTime.textContent = `${formatTimeRange(starttime, endtime)}`; //formatTimeRange function to convert time to desired format
       
 
       oInfo.appendChild(oDate);
@@ -110,7 +110,7 @@ async function displayOpportunities() {
       oInfo.addEventListener('click', () => {
         //Pass opportunity ID as a query parameter
         console.log("Opportunity ID being passed:", opportunity.opportunityid)
-        window.location.href = `ngomanageopportunity.html?id=${opportunity.opportunityid}`;
+        window.location.href = `ngomanageopportunity.html?id=${opportunity.opportunityid}`; //redirect and pass id for easy integration
       });
       
     });
