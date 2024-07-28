@@ -148,7 +148,7 @@ async function fetchCreatedOpp() {
 
         if (response.ok) {
 
-            if (photo.length > 0) {
+            if (photo.files.length > 0) {
                 const formData = new FormData();
                 formData.append('photo', photo.files[0]);
                 Object.entries(updatedOpportunity).forEach(([key, value]) => {
