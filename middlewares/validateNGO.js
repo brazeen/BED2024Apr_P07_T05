@@ -9,7 +9,7 @@ const validateNGO = (req, res, next) => {
     contactnumber: Joi.string().pattern(/^[0-9]{7,15}$/).required(), //between 7 to 15 digit
     password: Joi.string().min(3).required(),
     address: Joi.string().max(255).required()
-  });
+  }, { unknown: true });
 
   const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
 

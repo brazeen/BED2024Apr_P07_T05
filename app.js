@@ -42,7 +42,7 @@ app.get("/volunteers/:id", verifyJWT,volunteercontroller.getVolunteerById);
 app.delete("/volunteers/:id", verifyJWT,volunteercontroller.deleteVolunteer);
 app.get("/volunteers/skills/:id", verifyJWT,volunteercontroller.getVolunteerSkills);
 app.post("/volunteers", validateVolunteer,volunteercontroller.registerVolunteer);
-app.put("/volunteers/:id", verifyJWT, validateVolunteer, volunteercontroller.updateVolunteer);
+app.put("/volunteers/:id", verifyJWT, volunteercontroller.updateVolunteer);
 app.post("/volunteers/login", volunteercontroller.loginVolunteer);
 app.post('/volunteers/profilepicture/:id', verifyJWT,volupload.single('profilepicture'), volunteercontroller.updateVolunteerProfilePicture);
 app.patch('/volunteers/:id/:hash', verifyJWT,volunteercontroller.updateVolunteerPassword);
@@ -58,7 +58,7 @@ app.post('/volunteers/createMessage', verifyJWT,chatcontroller.createMessage); /
 app.get("/ngos", verifyJWT,ngocontroller.getAllNGOs);
 app.get("/ngos/status/:status", verifyJWT,ngocontroller.getNGOsByStatus); // status must be R, A or P
 app.get("/ngos/:id", verifyJWT,ngocontroller.getNGOById);
-app.put("/ngos/:id", verifyJWT, validateNGO, ngocontroller.updateNGO);
+app.put("/ngos/:id", verifyJWT, ngocontroller.updateNGO);
 app.patch("/ngos/:id/:status", verifyJWT,ngocontroller.updateNGOStatus);
 app.delete("/ngos/:id", verifyJWT,ngocontroller.deleteNGO);
 app.post('/ngos/logo/:id', verifyJWT,ngoupload.single('logo'), ngocontroller.updateNGOLogo);

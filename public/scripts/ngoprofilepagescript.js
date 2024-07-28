@@ -141,9 +141,9 @@ async function updateProfile() {
     
                 if (picResponse.ok) {
                     const picData = await picResponse.json();
-                    console.log("picData:", picData);
+                   
                     pic = picData.logo; // update pic with the new profile picture path
-                    console.log("Updated pic:", pic); // Log the updated pic
+                    
                 } else {
                     alert("Failed to upload new profile picture.");
                     return;
@@ -181,6 +181,9 @@ async function updateProfile() {
                 // Update displayed data with new information
                 // ...
             } else {
+                if (response.status == 400) {
+                    alert("All fields are required and phone number must be 7-15 digits.")
+                }
                 alert("Failed to update profile.");
             }
         }

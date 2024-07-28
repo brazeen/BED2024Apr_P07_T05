@@ -65,80 +65,87 @@ async function getVolunteerSkillsArray(id) {
 }
 
 async function fetchVolunteers(searchTerm = '') {
-  //if searchTerm exists, put it inside the url and search but if not just fetch all
-  let url;
-  if (searchTerm == '') {
-    url = '/volunteers'
+  try {
+    //if searchTerm exists, put it inside the url and search but if not just fetch all
+    let url;
+    if (searchTerm == '') {
+      url = '/volunteers'
+    }
+    else {
+      url = `/volunteers/search/user?searchTerm=${encodeURIComponent(searchTerm)}`
+    }
+    const response = await fetch(url, {
+      method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+              }
+    }); // Replace with your API endpoint
+    const data = await response.json();
+  
+    const volCount = document.getElementById("volcount")
+    volCount.innerText = `(${data.length})`
+    const volDiv = document.querySelector(".leftHomeDiv");
+  
+    //clear the current content so that it doesnt get loaded twice when searched 
+    volDiv.innerHTML = '';
+  
+    //get the volunteer's skills, and then return an array of {volunteer, skillstr}
+    if (data) {
+      const skillPromises = data.map(volunteer => 
+        getVolunteerSkillsArray(volunteer.volunteerid).then(skillstr => ({ volunteer, skillstr }))
+      );
+    
+      //ensure ALL volunteers have been returned (to prevent volunteers not being loaded cos page refresh too fast etc)
+      const volunteersWithSkills = await Promise.all(skillPromises);
+    
+      volunteersWithSkills.forEach(({ volunteer, skillstr }) => {
+        const volItem = document.createElement("div");
+        volItem.classList.add("volunteer"); // Add a CSS class for styling
+    
+        const volImage = document.createElement("img");
+        volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
+        volImage.setAttribute("src", volunteer.profilepicture);
+    
+        const volInfo = document.createElement("div");
+        volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
+    
+        const volName = document.createElement("h3");
+        volName.textContent = volunteer.name;
+        volName.classList.add("volunteer-name");
+    
+        const volAge = document.createElement("p");
+        let now = new Date();
+        let birth = new Date(volunteer.dateofbirth);
+        let age = new Date(now - birth);
+        volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
+        volAge.classList.add("volunteer-age");
+    
+        const volSkills = document.createElement("p");
+        volSkills.textContent = skillstr; //use skillstr to show all vol skills
+        volSkills.classList.add("volunteer-skills");
+    
+        const volRemoveBtn = document.createElement("button");
+        volRemoveBtn.textContent = "✕";
+        volRemoveBtn.classList.add("remove-volunteer");
+        volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
+        volRemoveBtn.addEventListener("click", deleteUser);
+    
+        volItem.appendChild(volImage);
+        volItem.appendChild(volInfo);
+        volInfo.appendChild(volName);
+        volInfo.appendChild(volAge);
+        volInfo.appendChild(volSkills);
+        volItem.appendChild(volRemoveBtn);
+        volDiv.appendChild(volItem);
+      });
+    }
+  }catch (error) {
+    alert("Error loading volunteers:", error)
+    window.location.reload()
   }
-  else {
-    url = `/volunteers/search/user?searchTerm=${encodeURIComponent(searchTerm)}`
-  }
-  const response = await fetch(url, {
-    method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
-            }
-  }); // Replace with your API endpoint
-  const data = await response.json();
-
-  const volCount = document.getElementById("volcount")
-  volCount.innerText = `(${data.length})`
-  const volDiv = document.querySelector(".leftHomeDiv");
-
-  //clear the current content so that it doesnt get loaded twice when searched 
-  volDiv.innerHTML = '';
-
-  //get the volunteer's skills, and then return an array of {volunteer, skillstr}
-  if (data) {
-    const skillPromises = data.map(volunteer => 
-      getVolunteerSkillsArray(volunteer.volunteerid).then(skillstr => ({ volunteer, skillstr }))
-    );
   
-    //ensure ALL volunteers have been returned (to prevent volunteers not being loaded cos page refresh too fast etc)
-    const volunteersWithSkills = await Promise.all(skillPromises);
   
-    volunteersWithSkills.forEach(({ volunteer, skillstr }) => {
-      const volItem = document.createElement("div");
-      volItem.classList.add("volunteer"); // Add a CSS class for styling
-  
-      const volImage = document.createElement("img");
-      volImage.classList.add("volunteer-photo"); // Add a CSS class for styling
-      volImage.setAttribute("src", volunteer.profilepicture);
-  
-      const volInfo = document.createElement("div");
-      volInfo.classList.add("volunteer-info"); // Add a CSS class for styling
-  
-      const volName = document.createElement("h3");
-      volName.textContent = volunteer.name;
-      volName.classList.add("volunteer-name");
-  
-      const volAge = document.createElement("p");
-      let now = new Date();
-      let birth = new Date(volunteer.dateofbirth);
-      let age = new Date(now - birth);
-      volAge.textContent = `Age: ${Math.abs(age.getUTCFullYear() - 1970)} years old`;
-      volAge.classList.add("volunteer-age");
-  
-      const volSkills = document.createElement("p");
-      volSkills.textContent = skillstr; //use skillstr to show all vol skills
-      volSkills.classList.add("volunteer-skills");
-  
-      const volRemoveBtn = document.createElement("button");
-      volRemoveBtn.textContent = "✕";
-      volRemoveBtn.classList.add("remove-volunteer");
-      volRemoveBtn.setAttribute("id", `voldeletion-btn${volunteer.volunteerid}`);
-      volRemoveBtn.addEventListener("click", deleteUser);
-  
-      volItem.appendChild(volImage);
-      volItem.appendChild(volInfo);
-      volInfo.appendChild(volName);
-      volInfo.appendChild(volAge);
-      volInfo.appendChild(volSkills);
-      volItem.appendChild(volRemoveBtn);
-      volDiv.appendChild(volItem);
-    });
-  }
   
 }
 
