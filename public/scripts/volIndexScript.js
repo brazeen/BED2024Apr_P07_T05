@@ -170,7 +170,9 @@ async function deleteApplication(volunteerid, opportunityid) {
     yesbutton.onclick = async function () {
         try {
             let apistring = `/applications/${volunteerid}/${opportunityid}`;
-            const response = await fetch(apistring, { method: "DELETE" });
+            const response = await fetch(apistring, { method: "DELETE", headers: {
+                'Authorization': `Bearer ${token}`
+            } });
             if (response.ok) {
                 alert("Application deleted successfully! Please reload the page.");
                 popup.style.display = "none";
