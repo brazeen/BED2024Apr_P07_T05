@@ -10,6 +10,7 @@ nav {
     display: flex;
     justify-content: space-evenly;
     padding: 20px;
+    min-height:90vh;
 }
 /*-----------VolunteerHomePage*/
 .fullScreenDiv {
@@ -177,6 +178,7 @@ nav {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    min-height: 90vh;
 }
 
 .opportunity-details, .applications {
@@ -385,6 +387,7 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center; /* center align all*/
+    min-height: 90vh;
 }
 
 #ngodashMain h1{
@@ -569,6 +572,7 @@ body {
     background-color: #f9f9f9;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 
 .profile-container {
@@ -1362,3 +1366,15 @@ body {
 .go-button:hover {
     background-color: #0056b3;
 }
+
+footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+        background-color: #FDE87B;
+        padding: 20px;
+        text-align: center;
+    
+  }

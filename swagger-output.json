@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Volunteezy API",
-    "description": "Volunteezy is a service for volunteers to find volunteering opportunities, and for Non-Governmental Organisations (NGOs) to advertise volunteering opportunities",
+    "description": "Volunteezy is a service for volunteers to find volunteering opportunities, and for Non-Governmental Organisations (NGOs) to advertise volunteering opportunities.",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
@@ -13,7 +13,7 @@
   "paths": {
     "/users/validate": {
       "get": {
-        "description": "Validates users to ensure they are authenticated",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -34,9 +34,22 @@
         }
       }
     },
+    "/volunteers/maxid": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/volunteers": {
       "get": {
-        "description": "Retrieves all registered volunteers",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -60,13 +73,8 @@
         }
       },
       "post": {
-        "description": "Creates a new volunteer",
+        "description": "",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -90,9 +98,6 @@
                 },
                 "dateofbirth": {
                   "example": "any"
-                },
-                "profilepicture": {
-                  "example": "any"
                 }
               }
             }
@@ -105,12 +110,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -119,7 +118,7 @@
     },
     "/volunteers/{id}": {
       "get": {
-        "description": "Retrieves a volunteer by their volunteerId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -152,7 +151,7 @@
         }
       },
       "delete": {
-        "description": "Deletes a volunteer found by their volunteerId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -185,7 +184,7 @@
         }
       },
       "put": {
-        "description": "Updates the attributes of a volunteer found by their volunteerId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -202,6 +201,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -220,7 +222,7 @@
     },
     "/volunteers/skills/{id}": {
       "get": {
-        "description": "Retrieves a volunteer's skills found by their volunteerId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -252,7 +254,7 @@
     },
     "/volunteers/login": {
       "post": {
-        "description": "Logs a volunteer into the Volunteezy platform",
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -285,7 +287,7 @@
     },
     "/volunteers/profilepicture/{id}": {
       "post": {
-        "description": "Uploads an image for a volunteer's profile picture",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -320,7 +322,7 @@
     },
     "/volunteers/{id}/{hash}": {
       "patch": {
-        "description": "Updates a volunteer's password hash",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -361,7 +363,7 @@
     },
     "/volunteers/changepw/{id}/{pw}": {
       "patch": {
-        "description": "Hashes the password provided and updates the volunteer's password hash",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -402,7 +404,7 @@
     },
     "/volunteers/{id}/{pw}": {
       "post": {
-        "description": "Compares the password given with the volunteer's current password",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -438,10 +440,47 @@
         }
       }
     },
-    "/ngos": {
+    "/volunteers/search/user": {
       "get": {
-        "description": "Retrieves all registered NGOs",
+        "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/volunteers/{id}/messages": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -464,9 +503,142 @@
         }
       }
     },
+    "/volunteers/chats/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/volunteers/createMessage": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ngos": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "contactperson": {
+                  "example": "any"
+                },
+                "contactnumber": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/ngos/status/{status}": {
       "get": {
-        "description": "Retrieves an NGO's registration status (A for accepted, P for pending)",
+        "description": "",
         "parameters": [
           {
             "name": "status",
@@ -498,7 +670,7 @@
     },
     "/ngos/{id}": {
       "get": {
-        "description": "Retrieves an NGO by their ngoId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -531,7 +703,7 @@
         }
       },
       "put": {
-        "description": "Updates the attributes of an NGO found by their ngoId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -546,6 +718,9 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -561,7 +736,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an NGO found by their ngoId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -596,7 +771,7 @@
     },
     "/ngos/{id}/{status}": {
       "patch": {
-        "description": "Updates an NGO's registration status found by their ngoId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -637,7 +812,7 @@
     },
     "/ngos/logo/{id}": {
       "post": {
-        "description": "Uploads an image for an NGO's logo",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -672,7 +847,7 @@
     },
     "/ngos/changepw/{id}/{pw}": {
       "patch": {
-        "description": "Hashes the password provided and updates the NGO's password hash",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -713,7 +888,7 @@
     },
     "/ngos/{id}/{pw}": {
       "post": {
-        "description": "Compares the password given with the NGO's current password",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -749,9 +924,166 @@
         }
       }
     },
+    "/ngos/search/user": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ngos/{id}/messages": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ngos/chats/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ngos/createMessage": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/ngos/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/applications/{id}": {
       "get": {
-        "description": "Retrieves an application by their applicationId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -786,7 +1118,7 @@
     },
     "/applications/volunteer/{id}": {
       "get": {
-        "description": "Retrieves applications by their volunteerId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -821,7 +1153,7 @@
     },
     "/applications/{volunteerid}/{opportunityid}": {
       "get": {
-        "description": "Retrieves an application by their volunteerId and opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "volunteerid",
@@ -860,7 +1192,7 @@
         }
       },
       "delete": {
-        "description": "Deletes an application found by their volunteerId and opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "volunteerid",
@@ -901,7 +1233,7 @@
     },
     "/applications/array/{opportunityid}/{status}": {
       "get": {
-        "description": "Retrieves all applications of an opportunity with a certain status (A for accepted, R for rejected and P for pending)",
+        "description": "",
         "parameters": [
           {
             "name": "opportunityid",
@@ -939,7 +1271,7 @@
     },
     "/applications": {
       "post": {
-        "description": "Creates a new application",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -965,7 +1297,7 @@
     },
     "/applications/{volunteerid}/{opportunityid}/{status}": {
       "patch": {
-        "description": "Updates an application's status found by their volunteerId and opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "volunteerid",
@@ -1010,9 +1342,40 @@
         }
       }
     },
+    "/opportunities/search/listing": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/opportunities": {
       "get": {
-        "description": "Retrieves all opportunities",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -1036,7 +1399,7 @@
         }
       },
       "post": {
-        "description": "Creates a new opportunity",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -1062,7 +1425,7 @@
     },
     "/opportunities/{id}": {
       "get": {
-        "description": "Retrieves an opportunity by their opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1095,7 +1458,7 @@
         }
       },
       "delete": {
-        "description": "Deletes a opportunity found by their opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1128,7 +1491,7 @@
         }
       },
       "put": {
-        "description": "Updates the attributes of an opportunity found by their opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1163,7 +1526,7 @@
     },
     "/opportunities/skills/{id}": {
       "get": {
-        "description": "Retrieves an opportunity's skills found by their opportunityId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1198,7 +1561,238 @@
     },
     "/opportunities/increment/{id}": {
       "patch": {
-        "description": "Increments the current volunteers of an opportunity by 1",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/opportunities/ngos/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/opportunities/photo/{id}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/skills/{skillname}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "skillname",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/skills/createVolunteerSkills": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/skills": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/skills/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1233,7 +1827,7 @@
     },
     "/admins/{name}": {
       "get": {
-        "description": "Retrieves an admin by their adminname attribute",
+        "description": "",
         "parameters": [
           {
             "name": "name",
@@ -1257,7 +1851,7 @@
     },
     "/admins/login": {
       "post": {
-        "description": "Logs an Admin into the Volunteezy platform",
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -1288,19 +1882,9 @@
         }
       }
     },
-    "/": {
+    "/login": {
       "get": {
-        "description": "Route to the starting page of the website to choose logins",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/login/admin": {
-      "get": {
-        "description": "Route to the admin login page",
+        "description": "",
         "responses": {
           "default": {
             "description": ""
@@ -1310,7 +1894,7 @@
     },
     "/volunteer/index": {
       "get": {
-        "description": "Route to the index page of the volunteer",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -1330,7 +1914,7 @@
     },
     "/volunteer/profile": {
       "get": {
-        "description": "Route to the profile page of the volunteer",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -1348,9 +1932,89 @@
         }
       }
     },
+    "/login/volunteer": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/ngo/dashboard": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/ngo/profile": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/login/ngo": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/register/ngo": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/login/admin": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/admin/dashboard": {
       "get": {
-        "description": "Route to the dashboard page of the admin",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -1370,7 +2034,7 @@
     },
     "/admin/applications": {
       "get": {
-        "description": "Route to the applications page of the admin",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
