@@ -239,21 +239,14 @@ nav {
     padding: 20px;
 }
 
-.edit-btn, .delete-btn, .update-btn, .submit-btn, #change-password-btn {
-    color: white;
-    background-color: #ffbc36;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 0 10px;
-    width: 120px;
-    font-size: 12px;
-    margin: 5%;
+.buttons {
+    display: flex;
+    justify-content: flex-end; /* Aligns buttons to the right */
+    gap: 10px; /* Adds spacing between buttons */
+    padding: 20px;
 }
 
-.logout-btn {
+.edit-btn, .update-btn, .submit-btn, #change-password-btn {
     color: white;
     background-color: #ffbc36;
     border: none;
@@ -261,11 +254,9 @@ nav {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 10px;
-    width: 120px;
-    font-size: 15px;
-    margin-left: 80%;
-    margin-top: 1%;
+    width: 145px;
+    font-size: 12px;
+    box-shadow: #555;
 }
 
 .delete-popup {
@@ -579,7 +570,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100vw;
     margin: 20px;
 }  
 
@@ -841,13 +831,6 @@ body {
 
 #profileForm button:hover {
     background-color: #f6ff00;
-}
-
-
-#change-password-btn {
-    padding: 10px 20px;
-    font-size: 12px;
-    cursor: pointer;
 }
 
 .passwordpopup {
@@ -1122,13 +1105,13 @@ body {
 }
 
 
-.logout-btn {
+.logout-btn, .delete-btn {
     background-color: #ff4b5c; /* Red background color */
     color: #fff; /* White text color */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
     padding: 10px 20px; /* Padding inside the button */
-    font-size: 16px; /* Font size */
+    font-size: 13px; /* Font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
