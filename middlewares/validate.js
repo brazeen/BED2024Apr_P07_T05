@@ -47,7 +47,7 @@ function verifyJWT(req, res, next) {
             "/applications/volunteer/:id": ["admin", "ngo", "volunteer"],
             "/applications/:volunteerid/:opportunityid": ["admin", "ngo", "volunteer"],
             "/applications/array/:opportunityid/:status": ["admin", "ngo", "volunteer"],
-            "/applications": ["admin", "ngo"],
+            "/applications": ["admin", "ngo", "volunteer"],
             "/applications/:volunteerid/:opportunityid/:status": ["admin", "ngo", "volunteer"],
             "/applications/:volunteerid/:opportunityid": ["admin", "ngo", "volunteer"],
             
