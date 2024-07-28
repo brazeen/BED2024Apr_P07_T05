@@ -115,12 +115,12 @@ async function displayOpportunity(id) {
         let skillarray = await fetchOpportunitySkills(opportunity.opportunityid);
         //add opportunity to html page
         //add image
-        /*
+        
         const oppImageDiv = document.querySelector(".image-placeholder")
-        const volImage = document.createElement("img");
-        oppImage.setAttribute("src", opportunity.profilepicture);
-        oppImageDiv.appendChild(volImage)
-        */
+        const oppImage = document.createElement("img");
+        oppImage.setAttribute("src", opportunity.photo);
+        oppImageDiv.appendChild(oppImage)
+        
         //replace text
         const oppTitle = document.getElementById("opportunity-title")
         oppTitle.textContent = opportunity.title;
