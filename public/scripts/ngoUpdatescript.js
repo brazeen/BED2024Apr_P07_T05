@@ -159,7 +159,7 @@ async function fetchCreatedOpp() {
                 });
 
                 const photoResponse = await fetch(`/opportunities/photo/${oppid}`, {
-                    method: 'PUT',
+                    method: 'POST',
                     body: formData,
                     headers: {
                         'Authorization': `Bearer ${token}` // Include the token in the Authorization header

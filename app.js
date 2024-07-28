@@ -91,7 +91,6 @@ app.delete("/opportunities/:id", verifyJWT,opportunitycontroller.deleteOpportuni
 app.put("/opportunities/:id", verifyJWT,opportunitycontroller.updateOpportunity);
 app.get("/opportunities/ngos/:id", verifyJWT, opportunitycontroller.getOpportunityByNGOid);
 app.post("/opportunities/photo/:id", verifyJWT,oppupload.single('photo'), opportunitycontroller.createOppPhoto);
-app.put("/opportunities/photo/:id", verifyJWT, oppupload.single('photo'), opportunitycontroller.updateOppPhoto);
 
 //skill routes
 app.get("/skills/:skillname", skillcontroller.getSkillIdByName);
