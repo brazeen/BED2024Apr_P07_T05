@@ -162,7 +162,6 @@ async function updateProfile() {
                 address: addressField.value,
                 status: ngo.status
             };
-
             
             const response = await fetch(`/ngos/${ngo.ngoid}`, {
                 method: 'PUT',
@@ -178,11 +177,9 @@ async function updateProfile() {
                 modal.style.display = 'none';
                 // Optionally, update the displayed ngo information on the page
                 ngo = await response.json();
-                // Update displayed data with new information
-                // ...
             } else {
                 if (response.status == 400) {
-                    alert("All fields are required and phone number must be 7-15 digits.")
+                    alert("All fields are required.")
                 }
                 alert("Failed to update profile.");
             }
