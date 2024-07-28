@@ -16,9 +16,23 @@
         .step.active {
             display: block;
         }
+        button {
+        margin: 40px;
+        color: white;
+        background-color: #ffbc36;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 145px;
+        font-size: 12px;
+        box-shadow: #555;
+        }
     </style>
 </head>
 <body>
+    <button onclick="window.location.href='/login'">Back</button>
     <h1 class="text-success text-center">Volunteezy</h1>
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -50,7 +64,6 @@
     </div>
     <div class="login-link">
         <a aria-current="page" href="ngosignuppage.html">Sign up</a>
-        <a href="index.html">Back</a>
     </div>
     <script src="/scripts/ngologinscript.js"></script>
 </body>
