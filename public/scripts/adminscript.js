@@ -156,6 +156,7 @@ async function fetchNGOs(searchTerm = '') {
     url = '/ngos/status/A'
   }
   else {
+    
     url = `/ngos/search/user?searchTerm=${encodeURIComponent(searchTerm)}`
   }
   const response = await fetch(url, {
@@ -173,45 +174,49 @@ async function fetchNGOs(searchTerm = '') {
 
   //clear div
   ngoDiv.innerHTML = '';
-
-  data.forEach((ngo) => {
-    const ngoItem = document.createElement("div");
-    ngoItem.classList.add("ngo"); // Add a CSS class for styling
-
-    const ngoImage = document.createElement("img");
-    ngoImage.classList.add("ngo-photo"); // Add a CSS class for styling
-    ngoImage.setAttribute("src", ngo.logo)
-
-    const ngoInfo = document.createElement("div");
-    ngoInfo.classList.add("ngo-info"); // Add a CSS class for styling
-
-    const ngoName = document.createElement("h3");
-    ngoName.textContent = ngo.name;
-    ngoName.classList.add("ngo-name")
-
-    const ngoEmail = document.createElement("p");
-    ngoEmail.textContent = ngo.email;
-    ngoEmail.classList.add("ngo-email")
-
-    const ngoContact = document.createElement("p");
-    ngoContact.textContent = ngo.contactnumber;
-    ngoContact.classList.add("ngo-contact")
-
-    const ngoRemoveBtn = document.createElement("button")
-    ngoRemoveBtn.textContent = "✕";
-    ngoRemoveBtn.setAttribute("id", `ngodeletion-btn${ngo.ngoid}`)
-    ngoRemoveBtn.classList.add("remove-ngo")
-    ngoRemoveBtn.addEventListener("click", deleteUser)
-
-    ngoItem.appendChild(ngoImage);
-    ngoItem.appendChild(ngoInfo);
-    ngoInfo.appendChild(ngoName);
-    ngoInfo.appendChild(ngoEmail);
-    ngoInfo.appendChild(ngoContact);
-    ngoItem.appendChild(ngoRemoveBtn);
-    ngoDiv.appendChild(ngoItem);
-
-  });
+  if (data.length > 0) {
+    data.forEach((ngo) => {
+      const ngoItem = document.createElement("div");
+      ngoItem.classList.add("ngo"); // Add a CSS class for styling
+  
+      const ngoImage = document.createElement("img");
+      ngoImage.classList.add("ngo-photo"); // Add a CSS class for styling
+      ngoImage.setAttribute("src", ngo.logo)
+  
+      const ngoInfo = document.createElement("div");
+      ngoInfo.classList.add("ngo-info"); // Add a CSS class for styling
+  
+      const ngoName = document.createElement("h3");
+      ngoName.textContent = ngo.name;
+      ngoName.classList.add("ngo-name")
+  
+      const ngoEmail = document.createElement("p");
+      ngoEmail.textContent = ngo.email;
+      ngoEmail.classList.add("ngo-email")
+  
+      const ngoContact = document.createElement("p");
+      ngoContact.textContent = ngo.contactnumber;
+      ngoContact.classList.add("ngo-contact")
+  
+      const ngoRemoveBtn = document.createElement("button")
+      ngoRemoveBtn.textContent = "✕";
+      ngoRemoveBtn.setAttribute("id", `ngodeletion-btn${ngo.ngoid}`)
+      ngoRemoveBtn.classList.add("remove-ngo")
+      ngoRemoveBtn.addEventListener("click", deleteUser)
+  
+      ngoItem.appendChild(ngoImage);
+      ngoItem.appendChild(ngoInfo);
+      ngoInfo.appendChild(ngoName);
+      ngoInfo.appendChild(ngoEmail);
+      ngoInfo.appendChild(ngoContact);
+      ngoItem.appendChild(ngoRemoveBtn);
+      ngoDiv.appendChild(ngoItem);
+  
+    });
+  }
+  else {
+    ngoCount.innerText = '(0)'
+  }
 }
 
 async function fetchNGOapplications() {
