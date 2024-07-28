@@ -100,6 +100,9 @@ function showPrompts() {
             ul.innerHTML = ""; //clear previous results before adding new ones
             content.forEach(li => ul.appendChild(li)); //append new list items
         }
+        else if (!input.length){
+            displaySuggestedOpp();
+        }
         else {
             ul.innerHTML = ""; // clear list when input is empty
         }
@@ -115,7 +118,7 @@ async function displaySuggestedOpp() {
     let opportunities = await fetchOpportunities();
     let oppDiv = document.querySelector(".suggestedOpps");
 
-    opportunities.slice(-5).forEach(opp => { //limits number of opportunities displayed
+    opportunities.slice(0, 20).forEach(opp => { //limits number of opportunities displayed
         const imgDiv = document.createElement('div');
         imgDiv.classList.add('sImage');
         const putImage = document.createElement('img');
@@ -183,7 +186,7 @@ function displayFilteredOpportunities(opportunities) {
         oppDiv.appendChild(noOpportunitiesMessage);
     }
 
-    opportunities.slice(0, 5).forEach(opp => { // Limits number of opportunities displayed
+    opportunities.slice(0, 20).forEach(opp => { // Limits number of opportunities displayed
         const imgDiv = document.createElement('div');
         imgDiv.classList.add('sImage');
         const putImage = document.createElement('img');

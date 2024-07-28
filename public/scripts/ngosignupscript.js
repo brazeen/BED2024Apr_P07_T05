@@ -1,3 +1,4 @@
+//donovan
 function showAlert(message) {
     const alertBox = document.getElementById('alertMessage');
     alertBox.innerText = message;
@@ -10,7 +11,7 @@ function hideAlert() {
 }
 
 function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //ensure a proper email is inputted
     return emailRegex.test(email);
 }
 
@@ -21,7 +22,7 @@ function nextStep() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirm-password').value.trim();
-
+    //validation
     if (name === '' || email === '' || password === '' || confirmPassword === '') {
         showAlert('Please fill in all the fields.');
         return;
@@ -58,7 +59,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const contactperson = document.getElementById('cperson').value;
     const contactnumber = document.getElementById('cno').value;
     const address = document.getElementById('address').value;
-    let logo; 
+    let logo; //generate random image with api
     
     const data = {
         name,
