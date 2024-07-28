@@ -100,6 +100,9 @@ function showPrompts() {
             ul.innerHTML = ""; //clear previous results before adding new ones
             content.forEach(li => ul.appendChild(li)); //append new list items
         }
+        else if (!input.length){
+            displaySuggestedOpp();
+        }
         else {
             ul.innerHTML = ""; // clear list when input is empty
         }
