@@ -44,7 +44,6 @@ CREATE TABLE NGOs (
     status VARCHAR(1) CHECK (status IN ('P', 'A', 'R'))
 );
  
--- Create Opportunity Table
 CREATE TABLE Opportunities (
     opportunityid INT PRIMARY KEY IDENTITY(1,1),
     ngoid INT FOREIGN KEY REFERENCES NGOs(ngoid) ON DELETE CASCADE,
@@ -57,7 +56,8 @@ CREATE TABLE Opportunities (
     endtime time, 
     age INT,
     maxvolunteers INT,
-    currentvolunteers INT
+    currentvolunteers INT,
+    photo NVARCHAR(MAX)
 );
  
 CREATE TABLE OpportunitySkills (
@@ -137,28 +137,28 @@ VALUES ('Animal Shelter', 'animalshelter@example.com', '$2b$10$XF7JI2iz22TIbDbdM
        ('Soup Kitchen', 'soupkitchengoals@example.com', '$2b$10$QsjlfLY0Ui2z/RDVvxPGmefl47ecFG0kZbn2bnM2gBLrQh.KJWyBG', 'https://static.wixstatic.com/media/950ec0_7557c389547c46bf8b123167dacf9936~mv2.webp', 'Provides hot meals to those in need.', 'David Williams', '555-345-6789', '1213 Pine St, Anytown, WA 98765', 'P'); 
         /*soup kitchen nourishinglives*/
 -- Opportunity population
-INSERT INTO Opportunities (ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers)
+INSERT INTO Opportunities (ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers, photo)
 VALUES 
 -- Animal Shelter
-(1, 'Pet Adoption Drive', 'Help organize an adoption drive for stray animals.', '80 Mandai Lake Rd, Singapore Zoo', 'North', '2025-03-15', '10:00', '14:00', 20, 50, 30),
-(1, 'Shelter Maintenance', 'Assist in cleaning and maintaining the animal shelter.', '50 Sungei Tengah Rd, Animal Shelter', 'North', '2025-06-12', '09:00', '13:00',17, 30, 15),
-(1, 'Fundraising Gala', 'Support fundraising efforts for the animal shelter.', '10 Woodlands Square, Causeway Point', 'North', '2025-09-20', '19:00', '22:00', 21, 100, 45),
+(1, 'Pet Adoption Drive', 'Help organize an adoption drive for stray animals.', '80 Mandai Lake Rd, Singapore Zoo', 'North', '2025-03-15', '10:00', '14:00', 20, 50, 30, 'https://singaporepoloclub.org/images/dogadoption/060_MG_4651.jpg'),
+(1, 'Shelter Maintenance', 'Assist in cleaning and maintaining the animal shelter.', '50 Sungei Tengah Rd, Animal Shelter', 'North', '2025-06-12', '09:00', '13:00',17, 30, 15, 'https://humanepro.org/sites/default/files/styles/article_new/public/images/hero/_DSC0043_77793.JPG?itok=P3cW440c'),
+(1, 'Fundraising Gala', 'Support fundraising efforts for the animal shelter.', '10 Woodlands Square, Causeway Point', 'North', '2025-09-20', '19:00', '22:00', 21, 100, 45, 'https://www.iberdrola.com/documents/20125/40024/Fundraising_Que_Es_746x419.jpg.png/1d5821d7-f7b9-5d4c-be73-7b6d8522ca18?t=1700550627778'),
 -- Food Bank
-(2, 'Food Distribution', 'Distribute food to families in need.', '1 Tampines Walk, Our Tampines Hub', 'East', '2025-04-05', '14:00', '18:00', 16, 40, 20),
-(2, 'Warehouse Sorting', 'Sort food donations at our warehouse.', '18 Bedok North St 5, Bedok Industrial Park', 'East', '2025-07-10', '11:00', '15:00', 16, 25, 18),
-(2, 'Community Kitchen', 'Prepare meals for the underprivileged.', '200 Sims Ave, Geylang', 'East', '2025-10-25', '08:00', '12:00', 21, 35, 28),
+(2, 'Food Distribution', 'Distribute food to families in need.', '1 Tampines Walk, Our Tampines Hub', 'East', '2025-04-05', '14:00', '18:00', 16, 40, 20, 'https://foodbanknews.org/wp-content/uploads/2023/04/DSC_8539_0.jpg'),
+(2, 'Warehouse Sorting', 'Sort food donations at our warehouse.', '18 Bedok North St 5, Bedok Industrial Park', 'East', '2025-07-10', '11:00', '15:00', 16, 25, 18, 'https://assets.warehousegig.com/production/288/Warehouse_Sorter_Job_Description_1600x684.png'),
+(2, 'Community Kitchen', 'Prepare meals for the underprivileged.', '200 Sims Ave, Geylang', 'East', '2025-10-25', '08:00', '12:00', 21, 35, 28, 'https://images.squarespace-cdn.com/content/v1/575c7d10044262e4c49720f7/091ffeb5-e6b7-473e-834c-857b0dcb168b/community-kitchen.jpg'),
 -- Literacy Program
-(3, 'Reading Session', 'Conduct reading sessions for children.', '298 Yishun St 20, Northpoint City', 'North', '2025-02-28', '16:00', '18:00', 17, 20, 12),
-(3, 'Book Donation Drive', 'Organize a book donation event.', '3 Bukit Panjang Ring Rd, Hillion Mall', 'West', '2025-05-22', '10:00', '14:00', 21, 60, 40),
-(3, 'Tutoring Program', 'Provide tutoring for underprivileged children.', '31 Jurong West Central 3, Jurong Point', 'West', '2025-08-15', '17:00', '20:00', 18, 30, 25),
+(3, 'Reading Session', 'Conduct reading sessions for children.', '298 Yishun St 20, Northpoint City', 'North', '2025-02-28', '16:00', '18:00', 17, 20, 12, 'https://blog.hope-education.co.uk/wp-content/uploads/2021/02/children_guided_reading.jpg'),
+(3, 'Book Donation Drive', 'Organize a book donation event.', '3 Bukit Panjang Ring Rd, Hillion Mall', 'West', '2025-05-22', '10:00', '14:00', 21, 60, 40, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz8kV5ftFg1rXDGefqswhgK8EvAZoLpBxCAw&s'),
+(3, 'Tutoring Program', 'Provide tutoring for underprivileged children.', '31 Jurong West Central 3, Jurong Point', 'West', '2025-08-15', '17:00', '20:00', 18, 30, 25, 'https://blog.sagaeducation.org/hubfs/Imported_Blog_Media/tutor-1.jpg'),
 -- Environmental Cleanup
-(4, 'Beach Cleanup', 'Join us in cleaning up East Coast Park.', 'East Coast Park, Marine Parade', 'East', '2025-03-22', '07:00', '12:00', 16, 100, 60),
-(4, 'Park Maintenance', 'Help maintain the greenery at Bishan Park.', '1384 Ang Mo Kio Ave 1, Bishan Park', 'Central', '2025-06-18', '09:00', '13:00', 16, 50, 30),
-(4, 'Community Garden', 'Assist in managing a community garden.', 'Bukit Batok Nature Park', 'West', '2025-09-10', '08:00', '12:00', 21, 40, 25),
+(4, 'Beach Cleanup', 'Join us in cleaning up East Coast Park.', 'East Coast Park, Marine Parade', 'East', '2025-03-22', '07:00', '12:00', 16, 100, 60, 'https://a.storyblok.com/f/146790/1600x842/7ac33a43f1/how-to-organize-a-beach-clean-up-0.png'),
+(4, 'Park Maintenance', 'Help maintain the greenery at Bishan Park.', '1384 Ang Mo Kio Ave 1, Bishan Park', 'Central', '2025-06-18', '09:00', '13:00', 16, 50, 30, 'https://www.gofmx.com/wp-content/uploads/2023/08/Park-maintenance-groundskeeper-1024x683.jpg'),
+(4, 'Community Garden', 'Assist in managing a community garden.', 'Bukit Batok Nature Park', 'West', '2025-09-10', '08:00', '12:00', 21, 40, 25, 'https://cdn.hosted-assets.com/nourishingneighbors/ul/q_auto/9DEY071R/c89e77/c89e77-iStock-1364679535.jpg'),
 -- Soup Kitchen
-(5, 'Soup Kitchen Service', 'Serve meals to the homeless.', '27 Kreta Ayer Rd, Chinatown', 'Central', '2025-01-10', '11:00', '14:00', 18, 45, 30),
-(5, 'Meal Preparation', 'Prepare meals for distribution.', 'Blk 531A Upper Cross St, Hong Lim Complex', 'Central', '2025-07-05', '06:00', '10:00', 21, 30, 18),
-(5, 'Volunteer Training', 'Train new volunteers at the soup kitchen.', '10 Sinaran Dr, Novena', 'Central', '2025-11-22', '09:00', '12:00', 26, 25, 15);
+(5, 'Soup Kitchen Service', 'Serve meals to the homeless.', '27 Kreta Ayer Rd, Chinatown', 'Central', '2025-01-10', '11:00', '14:00', 18, 45, 30, 'https://static1.straitstimes.com.sg/s3fs-public/styles/large30x20/public/articles/2022/05/12/mi_edwintong_120522.jpg?VersionId=MfQ776gQhwGqvI1XR.P25kjYBeT1ose4'),
+(5, 'Meal Preparation', 'Prepare meals for distribution.', 'Blk 531A Upper Cross St, Hong Lim Complex', 'Central', '2025-07-05', '06:00', '10:00', 21, 30, 18, 'https://images.everydayhealth.com/images/diet-nutrition/benefits-of-meal-planning-alt-1440x810.jpg'),
+(5, 'Volunteer Training', 'Train new volunteers at the soup kitchen.', '10 Sinaran Dr, Novena', 'Central', '2025-11-22', '09:00', '12:00', 26, 25, 15, 'https://volunteerhub.com/hubfs/Imported_Blog_Media/4-Easy-to-Implement-Volunteer-Training-Tips.jpg');
 
 
 -- OpportunitySkills population
