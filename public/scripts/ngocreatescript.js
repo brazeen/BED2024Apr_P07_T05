@@ -150,7 +150,7 @@ function oppFormSubmission(){
                 
                 console.log("Opportunity Created: ", createdOpp);
                 alert("New opportunity created!");
-                //window.location.href = 'ngodashboard.html';
+                window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);
