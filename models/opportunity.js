@@ -34,14 +34,7 @@ class Opportunity {
     }
 
     static async createOpportunity(newOpp) {
-        if (!newOpp.photo) {
-            try {
-                newOpp.photo = await fetchRandomImage();
-            } catch (error) {
-                console.error('Error fetching image data:', error);
-                throw new Error('Error fetching image data');
-            }
-        }
+        
         const connection = await sql.connect(dbConfig);
         //insert values
         const sqlQuery = `INSERT INTO Opportunities (ngoid, title, description,address,region,date,starttime,endtime,age,maxvolunteers,currentVolunteers, photo) VALUES (@ngoid, @title, @description,@address,@region,@date,@starttime,@endtime,@age,@maxvolunteers,0, @photo); SELECT SCOPE_IDENTITY() AS opportunityid;`;
