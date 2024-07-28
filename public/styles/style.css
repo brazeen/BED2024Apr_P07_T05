@@ -731,6 +731,10 @@ body {
     padding-top: 35px;
 }
 
+.login-link a{
+    padding: 0 10px 0 10px;
+}
+
 .step {
     display: none;
 }
