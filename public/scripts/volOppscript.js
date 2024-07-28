@@ -18,7 +18,7 @@ const chatButton = document.querySelector(".chat-button");
 //ensure ngoid is set before creating chat
 (async function initialize() {
     try {
-        const opportunity = { ngoid: currentOpportunityId }; // Assuming you have the opportunity details
+        const opportunity = { ngoid: currentOpportunityId }; 
         await fetchNGOInOpportunity(opportunity);
 
         console.log("current ngoid:", ngoId);
