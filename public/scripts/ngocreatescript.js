@@ -96,10 +96,10 @@ function oppFormSubmission(){
                 const opportunityid = createdOpp.opportunityid;
 
 
-                if (insertphoto.length > 0) {
+                if (insertphoto.files.length > 0) {
                     const formData = new FormData();
                     formData.append('photo', insertphoto.files[0]);
-                    Object.entries(newOpportunity).forEach(([key, value]) => {
+                    Object.entries(createdOpp).forEach(([key, value]) => {
                         if (key != "opportunityid") {
                             formData.append(key, value);
                         }
@@ -150,7 +150,7 @@ function oppFormSubmission(){
                 
                 console.log("Opportunity Created: ", createdOpp);
                 alert("New opportunity created!");
-                //window.location.href = 'ngodashboard.html';
+                window.location.href = 'ngodashboard.html';
             }
             else {
                 console.log("Error creating opportunity:", response.statusText);

@@ -148,7 +148,7 @@ async function fetchCreatedOpp() {
 
         if (response.ok) {
 
-            if (photo.length > 0) {
+            if (photo.files.length > 0) {
                 const formData = new FormData();
                 formData.append('photo', photo.files[0]);
                 Object.entries(updatedOpportunity).forEach(([key, value]) => {
@@ -159,7 +159,7 @@ async function fetchCreatedOpp() {
                 });
 
                 const photoResponse = await fetch(`/opportunities/photo/${oppid}`, {
-                    method: 'PUT',
+                    method: 'POST',
                     body: formData,
                     headers: {
                         'Authorization': `Bearer ${token}` // Include the token in the Authorization header

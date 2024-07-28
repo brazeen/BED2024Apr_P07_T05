@@ -356,6 +356,7 @@ initialiseAdmin()
 //redirect logic
 const dashbtn = document.getElementById("admindashboard")
 const applicationsbtn = document.getElementById("adminapplications")
+const logoutbtn = document.getElementById("adminlogout")
 dashbtn.addEventListener('click', (event) => {
   event.preventDefault();
   redirect('/admin/dashboard');
@@ -365,3 +366,13 @@ applicationsbtn.addEventListener('click', (event) => {
   event.preventDefault();
   redirect('/admin/applications');
 });
+
+logoutbtn.addEventListener('click', (event)=> {
+  event.preventDefault()
+  logout()
+})
+
+function logout() {
+  localStorage.removeItem('token')
+  window.location.href="/login"
+}

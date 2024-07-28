@@ -143,24 +143,7 @@ const createOppPhoto = async (req, res) => {
   }
 }
 
-const updateOppPhoto = async (req, res) => {
-  const oppId = req.params.id;
-  const newPhoto = req.file;
-  const imagepath = newPhoto.path.slice(6);
-  try {
-      const opportunity = await Opportunity.updateOppPhoto(oppId, imagepath)
-      
-      if (!opportunity) {
-        return res.status(404).send("Opportunity photo not found");
-      }
-      res.status(201) //send a OK status code
-      
-  }
-  catch(error) {
-      console.error(error)
-      res.status(500).send("Error updating opportunity photo")
-  }
-}
+
 
 module.exports = {
     getAllOpportunities,
@@ -174,5 +157,4 @@ module.exports = {
     searchOpportunity,
     getOpportunityByNGOid,
     createOppPhoto,
-    updateOppPhoto
 }
