@@ -198,15 +198,15 @@ async function loginNGO(req, res) {
 
 async function comparePassword(req, res) {
   const password = req.params.pw;
-  const volId = req.params.id;
+  const ngoId = req.params.id;
 
   try{
-    const ngo = await Volunteer.getNGOById(ngoId)
+    const ngo = await NGO.getNGOById(ngoId)
     if (!ngo) {
       return res.status(401).json({ message: "Invalid NGO" });
     }
     // Compare password with hash
-    const isMatch = await bcrypt.compare(password, volunteer.passwordHash);
+    const isMatch = await bcrypt.compare(password, ngo.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
@@ -223,7 +223,7 @@ async function searchAcceptedNGOs(req, res) {
   const searchTerm = req.query.searchTerm; // Extract search term from query params
   
   try {    
-    const ngos = await NGO.searchAcceptedNGOs(searchTerm);
+    const ngos = NGO.searchAcceptedNGOs(searchTerm);
     res.json(ngos);
   } catch (error) {
     console.error(error);
