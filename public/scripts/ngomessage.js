@@ -101,6 +101,8 @@ function displayMessages(messages, volunteerId, ngoId, senderName) {
             //if sender is ngo, display 'You' as name
             const userName = document.createElement('div');
             userName.classList.add('chat-bubble-header');
+            console.log("sendername:", senderName)
+            console.log("message.senderName:", message.senderName)
             if (message.senderName === senderName) {
                 userName.textContent = 'You'
             } else {
@@ -210,7 +212,7 @@ function setupMessageForm(ngoId, volunteerId, senderName, token) {
 
             const createdMessage = await response.json();
             console.log('Message sent successfully:', createdMessage);
-            await loadMessagesForChat(volunteerId, ngoId, token);
+            await loadMessagesForChat(volunteerId, ngoId, token, senderName);
             messageInput.value = ''; // Clear input after sending the message
         } catch (error) {
             console.error('Error sending message:', error);
