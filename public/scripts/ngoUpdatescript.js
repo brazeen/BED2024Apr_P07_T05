@@ -98,7 +98,7 @@ async function fetchCreatedOpp() {
     // Collect updated opportunity data from the form
     const updatedOpportunity = {
         opportunityid: oppid,
-        ngoid: 1,
+        ngoid: localStorage.getItem("ngoid"),
         title: title.value,
         description: description.value,
         date: date.value,
