@@ -226,21 +226,6 @@ class Opportunity {
         return this.getOpportunityById(id)
     }
 
-    static async updateOppPhoto(id, imagepath) {
-        const connection = await sql.connect(dbConfig)
-
-        const sqlQuery = `UPDATE Opportunities SET photo = @photo WHERE opportunityid = @opportunityid;`
-
-        const request = connection.request()
-        request.input("opportunityid", id)
-        request.input("photo", imagepath)
-
-        await request.query(sqlQuery)
-
-        connection.close()
-
-        return this.getOpportunityById(id)
-    }
 
 }
 
