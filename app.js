@@ -134,6 +134,9 @@ app.get('/login/ngo', (req, res) => {
 app.get('/register/ngo', (req, res) => {
     res.redirect('/ngosignuppage.html');
 })
+app.get('ngo/create', verifyJWT, (req, res) => {
+    res.redirect('/ngocreate.html')
+})
 
 //admin routes
 app.get('/login/admin', (req, res) => {
