@@ -126,15 +126,15 @@ VALUES (3, 2),  -- Volunteer 2 has skill 3
 -- NGO population
 INSERT INTO NGOs (name, email, passwordHash, logo, description, contactperson, contactnumber, address, status) 
 
-VALUES ('Animal Shelter', 'animalshelter@example.com', '$2b$10$XF7JI2iz22TIbDbdMACRXuNn/Z/T6GNeKBP1gQWYdbXu6odSUnlzq', 'https://images.wsj.net/im-831237?width=1280&size=1.33333333', 'Provides care and adoption services for homeless pets.', 'John Johnson', '555-123-4567', '123 Main St, Anytown, CA 12345', 'A'), 
+VALUES ('Animal Shelter', 'animalshelter@example.com', '$2b$10$XF7JI2iz22TIbDbdMACRXuNn/Z/T6GNeKBP1gQWYdbXu6odSUnlzq', 'https://images.wsj.net/im-831237?width=1280&size=1.33333333', 'Provides care and adoption services for homeless pets.', 'John Johnson', '5551234567', '123 Main St, Anytown, CA 12345', 'A'), 
         /*animal shelter sheltercare*/
-       ('Food Bank', 'foodbank@example.com', '$2b$10$Yokhl4XqXD7rTtM1Cs2Ut.yllptuv9p5PcXUCyeCRjpv/QWAuYsSq', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_PW2BsuN_3oL96einYF1zuZdMrTO7MTbXLw&s', 'Distributes food to those in need in our community.', 'Jane Doe', '555-789-0123', '456 Elm St, Anytown, TX 78901', 'A'), 
+       ('Food Bank', 'foodbank@example.com', '$2b$10$Yokhl4XqXD7rTtM1Cs2Ut.yllptuv9p5PcXUCyeCRjpv/QWAuYsSq', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_PW2BsuN_3oL96einYF1zuZdMrTO7MTbXLw&s', 'Distributes food to those in need in our community.', 'Jane Doe', '5557890123', '456 Elm St, Anytown, TX 78901', 'A'), 
         /*food bank feedtheneedy*/
-       ('Literacy Program', 'literacyprogram@example.com', '$2b$10$bemjJgeHd9qz16.87/XCouJhUjISNv/cLZGJt5WPZ50y8AmzZEf5W', 'https://www.eschoolnews.com/files/2023/05/online-literacy-program.jpeg', 'Helps adults and children learn to read and write.', 'Michael Smith', '555-456-7890', '789 Maple St, Anytown, NY 09876', 'R'), 
+       ('Literacy Program', 'literacyprogram@example.com', '$2b$10$bemjJgeHd9qz16.87/XCouJhUjISNv/cLZGJt5WPZ50y8AmzZEf5W', 'https://www.eschoolnews.com/files/2023/05/online-literacy-program.jpeg', 'Helps adults and children learn to read and write.', 'Michael Smith', '5554567890', '789 Maple St, Anytown, NY 09876', 'R'), 
         /*literacy program learningforall*/
-       ('Environmental Cleanup', 'cleanupcrew@example.com', '$2b$10$GsF8g5FSr7yi0obNSxt0eOwYO8oPID9oM64VUQzxbiZBV1g3ODdva', 'https://cleanmanagement.com/wp-content/uploads/2022/02/CleanManagementEnvironmentalGroup-106513-Waste-Cleanup-Essential-Image1.jpg', 'Organizes cleanups of parks, beaches, and other areas.', 'Sarah Jones', '555-012-3456', '1011 Oak St, Anytown, FL 32101', 'A'), 
+       ('Environmental Cleanup', 'cleanupcrew@example.com', '$2b$10$GsF8g5FSr7yi0obNSxt0eOwYO8oPID9oM64VUQzxbiZBV1g3ODdva', 'https://cleanmanagement.com/wp-content/uploads/2022/02/CleanManagementEnvironmentalGroup-106513-Waste-Cleanup-Essential-Image1.jpg', 'Organizes cleanups of parks, beaches, and other areas.', 'Sarah Jones', '5550123456', '1011 Oak St, Anytown, FL 32101', 'A'), 
         /*environmental cleanup gogreen*/
-       ('Soup Kitchen', 'soupkitchengoals@example.com', '$2b$10$QsjlfLY0Ui2z/RDVvxPGmefl47ecFG0kZbn2bnM2gBLrQh.KJWyBG', 'https://static.wixstatic.com/media/950ec0_7557c389547c46bf8b123167dacf9936~mv2.webp', 'Provides hot meals to those in need.', 'David Williams', '555-345-6789', '1213 Pine St, Anytown, WA 98765', 'P'); 
+       ('Soup Kitchen', 'soupkitchengoals@example.com', '$2b$10$QsjlfLY0Ui2z/RDVvxPGmefl47ecFG0kZbn2bnM2gBLrQh.KJWyBG', 'https://static.wixstatic.com/media/950ec0_7557c389547c46bf8b123167dacf9936~mv2.webp', 'Provides hot meals to those in need.', 'David Williams', '5553456789', '1213 Pine St, Anytown, WA 98765', 'P'); 
         /*soup kitchen nourishinglives*/
 -- Opportunity population
 INSERT INTO Opportunities (ngoid, title, description, address, region, date, starttime, endtime, age, maxvolunteers, currentvolunteers, photo)
