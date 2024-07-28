@@ -9,10 +9,10 @@ let ngoId;
 const urlParams = new URLSearchParams(window.location.search)
 const currentOpportunityId = urlParams.get('oppid')
 
-console.log("ngoId:", ngoId);
-
+console.log("oppId:", currentOpportunityId);
+console.log("volId:", currentVolunteerId);
 const applyButton = document.querySelector(".apply-button")
-applyButton.addEventListener("click", () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
+applyButton.addEventListener("click", async () => applyForOpportunity(currentVolunteerId, currentOpportunityId)); 
 const chatButton = document.querySelector(".chat-button");
 
 //ensure ngoid is set before creating chat
@@ -93,7 +93,7 @@ async function fetchOpportunitySkills(id) {
     let response = await fetch(`/opportunities/skills/${id}`, {
         headers: {
             'Authorization': `Bearer ${token}`}
-    }); // Replace with your API endpoint
+    }); 
     if (!response.ok) throw new Error('Network response was not ok');
     let skills = await response.json(); 
     return skills;
@@ -103,7 +103,7 @@ async function fetchOpportunity(id) {
     let response = await fetch(`/opportunities/${id}`, {
         headers: {
                     'Authorization': `Bearer ${token}`}
-    }); // Replace with your API endpoint
+    }); 
     if (!response.ok) throw new Error('Network response was not ok');
     let opportunity = await response.json();
     return opportunity;
@@ -162,7 +162,6 @@ async function displayOpportunity(id) {
 
 
 async function applyForOpportunity(volid, oppid) {
-    //fake volunteer id as login is not done
     let applicationstatus = "P"
     let newApplication = {
         volunteerid: volid,
@@ -170,26 +169,28 @@ async function applyForOpportunity(volid, oppid) {
         status: applicationstatus
     }
     let response = await fetch(`/applications/${volid}/${oppid}`, {
+        method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`}
-    })
-    if (response.status != 404) {
-        alert("An application for this opportunity has already been made.")
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (response.status !== 404) {
+        alert("An application for this opportunity has already been made.");
         return;
     }
     response = await fetch('/applications', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`},
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(newApplication)
-      });// Replace with your API endpoint
-      
+    }); // Replace with your API endpoint
     if (!response.ok) throw new Error('Network response was not ok');
     else {
-        alert("Application has been made! Please refresh the page.")
+        alert("Application has been made! Please refresh the page.");
     }
 }
-
 displayOpportunity(currentOpportunityId)
 
 //function to create chat
