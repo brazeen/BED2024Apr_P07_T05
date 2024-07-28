@@ -144,20 +144,22 @@ async function manageVolunteerApplication(volid, oppid, status) {
                     'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 }});
                 if (response.ok) {
-                    let incrementResponse = await fetch(`/opportunities/increment/${oppid}`, {
-                        method: "PATCH",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                    if (status == "A") {
+                        let incrementResponse = await fetch(`/opportunities/increment/${oppid}`, {
+                            method: "PATCH",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                            }
+                        })
+                        if (!incrementResponse.ok) {
+                            alert("Error updating opportunity volunteers:", await incrementResponse.text())
                         }
-                    })
-                    if (!incrementResponse.ok) {
-                        alert("Error updating opportunity volunteers:", await incrementResponse.text())
                     }
-                    else {
-                        alert("Volunteer managed successfully! Please reload the page.");
-                        popup.style.display = "none";
-                    }
+                    
+                    
+                    alert("Volunteer managed successfully! Please reload the page.");
+                    popup.style.display = "none";
                     
                 } else {
                     alert("Error managing volunteer application:", await response.text());
