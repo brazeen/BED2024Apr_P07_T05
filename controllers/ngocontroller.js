@@ -223,7 +223,7 @@ async function searchAcceptedNGOs(req, res) {
   const searchTerm = req.query.searchTerm; // Extract search term from query params
   
   try {    
-    const ngos = NGO.searchAcceptedNGOs(searchTerm);
+    const ngos = await NGO.searchAcceptedNGOs(searchTerm);
     res.json(ngos);
   } catch (error) {
     console.error(error);
